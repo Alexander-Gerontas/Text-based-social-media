@@ -5,8 +5,8 @@
 	<groupId>com.alg</groupId>
 	<artifactId>jdbc_exercises</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>jdbc Exercises</name>
-	<description>JDBC exercises</description>
+	<name>Social media Application</name>
+	<description>Social media Application</description>
 	<properties>
 		<java.version>17</java.version>
 		<lombok.version>1.18.30</lombok.version>
