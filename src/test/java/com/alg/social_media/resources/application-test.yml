@@ -1,0 +1,17 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    database: POSTGRESQL
+    open-in-view: false
+    generate-ddl: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 10
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
+        format_sql: false
+        generate_statistics: false

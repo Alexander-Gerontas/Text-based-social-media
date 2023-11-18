@@ -1,4 +1,4 @@
-package com.alg.jdbc_exercises.configuration;
+package com.alg.social_media.configuration;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
