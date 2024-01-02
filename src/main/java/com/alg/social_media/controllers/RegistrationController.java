@@ -20,8 +20,8 @@ public class RegistrationController {
 
     private final AccountService accountService;
 
-    @PostMapping(value = "/registration", produces = "application/json")
-    public ResponseEntity<String> registration(
+    @PostMapping(value = "/registration2", produces = "application/json")
+    public ResponseEntity<String> springRegistration(
             @RequestBody @Valid AccountDto accountDto) throws AccountExistsException {
 
         log.info("Registering account with username: " + accountDto.getUsername());

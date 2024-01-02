@@ -2,16 +2,16 @@ version: "3.9"
 
 services:
   postgresql:
-    container_name: db
+    container_name: social_media_db
     image: postgres:15.3-alpine
     environment:
-      POSTGRES_DATABASE: db
+      POSTGRES_DATABASE: social_media
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
       POSTGRES_ALLOW_EMPTY_PASSWORD: 1
 
     ports:
-      - "5432:5432"
+      - "6000:5432"
     networks:
       - docker-net
 

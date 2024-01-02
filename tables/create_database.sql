@@ -1,2 +1,2 @@
-SELECT 'CREATE DATABASE db'
-WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'db')\gexec
+SELECT 'CREATE DATABASE social_media'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'social_media')\gexec

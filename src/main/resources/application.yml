@@ -1,5 +1,4 @@
 spring:
-
   jpa:
     hibernate:
       ddl-auto: none
@@ -18,7 +17,7 @@ spring:
         generate_statistics: false
 
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/db
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:6000/social_media
     username: ${POSTGRES_USER:admin}
     password: ${POSTGRES_PASSWORD:password}
     driverClassName: org.postgresql.Driver

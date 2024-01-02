@@ -28,4 +28,15 @@ public class ConfiguredPostgresContainer
 
     return configuredPostgresContainer;
   }
+
+  /**
+   * Start container and set env variables for JDBC url, username and password.
+   */
+  @Override
+  public void start() {
+    super.start();
+    System.setProperty("spring.datasource.url", configuredPostgresContainer.getJdbcUrl());
+    System.setProperty("spring.datasource.username", configuredPostgresContainer.getUsername());
+    System.setProperty("spring.datasource.password", configuredPostgresContainer.getPassword());
+  }
 }

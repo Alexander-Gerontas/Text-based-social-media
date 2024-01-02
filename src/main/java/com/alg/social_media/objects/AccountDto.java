@@ -3,6 +3,7 @@ package com.alg.social_media.objects;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -10,6 +11,7 @@ import lombok.ToString;
  */
 @Getter
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
 public class AccountDto {
 
