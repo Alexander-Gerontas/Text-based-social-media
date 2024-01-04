@@ -1,17 +1,19 @@
 package com.alg.social_media.handler;
 
 import com.alg.social_media.exceptions.AccountExistsException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import io.javalin.http.ExceptionHandler;
+import io.javalin.http.HttpStatus;
 
-@RestControllerAdvice
 public class GlobalControllerExceptionHandler {
-    @ExceptionHandler(AccountExistsException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleAccountExists(Exception ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-    }
+    public static final ExceptionHandler<AccountExistsException> handleAccountExists = (e, ctx) -> {
+        // Handle exceptions here and provide appropriate response to the client
+        e.printStackTrace(); // Log the exception for debugging purposes
+        ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
+    };
+
+    public static final ExceptionHandler<Exception> exceptionHandler = (e, ctx) -> {
+        // Handle exceptions here and provide appropriate response to the client
+        e.printStackTrace(); // Log the exception for debugging purposes
+        ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
+    };
 }

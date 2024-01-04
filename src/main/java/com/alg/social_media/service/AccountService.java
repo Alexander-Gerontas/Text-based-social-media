@@ -6,19 +6,19 @@ import com.alg.social_media.exceptions.GenericError;
 import com.alg.social_media.objects.Account;
 import com.alg.social_media.objects.AccountDto;
 import com.alg.social_media.repository.AccountRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.google.inject.Inject;
 
-@Service
-@Transactional
-@RequiredArgsConstructor
 public class AccountService {
 
     private final AccountRepository accountRepository;
     private final AccountConverter accountConverter;
 
-//    @Override
+    @Inject
+    public AccountService(AccountRepository accountRepository, AccountConverter accountConverter) {
+        this.accountRepository = accountRepository;
+        this.accountConverter = accountConverter;
+    }
+
     public Account accountRegistration(AccountDto dto) throws AccountExistsException {
 
         // search for account with the same username
@@ -31,7 +31,8 @@ public class AccountService {
 
         // create a new account if not
         var newAccount = accountConverter.toAccount(dto);
-        newAccount = accountRepository.save(newAccount);
+
+        accountRepository.save(newAccount);
 
         return newAccount;
     }

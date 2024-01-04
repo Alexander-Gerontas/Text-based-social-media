@@ -1,33 +1,34 @@
 package com.alg.social_media.controllers;
 
-import com.alg.social_media.exceptions.AccountExistsException;
 import com.alg.social_media.objects.AccountDto;
 import com.alg.social_media.service.AccountService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import com.google.inject.Injector;
+import io.javalin.http.Handler;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@RestController
-@RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/account")
 public class RegistrationController {
+    private static AccountService staticAccountService;
 
-    private final AccountService accountService;
+    public static void setInjector(Injector injector) {
 
-    @PostMapping(value = "/registration2", produces = "application/json")
-    public ResponseEntity<String> springRegistration(
-            @RequestBody @Valid AccountDto accountDto) throws AccountExistsException {
+        // todo remove
+        staticAccountService = injector.getInstance(AccountService.class);
+    }
 
+    public static final Handler registrationHandler = ctx -> {
+        AccountDto accountDto = ctx.bodyAsClass(AccountDto.class);
+
+        // Log the registration
         log.info("Registering account with username: " + accountDto.getUsername());
 
-        var account = accountService.accountRegistration(accountDto);
-        return ResponseEntity.ok().body("account with username: "
-                + account.getUsername() + " and role: " + account.getRole() + " created");
-    }
+        // Perform account registration
+        var account = staticAccountService.accountRegistration(accountDto);
+
+        // Send the response
+        ctx.json("account with username: " + account.getUsername() +
+            " and role: " + account.getRole() + " created");
+
+        ctx.status(200);
+    };
 }
