@@ -1,4 +1,4 @@
-package com.alg.social_media.configuration;
+package com.alg.social_media.configuration.database;
 
 import jakarta.persistence.SharedCacheMode;
 import jakarta.persistence.ValidationMode;

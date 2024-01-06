@@ -1,4 +1,4 @@
-package com.alg.social_media.controllers;
+package com.alg.social_media.utils;
 
 import com.alg.social_media.objects.AccountDto;
 import com.alg.social_media.objects.AccountType;

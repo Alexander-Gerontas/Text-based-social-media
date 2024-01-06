@@ -2,15 +2,20 @@ package com.alg.social_media.repository;
 
 import com.alg.social_media.objects.Account;
 import com.alg.social_media.utils.DBUtils;
-import com.google.inject.Inject;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import javax.inject.Inject;
 
 public class AccountRepository {
-    @Inject private DBUtils dbUtils;
+    private final DBUtils dbUtils;
+
+    @Inject
+    public AccountRepository(DBUtils dbUtils) {
+        this.dbUtils = dbUtils;
+    }
 
     public Account save(Account newAccount) {
         DBUtils.DbTransactionResultOperation<Account> operation = entityManager -> {

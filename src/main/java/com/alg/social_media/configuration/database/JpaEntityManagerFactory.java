@@ -1,9 +1,7 @@
-package com.alg.social_media.configuration;
+package com.alg.social_media.configuration.database;
 
-import com.alg.social_media.utils.AppInjector;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,13 +18,9 @@ public class JpaEntityManagerFactory {
 
 	private final Properties properties;
 
-//	private final LiquibaseConfiguration liquibaseConfiguration;
-
 	public JpaEntityManagerFactory(DBConnection dbConnection, Class[] entityClasses ) {
 		this.dbConnection = dbConnection;
 		this.entityClasses = entityClasses;
-
-//		liquibaseConfiguration = AppInjector.getInjector().getInstance(LiquibaseConfiguration.class);
 
 		this.properties = new Properties();
 		properties.put("hibernate.connection.autocommit", false);

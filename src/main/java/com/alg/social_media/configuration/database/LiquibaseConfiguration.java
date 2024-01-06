@@ -1,8 +1,9 @@
-package com.alg.social_media.configuration;
+package com.alg.social_media.configuration.database;
 
-import com.google.inject.Inject;
+import dagger.Module;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import liquibase.Liquibase;
 import liquibase.database.Database;
@@ -11,6 +12,7 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
+@Module
 public class LiquibaseConfiguration {
 
   private final DataSource dataSource;
@@ -21,7 +23,6 @@ public class LiquibaseConfiguration {
     runChangelog();
   }
 
-  // todo merge
   private void runChangelog() {
 
     try (Connection connection = dataSource.getConnection()) {

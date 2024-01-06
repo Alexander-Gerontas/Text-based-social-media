@@ -6,7 +6,7 @@ import com.alg.social_media.exceptions.GenericError;
 import com.alg.social_media.objects.Account;
 import com.alg.social_media.objects.AccountDto;
 import com.alg.social_media.repository.AccountRepository;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 public class AccountService {
 

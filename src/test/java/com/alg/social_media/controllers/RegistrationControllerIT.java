@@ -3,16 +3,15 @@ package com.alg.social_media.controllers;
 import static org.junit.Assert.assertEquals;
 
 import com.alg.social_media.configuration.BaseIntegrationTest;
-import com.alg.social_media.configuration.GuiceModule;
+import com.alg.social_media.configuration.database.DBConnection;
+import com.alg.social_media.configuration.database.LiquibaseConfiguration;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.repository.AccountRepository;
-import com.alg.social_media.utils.AppInjector;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.alg.social_media.service.AccountService;
+import com.alg.social_media.utils.AccountDtoFactory;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
-import java.io.IOException;
+import jakarta.inject.Inject;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -23,25 +22,22 @@ import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RegistrationControllerIT extends BaseIntegrationTest {
-     private Javalin app;
+     private final Javalin app;
+     private final RegistrationController registrationController;
+     private final DBConnection dbConnection;
+     private final LiquibaseConfiguration liquibaseConfiguration;
      private AccountConverter accountConverter;
-     private AccountRepository accountRepository;
-     private ObjectMapper objectMapper;
+     private final AccountService accountService;
+     private final AccountRepository accountRepository;
 
-    public RegistrationControllerIT() throws IOException {
-//        Injector injector = Guice.createInjector(new GuiceModule(dbConnection));
-
-        AppInjector.setConnection(dbConnection);
-        Injector injector = AppInjector.getInjector();
-
-        RegistrationController.setInjector(injector);
-
-        app = injector.getInstance(Javalin.class);
-        accountRepository = injector.getInstance(AccountRepository.class);
-
-        // todo move to base int test
-        objectMapper = injector.getInstance(ObjectMapper.class);
-        accountConverter = injector.getInstance(AccountConverter.class);
+    @Inject
+    public RegistrationControllerIT() {
+        app = appComponent.buildJavalin();
+        registrationController = appComponent.buildRegistrationController();
+        dbConnection = appComponent.buildDBConnection();
+        liquibaseConfiguration = appComponent.buildLiquibaseConfiguration();
+        accountRepository = appComponent.buildAccountRepository();
+        accountService = appComponent.buildAccountService();
     }
 
     @BeforeAll

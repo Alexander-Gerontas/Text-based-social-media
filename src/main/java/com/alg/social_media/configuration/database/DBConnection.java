@@ -1,7 +1,9 @@
-package com.alg.social_media.configuration;
+package com.alg.social_media.configuration.database;
 
+import com.alg.social_media.SocialMediaApplication;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import java.io.IOException;
 import java.util.Properties;
 import javax.sql.DataSource;
 import net.ttddyy.dsproxy.listener.QueryExecutionListener;
@@ -9,27 +11,17 @@ import net.ttddyy.dsproxy.listener.logging.SLF4JLogLevel;
 import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 
 public class DBConnection {
+
+	public static Properties properties;
 	private String jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword;
+	private final HikariConfig config;
 	private final String jdbcFilename = "jdbc.properties";
-	private HikariConfig config;
 
-	// todo remove
-	/*public DBConnection() throws IOException {
-
-		var inputStream = DBConnection.class.getClassLoader()
-				.getResourceAsStream("resources/" + jdbcFilename);
-
-		if (inputStream == null) {
-			throw new FileNotFoundException("Unable to find database config file");
+	public DBConnection() {
+		if (properties == null) {
+			readProperties();
 		}
 
-		Properties properties = new Properties();
-		properties.load(inputStream);
-
-		initDb(properties);
-	}*/
-
-	public DBConnection(Properties properties) {
 		// initialize postgress db
 		this.jdbcDriver = properties.getProperty("jdbc.driver");
 		this.jdbcUrl = properties.getProperty("jdbc.url");
@@ -59,5 +51,22 @@ public class DBConnection {
 				.countQuery()
 				.listener(QueryExecutionListener.DEFAULT)
 				.build();
+	}
+
+	private void readProperties() {
+		var inputStream = SocialMediaApplication.class.getClassLoader()
+				.getResourceAsStream(jdbcFilename);
+
+		if (inputStream == null) {
+			throw new RuntimeException("Unable to find database config file");
+		}
+
+		this.properties = new Properties();
+
+		try {
+			properties.load(inputStream);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

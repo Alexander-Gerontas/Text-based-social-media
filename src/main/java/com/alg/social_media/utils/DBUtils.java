@@ -1,10 +1,10 @@
 package com.alg.social_media.utils;
 
-import com.alg.social_media.configuration.JpaEntityManagerFactory;
-import com.google.inject.Inject;
+import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import java.sql.SQLException;
+import javax.inject.Inject;
 
 public class DBUtils {
 	private final JpaEntityManagerFactory jpaEntityManagerFactory;
