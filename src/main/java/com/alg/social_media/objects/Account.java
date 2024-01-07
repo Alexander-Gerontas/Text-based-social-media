@@ -1,5 +1,6 @@
 package com.alg.social_media.objects;
 
+import com.alg.social_media.enums.AccountType;
 import jakarta.persistence.*;
 import lombok.*;
 

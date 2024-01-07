@@ -1,5 +1,6 @@
-package com.alg.social_media.objects;
+package com.alg.social_media.dto;
 
+import com.alg.social_media.enums.AccountType;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountDto {
+public class AccountRegistrationDto {
 
     @NotEmpty
     private String username;

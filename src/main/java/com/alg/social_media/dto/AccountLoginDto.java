@@ -1,0 +1,23 @@
+package com.alg.social_media.dto;
+
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+/**
+ * Account login dto
+ */
+@Getter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccountLoginDto {
+
+    @NotEmpty
+    private String username;
+
+    @NotEmpty
+    private String password;
+}

@@ -9,7 +9,7 @@ public enum GenericError {
 
     ACCOUNT_WITH_SAME_USERNAME_EXISTS(2000, "Account with username exists: "),
 
-    PRDOUCT_DOES_NOT_EXIST(3000, "Product with id does not exist: ");
+    ACCOUNT_DOES_NOT_EXIST(2001, "Account with username does not exist: ");
 
     private final int code;
     private final String description;

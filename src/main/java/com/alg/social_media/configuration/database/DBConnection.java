@@ -13,7 +13,7 @@ import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 public class DBConnection {
 
 	public static Properties properties;
-	private String jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword;
+	private final String jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword;
 	private final HikariConfig config;
 	private final String jdbcFilename = "jdbc.properties";
 

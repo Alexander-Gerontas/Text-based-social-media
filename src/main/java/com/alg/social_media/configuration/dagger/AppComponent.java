@@ -2,6 +2,7 @@ package com.alg.social_media.configuration.dagger;
 
 import com.alg.social_media.configuration.database.DBConnection;
 import com.alg.social_media.configuration.database.LiquibaseConfiguration;
+import com.alg.social_media.configuration.security.SecurityMiddleware;
 import com.alg.social_media.controllers.RegistrationController;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.repository.AccountRepository;
@@ -17,6 +18,7 @@ import org.modelmapper.ModelMapper;
 @Component(modules = AppModule.class)
 public interface AppComponent {
   Javalin buildJavalin();
+  SecurityMiddleware buildSecurityMiddleware();
   AccountConverter buildAccountConverter();
   AccountRepository buildAccountRepository();
   AccountService buildAccountService();

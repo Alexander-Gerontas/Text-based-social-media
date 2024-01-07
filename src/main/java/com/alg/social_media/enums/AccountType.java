@@ -1,4 +1,4 @@
-package com.alg.social_media.objects;
+package com.alg.social_media.enums;
 
 import lombok.Getter;
 

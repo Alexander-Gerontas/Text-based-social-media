@@ -1,12 +1,13 @@
 package com.alg.social_media.utils;
 
-import com.alg.social_media.objects.AccountDto;
-import com.alg.social_media.objects.AccountType;
+import com.alg.social_media.dto.AccountLoginDto;
+import com.alg.social_media.dto.AccountRegistrationDto;
+import com.alg.social_media.enums.AccountType;
 
 public final class AccountDtoFactory {
-    public static AccountDto getFreeAccountDto() {
+    public static AccountRegistrationDto getFreeAccountDto() {
 
-        var userDto = new AccountDto(
+        var userDto = new AccountRegistrationDto(
                 "simpleUser",
                 "abc@mail.com",
                 "userpass",
@@ -16,9 +17,9 @@ public final class AccountDtoFactory {
         return userDto;
     }
 
-    public static AccountDto getPremiumAccountDto() {
+    public static AccountRegistrationDto getPremiumAccountDto() {
 
-        var accountDto = new AccountDto(
+        var accountDto = new AccountRegistrationDto(
                 "adminUser",
                 "efg@mail.com",
                 "adminpass",
@@ -26,5 +27,14 @@ public final class AccountDtoFactory {
         );
 
         return accountDto;
+    }
+
+    public static AccountLoginDto getFreeAccountLoginDto() {
+        var loginDto = new AccountLoginDto(
+            "simpleUser",
+            "userpass"
+        );
+
+        return loginDto;
     }
 }
