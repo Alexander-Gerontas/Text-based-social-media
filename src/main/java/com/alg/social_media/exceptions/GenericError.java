@@ -9,7 +9,8 @@ public enum GenericError {
 
     ACCOUNT_WITH_SAME_USERNAME_EXISTS(2000, "Account with username exists: "),
 
-    ACCOUNT_DOES_NOT_EXIST(2001, "Account with username does not exist: ");
+    ACCOUNT_DOES_NOT_EXIST(2001, "Account with username does not exist: "),
+    USER_PROVIDED_WRONG_PASSWORD(2002, "User provided wrong password: ");
 
     private final int code;
     private final String description;

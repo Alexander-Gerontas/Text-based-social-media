@@ -8,6 +8,7 @@ import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.repository.AccountRepository;
 import com.alg.social_media.service.AccountService;
 import com.alg.social_media.utils.DBUtils;
+import com.alg.social_media.utils.PasswordEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Component;
 import io.javalin.Javalin;
@@ -28,4 +29,5 @@ public interface AppComponent {
   LiquibaseConfiguration buildLiquibaseConfiguration();
   ObjectMapper buildObjectMapper();
   ModelMapper buildModelMapper();
+  PasswordEncoder buildPasswordEncoder();
 }

@@ -1,13 +1,17 @@
 package com.alg.social_media.configuration.dagger;
 
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.exceptionHandler;
+import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountDoesNotExist;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountExists;
+import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleWrongPassword;
 import static org.modelmapper.convention.MatchingStrategies.STRICT;
 
 import com.alg.social_media.configuration.database.DBConnection;
 import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import com.alg.social_media.configuration.database.LiquibaseConfiguration;
+import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.exceptions.AccountExistsException;
+import com.alg.social_media.exceptions.WrongPasswordException;
 import com.alg.social_media.objects.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
@@ -15,6 +19,7 @@ import dagger.Provides;
 import io.javalin.Javalin;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.modelmapper.ModelMapper;
 
 @Module
@@ -33,6 +38,8 @@ public class AppModule {
 
 		app.exception(Exception.class, exceptionHandler);
 		app.exception(AccountExistsException.class, handleAccountExists);
+		app.exception(AccountDoesNotExistException.class, handleAccountDoesNotExist);
+		app.exception(WrongPasswordException.class, handleWrongPassword);
 
 		return app;
 	}
@@ -71,6 +78,12 @@ public class AppModule {
 	@Singleton
 	public ObjectMapper provideObjectMapper() {
 		return new ObjectMapper();
+	}
+
+	@Provides
+	@Singleton
+	public StandardPBEStringEncryptor provideStandardPBEStringEncryptor() {
+		return new StandardPBEStringEncryptor();
 	}
 
 	@Provides
