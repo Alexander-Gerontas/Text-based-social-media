@@ -4,6 +4,7 @@ import static com.alg.social_media.handler.GlobalControllerExceptionHandler.exce
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountDoesNotExist;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountExists;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleWrongPassword;
+import static com.alg.social_media.handler.GlobalControllerExceptionHandler.runtimeExceptionHandler;
 import static org.modelmapper.convention.MatchingStrategies.STRICT;
 
 import com.alg.social_media.configuration.database.DBConnection;
@@ -31,12 +32,11 @@ public class AppModule {
 	@Provides
 	@Singleton
 	public Javalin provideJavalin() {
-		var app = Javalin.create(config -> {
-					config.http.asyncTimeout = 0L;
-				})
-				.routes(() -> {});
+		var app = Javalin.create(config -> config.http.asyncTimeout = 0L);
 
 		app.exception(Exception.class, exceptionHandler);
+		app.exception(RuntimeException.class, runtimeExceptionHandler);
+
 		app.exception(AccountExistsException.class, handleAccountExists);
 		app.exception(AccountDoesNotExistException.class, handleAccountDoesNotExist);
 		app.exception(WrongPasswordException.class, handleWrongPassword);

@@ -2,6 +2,8 @@ package com.alg.social_media.handler;
 
 import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.exceptions.AccountExistsException;
+import com.alg.social_media.exceptions.InvalidTokenException;
+import com.alg.social_media.exceptions.NoTokenProvidedException;
 import com.alg.social_media.exceptions.WrongPasswordException;
 import io.javalin.http.ExceptionHandler;
 import io.javalin.http.HttpStatus;
@@ -19,9 +21,18 @@ public class GlobalControllerExceptionHandler {
         ctx.status(HttpStatus.UNAUTHORIZED).result(e.getMessage());
     };
 
+    public static final ExceptionHandler<NoTokenProvidedException> handleNoTokenProvided = (e, ctx) ->
+        ctx.status(HttpStatus.UNAUTHORIZED).result(e.getMessage());
+
+    public static final ExceptionHandler<InvalidTokenException> handleInvalidTokenProvided = (e, ctx) ->
+        ctx.status(HttpStatus.UNAUTHORIZED).result(e.getMessage());
+
     public static final ExceptionHandler<Exception> exceptionHandler = (e, ctx) -> {
         // Handle exceptions here and provide appropriate response to the client
         e.printStackTrace(); // Log the exception for debugging purposes
         ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
     };
+
+    public static final ExceptionHandler<RuntimeException> runtimeExceptionHandler = (e, ctx) ->
+        ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
 }
