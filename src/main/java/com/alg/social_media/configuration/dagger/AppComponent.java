@@ -21,8 +21,10 @@ public interface AppComponent {
   Javalin buildJavalin();
   SecurityMiddleware buildSecurityMiddleware();
   AccountConverter buildAccountConverter();
+  // repositories
   AccountRepository buildAccountRepository();
   AccountService buildAccountService();
+  // controllers
   RegistrationController buildRegistrationController();
   DBConnection buildDBConnection();
   DBUtils buildDBUtils();

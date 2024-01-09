@@ -40,10 +40,10 @@ public class AccountRepository {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Account> query = cb.createQuery(Account.class);
 
-            Root<Account> itemRoot = query.from(Account.class);
+            Root<Account> accountRoot = query.from(Account.class);
 
-            query.select(itemRoot)
-                .where(cb.equal(itemRoot.get("username"), username))
+            query.select(accountRoot)
+                .where(cb.equal(accountRoot.get("username"), username))
                 .distinct(true);
 
             TypedQuery<Account> typedQuery = entityManager.createQuery(query);

@@ -51,7 +51,7 @@ public class BaseIntegrationTest {
     liquibaseConfiguration = appComponent.buildLiquibaseConfiguration();
 
     // Set up the base URI and port of your application
-    RestAssured.baseURI = "http://localhost/api/v1";
+    RestAssured.baseURI = "http://localhost/";
     RestAssured.port = port; // Set your port
 
     // start javalin server
