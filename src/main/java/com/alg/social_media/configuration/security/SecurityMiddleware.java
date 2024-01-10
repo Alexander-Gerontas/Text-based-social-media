@@ -24,9 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SecurityMiddleware {
   private final Javalin app;
-
-  private AccountService accountService;
-  private PasswordEncoder passwordEncoder;
+  private final AccountService accountService;
+  private final PasswordEncoder passwordEncoder;
+  private final Handler authHandler;
+  private final Handler loginHandler;
 
   @Inject
   public SecurityMiddleware(Javalin app, AccountService accountService,
@@ -35,6 +36,9 @@ public class SecurityMiddleware {
 
     this.accountService = accountService;
     this.passwordEncoder = passwordEncoder;
+
+    this.authHandler = createAuthenticationHandler();
+    this.loginHandler = createLoginHandler();
 
     configureRoutes();
   }
@@ -48,48 +52,52 @@ public class SecurityMiddleware {
     app.exception(InvalidTokenException.class, handleInvalidTokenProvided);
   }
 
-  private final Handler authHandler = context -> {
-    String token = context.header("Authorization");
+  private Handler createAuthenticationHandler() {
+    return context -> {
+      String token = context.header("Authorization");
 
-    if (token == null || !token.startsWith("Bearer ")) {
-      throw new NoTokenProvidedException(NO_TOKEN_PROVIDED);
-    }
+      if (token == null || !token.startsWith("Bearer ")) {
+        throw new NoTokenProvidedException(NO_TOKEN_PROVIDED);
+      }
 
-    try {
-      String username = JwtUtil.extractUsername(token.substring(7));
+      try {
+        String username = JwtUtil.extractUsername(token.substring(7));
 
-      // Continue to the next handler
-      context.attribute("username", username);
-    } catch (Exception e) {
-      throw new InvalidTokenException(INVALID_TOKEN_PROVIDED, token);
-    }
-  };
+        // Continue to the next handler
+        context.attribute("username", username);
+      } catch (Exception e) {
+        throw new InvalidTokenException(INVALID_TOKEN_PROVIDED, token);
+      }
+    };
+  }
 
-  private final Handler loginHandler = ctx -> {
-    var loginDto = ctx.bodyAsClass(AccountLoginDto.class);
+  private Handler createLoginHandler() {
+    return ctx -> {
+      var loginDto = ctx.bodyAsClass(AccountLoginDto.class);
 
-    // Log the authorization
-    log.info("Generating token for user: " + loginDto.getUsername());
+      // Log the authorization
+      log.info("Generating token for user: " + loginDto.getUsername());
 
-    Account account = accountService.findByUsername(loginDto.getUsername());
-    var decryptedPassword = passwordEncoder.decryptPassword(account.getPassword());
+      Account account = accountService.findByUsername(loginDto.getUsername());
+      var decryptedPassword = passwordEncoder.decryptPassword(account.getPassword());
 
-    // if an account does not exist throw exception
-    if (account == null) {
-      throw new AccountDoesNotExistException(GenericError.ACCOUNT_DOES_NOT_EXIST,
-          loginDto.getUsername());
-    }
+      // if an account does not exist throw exception
+      if (account == null) {
+        throw new AccountDoesNotExistException(GenericError.ACCOUNT_DOES_NOT_EXIST,
+            loginDto.getUsername());
+      }
 
-    if (!loginDto.getPassword().equals(decryptedPassword)) {
-      throw new WrongPasswordException(GenericError.USER_PROVIDED_WRONG_PASSWORD,
-          loginDto.getUsername());
-    }
+      if (!loginDto.getPassword().equals(decryptedPassword)) {
+        throw new WrongPasswordException(GenericError.USER_PROVIDED_WRONG_PASSWORD,
+            loginDto.getUsername());
+      }
 
-    // If authentication is successful, generate a token
-    String token = JwtUtil.generateToken(loginDto.getUsername());
+      // If authentication is successful, generate a token
+      String token = JwtUtil.generateToken(loginDto.getUsername());
 
-    // Send the response
-    ctx.json("Token: " + token);
-    ctx.status(200);
-  };
+      // Send the response
+      ctx.json("Token: " + token);
+      ctx.status(200);
+    };
+  }
 }

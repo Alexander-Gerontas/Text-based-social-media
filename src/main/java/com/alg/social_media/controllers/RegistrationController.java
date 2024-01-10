@@ -4,7 +4,6 @@ import static com.alg.social_media.configuration.constants.Paths.REGISTRATION_UR
 
 import com.alg.social_media.dto.AccountRegistrationDto;
 import com.alg.social_media.service.AccountService;
-import com.alg.social_media.utils.PasswordEncoder;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import javax.inject.Inject;
@@ -13,14 +12,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RegistrationController {
     private final Javalin app;
-    private AccountService accountService;
-    private PasswordEncoder passwordEncoder;
+    private final AccountService accountService;
+    private final Handler registrationHandler;
 
     @Inject
-    public RegistrationController(Javalin app, AccountService accountService, PasswordEncoder passwordEncoder) {
+    public RegistrationController(Javalin app, AccountService accountService) {
         this.app = app;
         this.accountService = accountService;
-        this.passwordEncoder = passwordEncoder;
+
+        registrationHandler = setupRegistrationHandler();
 
         configureRoutes();
     }
@@ -29,19 +29,22 @@ public class RegistrationController {
         app.post(REGISTRATION_URI, registrationHandler);
     }
 
-    private final Handler registrationHandler = ctx -> {
-        AccountRegistrationDto accountRegistrationDto = ctx.bodyAsClass(AccountRegistrationDto.class);
+    private Handler setupRegistrationHandler() {
+        return ctx -> {
+            AccountRegistrationDto accountRegistrationDto = ctx.bodyAsClass(
+                AccountRegistrationDto.class);
 
-        // Log the registration
-        log.info("Registering account with username: " + accountRegistrationDto.getUsername());
+            // Log the registration
+            log.info("Registering account with username: " + accountRegistrationDto.getUsername());
 
-        // Perform account registration
-        var account = accountService.accountRegistration(accountRegistrationDto);
+            // Perform account registration
+            var account = accountService.accountRegistration(accountRegistrationDto);
 
-        // Send the response
-        ctx.json("account with username: " + account.getUsername() +
-            " and role: " + account.getRole() + " created");
+            // Send the response
+            ctx.json("account with username: " + account.getUsername() +
+                " and role: " + account.getRole() + " created");
 
-        ctx.status(200);
-    };
+            ctx.status(200);
+        };
+    }
 }
