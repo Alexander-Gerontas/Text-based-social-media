@@ -32,4 +32,23 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="post-table-creation" author="author" failOnError="true">
+    <preConditions>
+      <not>
+        <tableExists tableName="posts"/>
+      </not>
+    </preConditions>
+    <createTable tableName="posts">
+      <column name="id" type="SERIAL" autoIncrement="true">
+        <constraints primaryKey="true" primaryKeyName="post_pk"/>
+      </column>
+      <column name="content" type="varchar(3000)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="author_id" type="SERIAL">
+        <constraints nullable="false" foreignKeyName="account_fk" references="accounts(id)"/>
+      </column>
+    </createTable>
+  </changeSet>
 </databaseChangeLog>
