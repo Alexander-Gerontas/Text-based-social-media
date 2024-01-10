@@ -4,8 +4,10 @@ import static com.alg.social_media.configuration.constants.Paths.AUTHENTICATION_
 import static com.alg.social_media.configuration.constants.Paths.BASE_URI_VERSION_1;
 import static com.alg.social_media.exceptions.GenericError.INVALID_TOKEN_PROVIDED;
 import static com.alg.social_media.exceptions.GenericError.NO_TOKEN_PROVIDED;
+import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountDoesNotExist;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleInvalidTokenProvided;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleNoTokenProvided;
+import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleWrongPassword;
 
 import com.alg.social_media.dto.AccountLoginDto;
 import com.alg.social_media.exceptions.AccountDoesNotExistException;
@@ -50,6 +52,9 @@ public class SecurityMiddleware {
 
     app.exception(NoTokenProvidedException.class, handleNoTokenProvided);
     app.exception(InvalidTokenException.class, handleInvalidTokenProvided);
+
+    app.exception(AccountDoesNotExistException.class, handleAccountDoesNotExist);
+    app.exception(WrongPasswordException.class, handleWrongPassword);
   }
 
   private Handler createAuthenticationHandler() {
