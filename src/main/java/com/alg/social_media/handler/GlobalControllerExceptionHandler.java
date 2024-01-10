@@ -9,30 +9,24 @@ import io.javalin.http.ExceptionHandler;
 import io.javalin.http.HttpStatus;
 
 public class GlobalControllerExceptionHandler {
-    public static final ExceptionHandler<AccountExistsException> handleAccountExists = (e, ctx) -> {
-        ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
-    };
+  public static final ExceptionHandler<AccountExistsException> handleAccountExists = (e, ctx) ->
+      ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
 
-    public static final ExceptionHandler<AccountDoesNotExistException> handleAccountDoesNotExist = (e, ctx) -> {
-        ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
-    };
+  public static final ExceptionHandler<AccountDoesNotExistException> handleAccountDoesNotExist = (e, ctx) ->
+      ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
 
-    public static final ExceptionHandler<WrongPasswordException> handleWrongPassword = (e, ctx) -> {
-        ctx.status(HttpStatus.UNAUTHORIZED).result(e.getMessage());
-    };
+  public static final ExceptionHandler<WrongPasswordException> handleWrongPassword = (e, ctx) ->
+      ctx.status(HttpStatus.UNAUTHORIZED).result(e.getMessage());
 
-    public static final ExceptionHandler<NoTokenProvidedException> handleNoTokenProvided = (e, ctx) ->
-        ctx.status(HttpStatus.UNAUTHORIZED).result(e.getMessage());
+  public static final ExceptionHandler<NoTokenProvidedException> handleNoTokenProvided = (e, ctx) ->
+      ctx.status(HttpStatus.UNAUTHORIZED).result(e.getMessage());
 
-    public static final ExceptionHandler<InvalidTokenException> handleInvalidTokenProvided = (e, ctx) ->
-        ctx.status(HttpStatus.UNAUTHORIZED).result(e.getMessage());
+  public static final ExceptionHandler<InvalidTokenException> handleInvalidTokenProvided = (e, ctx) ->
+      ctx.status(HttpStatus.UNAUTHORIZED).result(e.getMessage());
 
-    public static final ExceptionHandler<Exception> exceptionHandler = (e, ctx) -> {
-        // Handle exceptions here and provide appropriate response to the client
-        e.printStackTrace(); // Log the exception for debugging purposes
-        ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
-    };
+  public static final ExceptionHandler<Exception> exceptionHandler = (e, ctx) ->
+      ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
 
-    public static final ExceptionHandler<RuntimeException> runtimeExceptionHandler = (e, ctx) ->
-        ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
+  public static final ExceptionHandler<RuntimeException> runtimeExceptionHandler = (e, ctx) ->
+      ctx.status(HttpStatus.BAD_REQUEST).result(e.getMessage());
 }
