@@ -10,4 +10,7 @@ public final class Paths {
   // registration + authentication
   public static final String REGISTRATION_URI = BASE_URI_VERSION_0 + "/account/registration";
   public static final String AUTHENTICATION_URI = BASE_URI_VERSION_0 + "/account/login";
+
+  // posts
+  public static final String POST_URI = BASE_URI_VERSION_1 + "/post";
 }

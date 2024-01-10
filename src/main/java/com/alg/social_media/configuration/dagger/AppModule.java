@@ -1,18 +1,13 @@
 package com.alg.social_media.configuration.dagger;
 
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.exceptionHandler;
-import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountDoesNotExist;
-import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountExists;
-import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleWrongPassword;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.runtimeExceptionHandler;
 import static org.modelmapper.convention.MatchingStrategies.STRICT;
 
 import com.alg.social_media.configuration.database.DBConnection;
 import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import com.alg.social_media.configuration.database.LiquibaseConfiguration;
-import com.alg.social_media.exceptions.AccountDoesNotExistException;
-import com.alg.social_media.exceptions.AccountExistsException;
-import com.alg.social_media.exceptions.WrongPasswordException;
+import com.alg.social_media.model.Post;
 import com.alg.social_media.objects.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
@@ -37,10 +32,6 @@ public class AppModule {
 		app.exception(Exception.class, exceptionHandler);
 		app.exception(RuntimeException.class, runtimeExceptionHandler);
 
-		app.exception(AccountExistsException.class, handleAccountExists);
-		app.exception(AccountDoesNotExistException.class, handleAccountDoesNotExist);
-		app.exception(WrongPasswordException.class, handleWrongPassword);
-
 		return app;
 	}
 
@@ -48,7 +39,8 @@ public class AppModule {
 	@Singleton
 	public JpaEntityManagerFactory provideJpaEntityManagerFactory(DBConnection dbConnection) {
 		return new JpaEntityManagerFactory(dbConnection, new Class[]{
-				Account.class
+				Account.class,
+				Post.class,
 		});
 	}
 
