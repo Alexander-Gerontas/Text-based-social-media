@@ -7,6 +7,7 @@ import static org.modelmapper.convention.MatchingStrategies.STRICT;
 import com.alg.social_media.configuration.database.DBConnection;
 import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import com.alg.social_media.configuration.database.LiquibaseConfiguration;
+import com.alg.social_media.configuration.security.CustomAccessManager;
 import com.alg.social_media.model.Post;
 import com.alg.social_media.objects.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,13 +27,22 @@ public class AppModule {
 
 	@Provides
 	@Singleton
-	public Javalin provideJavalin() {
-		var app = Javalin.create(config -> config.http.asyncTimeout = 0L);
+	public Javalin provideJavalin(CustomAccessManager accessManager) {
+		var app = Javalin.create(config -> {
+			config.accessManager(accessManager);
+			config.http.asyncTimeout = 0L;
+		});
 
 		app.exception(Exception.class, exceptionHandler);
 		app.exception(RuntimeException.class, runtimeExceptionHandler);
 
 		return app;
+	}
+
+	@Provides
+	@Singleton
+	public CustomAccessManager provideCustomAccessManager() {
+		return new CustomAccessManager();
 	}
 
 	@Provides

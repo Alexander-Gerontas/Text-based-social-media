@@ -1,7 +1,11 @@
 package com.alg.social_media.configuration.security;
 
+import static com.alg.social_media.configuration.Constants.AUTHORIZATION;
+import static com.alg.social_media.configuration.Constants.BEARER;
+import static com.alg.social_media.configuration.Constants.ROLE;
+import static com.alg.social_media.configuration.Constants.USERNAME;
 import static com.alg.social_media.configuration.constants.Paths.AUTHENTICATION_URI;
-import static com.alg.social_media.configuration.constants.Paths.BASE_URI_VERSION_1;
+import static com.alg.social_media.configuration.constants.Paths.POST_URI;
 import static com.alg.social_media.exceptions.GenericError.INVALID_TOKEN_PROVIDED;
 import static com.alg.social_media.exceptions.GenericError.NO_TOKEN_PROVIDED;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountDoesNotExist;
@@ -10,6 +14,7 @@ import static com.alg.social_media.handler.GlobalControllerExceptionHandler.hand
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleWrongPassword;
 
 import com.alg.social_media.dto.AccountLoginDto;
+import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.exceptions.GenericError;
 import com.alg.social_media.exceptions.InvalidTokenException;
@@ -20,6 +25,7 @@ import com.alg.social_media.service.AccountService;
 import com.alg.social_media.utils.PasswordEncoder;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
+import io.javalin.http.HttpStatus;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,15 +46,16 @@ public class SecurityMiddleware {
     this.passwordEncoder = passwordEncoder;
 
     this.authHandler = createAuthenticationHandler();
-    this.loginHandler = createLoginHandler();
+    this.loginHandler = generateAuthenticationToken();
 
     configureRoutes();
   }
 
   private void configureRoutes() {
-    app.before(BASE_URI_VERSION_1 + "/*", authHandler);
+    app.before(POST_URI + "*", authHandler);
+    app.before(POST_URI + "/*", authHandler);
 
-    app.post(AUTHENTICATION_URI, loginHandler);
+    app.post(AUTHENTICATION_URI, loginHandler, AccountType.ANYONE);
 
     app.exception(NoTokenProvidedException.class, handleNoTokenProvided);
     app.exception(InvalidTokenException.class, handleInvalidTokenProvided);
@@ -59,24 +66,26 @@ public class SecurityMiddleware {
 
   private Handler createAuthenticationHandler() {
     return context -> {
-      String token = context.header("Authorization");
+      String token = context.header(AUTHORIZATION);
 
-      if (token == null || !token.startsWith("Bearer ")) {
+      if (token == null || !token.startsWith(BEARER)) {
         throw new NoTokenProvidedException(NO_TOKEN_PROVIDED);
       }
 
       try {
         String username = JwtUtil.extractUsername(token.substring(7));
+        AccountType accountType = JwtUtil.extractAccountType(token.substring(7));
 
         // Continue to the next handler
-        context.attribute("username", username);
+        context.attribute(USERNAME, username);
+        context.attribute(ROLE, accountType);
       } catch (Exception e) {
         throw new InvalidTokenException(INVALID_TOKEN_PROVIDED, token);
       }
     };
   }
 
-  private Handler createLoginHandler() {
+  private Handler generateAuthenticationToken() {
     return ctx -> {
       var loginDto = ctx.bodyAsClass(AccountLoginDto.class);
 
@@ -84,7 +93,6 @@ public class SecurityMiddleware {
       log.info("Generating token for user: " + loginDto.getUsername());
 
       Account account = accountService.findByUsername(loginDto.getUsername());
-      var decryptedPassword = passwordEncoder.decryptPassword(account.getPassword());
 
       // if an account does not exist throw exception
       if (account == null) {
@@ -92,17 +100,19 @@ public class SecurityMiddleware {
             loginDto.getUsername());
       }
 
+      var decryptedPassword = passwordEncoder.decryptPassword(account.getPassword());
+
       if (!loginDto.getPassword().equals(decryptedPassword)) {
         throw new WrongPasswordException(GenericError.USER_PROVIDED_WRONG_PASSWORD,
             loginDto.getUsername());
       }
 
       // If authentication is successful, generate a token
-      String token = JwtUtil.generateToken(loginDto.getUsername());
+      String token = JwtUtil.generateToken(account.getUsername(), account.getRole());
 
       // Send the response
       ctx.json("Token: " + token);
-      ctx.status(200);
+      ctx.status(HttpStatus.OK);
     };
   }
 }
