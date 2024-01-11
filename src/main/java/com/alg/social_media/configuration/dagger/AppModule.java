@@ -83,7 +83,6 @@ public class AppModule {
 	}
 
 	@Provides
-	@Singleton
 	public StandardPBEStringEncryptor provideStandardPBEStringEncryptor() {
 		return new StandardPBEStringEncryptor();
 	}

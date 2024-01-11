@@ -45,6 +45,11 @@ public class BaseIntegrationTest {
 
     appComponent.buildSecurityMiddleware();
     app = appComponent.buildJavalin();
+
+    // initialize controllers
+    appComponent.buildPostController();
+    appComponent.buildRegistrationController();
+
     objectMapper = appComponent.buildObjectMapper();
 
     dbConnection = appComponent.buildDBConnection();

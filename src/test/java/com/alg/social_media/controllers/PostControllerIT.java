@@ -30,9 +30,6 @@ class PostControllerIT extends BaseIntegrationTest {
   private final PostRepository postRepository;
 
   public PostControllerIT() {
-    appComponent.buildPostController();
-    appComponent.buildRegistrationController();
-
     postRepository = appComponent.buildPostRepository();
     accountRepository = appComponent.buildAccountRepository();
 
@@ -73,13 +70,12 @@ class PostControllerIT extends BaseIntegrationTest {
 
     // create a free user post
     var postDto = PostDtoFactory.getFreeUserPostDto();
-    var endpointUrl = POST_URI;
 
     given()
         .body(objectMapper.writeValueAsString(postDto))
         .header("Authorization", "Bearer " + authToken)
         .when()
-        .post(endpointUrl)
+        .post(POST_URI)
         .then()
         .statusCode(HttpStatus.OK.getCode())
         .extract();
