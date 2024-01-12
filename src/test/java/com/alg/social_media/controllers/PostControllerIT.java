@@ -1,5 +1,7 @@
 package com.alg.social_media.controllers;
 
+import static com.alg.social_media.configuration.Constants.AUTHORIZATION;
+import static com.alg.social_media.configuration.Constants.BEARER;
 import static com.alg.social_media.configuration.constants.Paths.POST_URI;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -168,7 +170,7 @@ class PostControllerIT extends BaseIntegrationTest {
 
     given()
         .body(objectMapper.writeValueAsString(postDto))
-        .header("Authorization", "Bearer " + authToken)
+        .header(AUTHORIZATION,  BEARER + " " + authToken)
         .when()
         .post(POST_URI)
         .then()
