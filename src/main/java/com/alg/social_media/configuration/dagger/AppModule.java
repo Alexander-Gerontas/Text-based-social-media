@@ -9,7 +9,7 @@ import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import com.alg.social_media.configuration.database.LiquibaseConfiguration;
 import com.alg.social_media.configuration.security.CustomAccessManager;
 import com.alg.social_media.model.Post;
-import com.alg.social_media.objects.Account;
+import com.alg.social_media.model.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;

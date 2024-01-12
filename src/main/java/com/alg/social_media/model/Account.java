@@ -1,4 +1,4 @@
-package com.alg.social_media.objects;
+package com.alg.social_media.model;
 
 import com.alg.social_media.enums.AccountType;
 import jakarta.persistence.*;

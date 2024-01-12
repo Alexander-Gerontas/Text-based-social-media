@@ -2,7 +2,6 @@ package com.alg.social_media.model;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import com.alg.social_media.objects.Account;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

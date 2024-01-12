@@ -1,6 +1,6 @@
 package com.alg.social_media.repository;
 
-import com.alg.social_media.objects.Account;
+import com.alg.social_media.model.Account;
 import com.alg.social_media.utils.DBUtils;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;

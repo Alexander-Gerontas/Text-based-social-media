@@ -20,7 +20,7 @@ import com.alg.social_media.exceptions.GenericError;
 import com.alg.social_media.exceptions.InvalidTokenException;
 import com.alg.social_media.exceptions.NoTokenProvidedException;
 import com.alg.social_media.exceptions.WrongPasswordException;
-import com.alg.social_media.objects.Account;
+import com.alg.social_media.model.Account;
 import com.alg.social_media.service.AccountService;
 import com.alg.social_media.utils.PasswordEncoder;
 import io.javalin.Javalin;
