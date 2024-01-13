@@ -1,6 +1,6 @@
 package com.alg.social_media.configuration.security;
 
-import static com.alg.social_media.configuration.Constants.ROLE;
+import static com.alg.social_media.constants.Keywords.ROLE;
 
 import com.alg.social_media.enums.AccountType;
 import io.javalin.http.Context;

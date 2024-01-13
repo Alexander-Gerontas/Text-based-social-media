@@ -1,7 +1,7 @@
 package com.alg.social_media.controllers;
 
-import static com.alg.social_media.configuration.Constants.USERNAME;
-import static com.alg.social_media.configuration.constants.Paths.POST_URI;
+import static com.alg.social_media.constants.Keywords.USERNAME;
+import static com.alg.social_media.constants.Paths.POST_URI;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handlePostException;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleSubscriptionException;
 

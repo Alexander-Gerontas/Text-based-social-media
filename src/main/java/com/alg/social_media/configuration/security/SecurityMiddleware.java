@@ -1,11 +1,11 @@
 package com.alg.social_media.configuration.security;
 
-import static com.alg.social_media.configuration.Constants.AUTHORIZATION;
-import static com.alg.social_media.configuration.Constants.BEARER;
-import static com.alg.social_media.configuration.Constants.ROLE;
-import static com.alg.social_media.configuration.Constants.USERNAME;
-import static com.alg.social_media.configuration.constants.Paths.AUTHENTICATION_URI;
-import static com.alg.social_media.configuration.constants.Paths.POST_URI;
+import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
+import static com.alg.social_media.constants.Keywords.BEARER;
+import static com.alg.social_media.constants.Keywords.ROLE;
+import static com.alg.social_media.constants.Keywords.USERNAME;
+import static com.alg.social_media.constants.Paths.AUTHENTICATION_URI;
+import static com.alg.social_media.constants.Paths.POST_URI;
 import static com.alg.social_media.exceptions.GenericError.INVALID_TOKEN_PROVIDED;
 import static com.alg.social_media.exceptions.GenericError.NO_TOKEN_PROVIDED;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountDoesNotExist;

@@ -1,13 +1,13 @@
 package com.alg.social_media.controllers;
 
-import static com.alg.social_media.configuration.Constants.AUTHORIZATION;
-import static com.alg.social_media.configuration.Constants.BEARER;
-import static com.alg.social_media.configuration.constants.Paths.POST_URI;
+import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
+import static com.alg.social_media.constants.Keywords.BEARER;
+import static com.alg.social_media.constants.Paths.POST_URI;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.alg.social_media.configuration.BaseIntegrationTest;
-import com.alg.social_media.configuration.constants.Paths;
+import com.alg.social_media.constants.Paths;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.AccountLoginDto;
 import com.alg.social_media.repository.AccountRepository;

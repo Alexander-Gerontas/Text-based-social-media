@@ -1,7 +1,7 @@
 package com.alg.social_media.controllers;
 
-import static com.alg.social_media.configuration.constants.Paths.AUTHENTICATION_URI;
-import static com.alg.social_media.configuration.constants.Paths.REGISTRATION_URI;
+import static com.alg.social_media.constants.Paths.AUTHENTICATION_URI;
+import static com.alg.social_media.constants.Paths.REGISTRATION_URI;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

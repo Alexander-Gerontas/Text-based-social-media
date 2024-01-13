@@ -1,6 +1,6 @@
 package com.alg.social_media.controllers;
 
-import static com.alg.social_media.configuration.constants.Paths.REGISTRATION_URI;
+import static com.alg.social_media.constants.Paths.REGISTRATION_URI;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountExists;
 
 import com.alg.social_media.dto.AccountRegistrationDto;
