@@ -3,6 +3,7 @@ package com.alg.social_media.configuration.security;
 import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
 import static com.alg.social_media.constants.Keywords.BEARER;
 import static com.alg.social_media.constants.Keywords.ROLE;
+import static com.alg.social_media.constants.Keywords.TOKEN;
 import static com.alg.social_media.constants.Keywords.USERNAME;
 import static com.alg.social_media.constants.Paths.AUTHENTICATION_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
@@ -111,7 +112,7 @@ public class SecurityMiddleware {
       String token = JwtUtil.generateToken(account.getUsername(), account.getRole());
 
       // Send the response
-      ctx.json("Token: " + token);
+      ctx.json(TOKEN + ": " + token);
       ctx.status(HttpStatus.OK);
     };
   }
