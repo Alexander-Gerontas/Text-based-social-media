@@ -4,7 +4,7 @@ import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.exceptions.AccountExistsException;
 import com.alg.social_media.exceptions.GenericError;
 import com.alg.social_media.model.Account;
-import com.alg.social_media.dto.AccountRegistrationDto;
+import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.repository.AccountRepository;
 import javax.inject.Inject;
 

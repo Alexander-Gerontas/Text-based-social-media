@@ -13,7 +13,7 @@ import static com.alg.social_media.handler.GlobalControllerExceptionHandler.hand
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleNoTokenProvided;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleWrongPassword;
 
-import com.alg.social_media.dto.AccountLoginDto;
+import com.alg.social_media.dto.account.AccountLoginDto;
 import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.exceptions.GenericError;

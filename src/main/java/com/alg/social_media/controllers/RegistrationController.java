@@ -3,7 +3,7 @@ package com.alg.social_media.controllers;
 import static com.alg.social_media.constants.Paths.REGISTRATION_URI;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountExists;
 
-import com.alg.social_media.dto.AccountRegistrationDto;
+import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.exceptions.AccountExistsException;
 import com.alg.social_media.service.AccountService;

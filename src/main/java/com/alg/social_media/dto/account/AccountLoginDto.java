@@ -1,4 +1,4 @@
-package com.alg.social_media.dto;
+package com.alg.social_media.dto.account;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;

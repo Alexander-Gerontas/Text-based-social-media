@@ -1,4 +1,4 @@
-package com.alg.social_media.dto;
+package com.alg.social_media.dto.account;
 
 import com.alg.social_media.enums.AccountType;
 import jakarta.validation.constraints.NotEmpty;

@@ -1,7 +1,7 @@
 package com.alg.social_media.converters;
 
 import com.alg.social_media.model.Account;
-import com.alg.social_media.dto.AccountRegistrationDto;
+import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.utils.PasswordEncoder;
 import javax.inject.Inject;
 import org.modelmapper.ModelMapper;

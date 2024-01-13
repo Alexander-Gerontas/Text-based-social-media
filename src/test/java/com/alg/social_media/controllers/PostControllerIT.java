@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.alg.social_media.configuration.BaseIntegrationTest;
 import com.alg.social_media.constants.Paths;
 import com.alg.social_media.converters.AccountConverter;
-import com.alg.social_media.dto.AccountLoginDto;
+import com.alg.social_media.dto.account.AccountLoginDto;
 import com.alg.social_media.repository.AccountRepository;
 import com.alg.social_media.repository.PostRepository;
 import com.alg.social_media.utils.AccountDtoFactory;
