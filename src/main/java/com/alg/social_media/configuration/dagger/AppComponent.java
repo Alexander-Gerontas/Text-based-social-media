@@ -8,6 +8,7 @@ import com.alg.social_media.controllers.PostController;
 import com.alg.social_media.controllers.RegistrationController;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.repository.AccountRepository;
+import com.alg.social_media.repository.CommentRepository;
 import com.alg.social_media.repository.PostRepository;
 import com.alg.social_media.service.AccountService;
 import com.alg.social_media.utils.DBUtils;
@@ -25,9 +26,13 @@ public interface AppComponent {
   CustomAccessManager buildCustomAccessManager();
   SecurityMiddleware buildSecurityMiddleware();
   AccountConverter buildAccountConverter();
+
   // repositories
   PostRepository buildPostRepository();
+  CommentRepository buildCommentRepository();
   AccountRepository buildAccountRepository();
+
+  // services
   AccountService buildAccountService();
   // controllers
   RegistrationController buildRegistrationController();

@@ -29,6 +29,13 @@ public class PostRepository {
     return dbUtils.executeWithResultInTransaction(operation);
   }
 
+  public Post findById(Long id) {
+    DBUtils.DbTransactionResultOperation<Post> operation = entityManager ->
+        entityManager.find(Post.class, id);
+
+    return dbUtils.executeWithResultInTransaction(operation);
+  }
+
   public List<Post> findAll() {
     DBUtils.DbTransactionResultOperation<List<Post>> operation = entityManager -> {
 

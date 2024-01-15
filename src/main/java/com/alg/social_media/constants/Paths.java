@@ -11,4 +11,7 @@ public final class Paths {
 
   // posts
   public static final String POST_URI = BASE_URI + "/post";
+
+  // comments
+  public static final String COMMENT_URI = "/comment";
 }

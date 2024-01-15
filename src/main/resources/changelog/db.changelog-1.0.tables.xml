@@ -51,4 +51,29 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="comment-table-creation" author="author" failOnError="true">
+    <preConditions>
+      <not>
+        <tableExists tableName="comments"/>
+      </not>
+    </preConditions>
+    <createTable tableName="comments">
+      <column name="id" type="SERIAL" autoIncrement="true">
+        <constraints primaryKey="true" primaryKeyName="comment_pk"/>
+      </column>
+      <column name="content" type="varchar(1000)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="author_id" type="SERIAL">
+        <constraints nullable="false" foreignKeyName="account_fk" references="accounts(id)"/>
+      </column>
+      <column name="post_id" type="SERIAL">
+        <constraints nullable="false" foreignKeyName="post_fk" references="posts(id)"/>
+      </column>
+      <column name="create_date_time" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
 </databaseChangeLog>

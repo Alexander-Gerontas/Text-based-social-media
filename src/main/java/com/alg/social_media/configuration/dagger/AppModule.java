@@ -8,6 +8,7 @@ import com.alg.social_media.configuration.database.DBConnection;
 import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import com.alg.social_media.configuration.database.LiquibaseConfiguration;
 import com.alg.social_media.configuration.security.CustomAccessManager;
+import com.alg.social_media.model.Comment;
 import com.alg.social_media.model.Post;
 import com.alg.social_media.model.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,6 +52,7 @@ public class AppModule {
 		return new JpaEntityManagerFactory(dbConnection, new Class[]{
 				Account.class,
 				Post.class,
+				Comment.class,
 		});
 	}
 

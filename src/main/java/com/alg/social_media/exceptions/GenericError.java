@@ -17,7 +17,11 @@ public enum GenericError {
 
     // subscription errors
     SUBSCRIPTION_ERROR(3000, "User does not have a premium subscription: "),
-    POST_CHARACTER_LIMIT(3001, "You cannot post text above 3000 character");
+    POST_CHARACTER_LIMIT(3001, "You cannot post text above 3000 character"),
+    COMMENT_CHARACTER_LIMIT(3002, "Free users can comment up to 5 times. User is not a premium: "),
+
+    //
+    POST_DOES_NOT_EXIST(4000, "Post does not exist or deleted: ");
 
     private final int code;
     private final String description;

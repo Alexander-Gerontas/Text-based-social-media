@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,20 +20,27 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "posts")
-public class Post {
+@AllArgsConstructor
+@Table(name = "comments")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    @Column(length = 3000, nullable = false)
+    @Column(length = 1000)
     private String content;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Account author;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @Column(name = "create_date_time", columnDefinition = "TIMESTAMP")
+    private LocalDateTime createDate;
 }
