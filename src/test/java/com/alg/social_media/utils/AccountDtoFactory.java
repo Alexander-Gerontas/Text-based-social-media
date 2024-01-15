@@ -23,6 +23,15 @@ public final class AccountDtoFactory {
         );
     }
 
+    public static AccountRegistrationDto getJaneDoePremiumAccountRegistrationDto() {
+      return new AccountRegistrationDto(
+                "janeDoe",
+                "jane@doe.com",
+                "janepass",
+                AccountType.PREMIUM
+        );
+    }
+
     public static AccountLoginDto getFreeAccountLoginDto() {
       return new AccountLoginDto(
             "simpleUser",
@@ -30,10 +39,17 @@ public final class AccountDtoFactory {
         );
     }
 
-    public static AccountLoginDto getPremiumAccountLoginDto() {
-        return new AccountLoginDto(
-            "adminUser",
-            "adminpass"
-        );
-    }
+  public static AccountLoginDto getPremiumAccountLoginDto() {
+    return new AccountLoginDto(
+        "adminUser",
+        "adminpass"
+    );
+  }
+
+  public static AccountLoginDto getAccountLoginDto(AccountRegistrationDto dto) {
+    return new AccountLoginDto(
+        dto.getUsername(),
+        dto.getPassword()
+    );
+  }
 }

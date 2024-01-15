@@ -19,7 +19,7 @@ public class BaseIntegrationTest {
   public static final ConfiguredPostgresContainer postgres;
   public static final AppComponent appComponent;
   public static final Properties properties;
-  public static final int port = 8080;
+  public static final int port = 5000;
 
   static {
     // start container db
