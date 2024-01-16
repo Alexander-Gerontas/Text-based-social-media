@@ -11,9 +11,10 @@ import java.util.List;
 /**
  * The Base repository.
  *
- * @param <E> the repository entity
+ * @param <E> the entity
+ * @param <P> the primary key of the entity
  */
-public abstract class BaseRepository<E> {
+public abstract class BaseRepository<E, P> {
   protected final DBUtils dbUtils;
   private final Class<E> entityName;
 
@@ -28,6 +29,13 @@ public abstract class BaseRepository<E> {
       entityManager.flush();
       return entity;
     };
+
+    return dbUtils.executeWithResultInTransaction(operation);
+  }
+
+  public E findById(P id) {
+    DBUtils.DbTransactionResultOperation<E> operation = entityManager ->
+        entityManager.find(entityName, id);
 
     return dbUtils.executeWithResultInTransaction(operation);
   }
@@ -48,6 +56,15 @@ public abstract class BaseRepository<E> {
     };
 
     return dbUtils.executeWithResultInTransaction(operation);
+  }
+
+  private void delete(P entityId) {
+    DBUtils.DbTransactionOperation operation = entityManager -> {
+      E entity = entityManager.find(entityName, entityId);
+      entityManager.remove(entity);
+    };
+
+    dbUtils.executeInTransaction(operation);
   }
 
   public void deleteAll() {
