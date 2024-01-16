@@ -30,10 +30,10 @@ public class Follow {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "follower_id")
+    @JoinColumn(name = "follower_id", nullable = false)
     private Account follower;
 
     @ManyToOne
-    @JoinColumn(name = "following_id")
+    @JoinColumn(name = "following_id", nullable = false)
     private Account following;
 }

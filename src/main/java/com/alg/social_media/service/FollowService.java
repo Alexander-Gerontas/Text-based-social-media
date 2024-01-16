@@ -4,8 +4,10 @@ import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.exceptions.GenericError;
 import com.alg.social_media.model.Follow;
 import com.alg.social_media.repository.FollowRepository;
+import jakarta.transaction.Transactional;
 import javax.inject.Inject;
 
+@Transactional
 public class FollowService {
   private final FollowRepository followRepository;
   private final AccountService accountService;
@@ -33,7 +35,7 @@ public class FollowService {
     }
 
     // check if follow already exists
-    if (followerAccount.getFollowingList()
+    if (followerAccount.getFollowers()
         .stream()
         .map(Follow::getFollowing)
         .anyMatch(account -> account.equals(followingAccount))) {

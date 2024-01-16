@@ -6,8 +6,10 @@ import com.alg.social_media.exceptions.GenericError;
 import com.alg.social_media.model.Account;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.repository.AccountRepository;
+import jakarta.transaction.Transactional;
 import javax.inject.Inject;
 
+@Transactional
 public class AccountService {
 
     private final AccountRepository accountRepository;
