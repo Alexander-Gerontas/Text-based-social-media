@@ -14,4 +14,7 @@ public final class Paths {
 
   // comments
   public static final String COMMENT_URI = "/comment";
+
+  // follows
+  public static final String FOLLOW_URI = BASE_URI + "/follow";
 }

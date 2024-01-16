@@ -3,9 +3,11 @@ package com.alg.social_media.utils;
 import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.transaction.Transactional;
 import java.sql.SQLException;
 import javax.inject.Inject;
 
+@Transactional
 public class DBUtils {
 	private final JpaEntityManagerFactory jpaEntityManagerFactory;
 

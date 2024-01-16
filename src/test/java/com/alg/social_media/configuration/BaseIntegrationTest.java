@@ -49,6 +49,7 @@ public class BaseIntegrationTest {
     // initialize controllers
     appComponent.buildPostController();
     appComponent.buildRegistrationController();
+    appComponent.buildFollowController();
 
     objectMapper = appComponent.buildObjectMapper();
 

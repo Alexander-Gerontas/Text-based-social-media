@@ -76,4 +76,23 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="follower-table-creation" author="author" failOnError="true">
+    <preConditions>
+      <not>
+        <tableExists tableName="followers"/>
+      </not>
+    </preConditions>
+    <createTable tableName="followers">
+      <column name="id" type="SERIAL" autoIncrement="true">
+        <constraints primaryKey="true" primaryKeyName="follower_pk"/>
+      </column>
+      <column name="follower_id" type="BIGINT">
+        <constraints nullable="false" foreignKeyName="follower_acc_fk" references="accounts(id)"/>
+      </column>
+      <column name="following_id" type="BIGINT">
+        <constraints nullable="false" foreignKeyName="following_acc_fk" references="accounts(id)"/>
+      </column>
+    </createTable>
+  </changeSet>
 </databaseChangeLog>

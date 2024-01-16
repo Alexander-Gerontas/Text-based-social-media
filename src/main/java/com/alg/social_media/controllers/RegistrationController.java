@@ -17,25 +17,22 @@ import lombok.extern.slf4j.Slf4j;
 public class RegistrationController {
     private final Javalin app;
     private final AccountService accountService;
-    private final Handler registrationHandler;
 
     @Inject
     public RegistrationController(Javalin app, AccountService accountService) {
         this.app = app;
         this.accountService = accountService;
 
-        registrationHandler = setupRegistrationHandler();
-
         configureRoutes();
     }
 
     private void configureRoutes() {
-        app.post(REGISTRATION_URI, registrationHandler, AccountType.ANYONE);
+        app.post(REGISTRATION_URI, registrationHandler(), AccountType.ANYONE);
 
         app.exception(AccountExistsException.class, handleAccountExists);
     }
 
-    private Handler setupRegistrationHandler() {
+    private Handler registrationHandler() {
         return ctx -> {
             AccountRegistrationDto accountRegistrationDto = ctx.bodyAsClass(
                 AccountRegistrationDto.class);

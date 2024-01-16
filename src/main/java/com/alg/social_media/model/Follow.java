@@ -2,16 +2,15 @@ package com.alg.social_media.model;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import com.alg.social_media.enums.AccountType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,24 +18,22 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "accounts")
-public class Account {
+@Table(name = "followers")
+public class Follow {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "follower_id")
+    private Account follower;
 
-    private String email;
-
-    private String password;
-
-    private AccountType role;
-
-    @OneToMany(mappedBy = "follower")
-    private List<Follow> followingList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "following_id")
+    private Account following;
 }
