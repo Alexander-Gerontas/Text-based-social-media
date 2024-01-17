@@ -7,12 +7,12 @@ import static com.alg.social_media.constants.Keywords.BEARER;
 import static com.alg.social_media.constants.Paths.COMMENT_URI;
 import static com.alg.social_media.constants.Paths.FOLLOWER_POSTS_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
+import static com.alg.social_media.utils.CrudUtils.getAuthTokenForUser;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.alg.social_media.configuration.BaseIntegrationTest;
-import com.alg.social_media.constants.Paths;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.account.AccountLoginDto;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
@@ -26,7 +26,7 @@ import com.alg.social_media.repository.CommentRepository;
 import com.alg.social_media.repository.FollowRepository;
 import com.alg.social_media.repository.PostRepository;
 import com.alg.social_media.utils.AccountDtoFactory;
-import com.alg.social_media.utils.AuthenticationUtil;
+import com.alg.social_media.utils.CrudUtils;
 import com.alg.social_media.utils.DateUtil;
 import com.alg.social_media.utils.PostDtoFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -85,10 +85,9 @@ class PostControllerIT extends BaseIntegrationTest {
   @Test
   @SneakyThrows
   void createFreeUserPostTest() {
-
     // create a free user
-    var loginDto = AccountDtoFactory.getFreeAccountLoginDto();
     var registrationDto = AccountDtoFactory.getFreeAccountRegistrationDto();
+    var loginDto = AccountDtoFactory.getAccountLoginDto(registrationDto);
 
     var account = accountConverter.toAccount(registrationDto);
     accountRepository.save(account);
@@ -155,8 +154,8 @@ class PostControllerIT extends BaseIntegrationTest {
   void freeUserCannotPostMoreThan1000WordsTest() {
 
     // create a free user
-    var loginDto = AccountDtoFactory.getFreeAccountLoginDto();
     var registrationDto = AccountDtoFactory.getFreeAccountRegistrationDto();
+    var loginDto = AccountDtoFactory.getAccountLoginDto(registrationDto);
 
     var account = accountConverter.toAccount(registrationDto);
     accountRepository.save(account);
@@ -168,7 +167,7 @@ class PostControllerIT extends BaseIntegrationTest {
 
     given()
         .body(objectMapper.writeValueAsString(postDto))
-        .header("Authorization", "Bearer " + authToken)
+        .header(AUTHORIZATION, BEARER + " " + authToken)
         .when()
         .post(POST_URI)
         .then()
@@ -423,13 +422,13 @@ class PostControllerIT extends BaseIntegrationTest {
 
     List<String> authTokens = registrationDtos.stream()
         .map(AccountDtoFactory::getAccountLoginDto)
-        .map(this::getAuthTokenForUser)
+        .map(CrudUtils::getAuthTokenForUser)
         .toList();
 
     // first account follows every other user
     accounts.forEach(account -> {
       if (!account.getUsername().equals(registrationDto1.getUsername())) {
-        AuthenticationUtil.followUser(authTokens.get(0), account.getUsername());
+        CrudUtils.followUser(authTokens.get(0), account.getUsername());
       }
     });
 
@@ -484,26 +483,6 @@ class PostControllerIT extends BaseIntegrationTest {
 
     var datesInReverseChronologicalOrder = DateUtil.areDatesInReverseChronologicalOrder(postDates);
     assertTrue(datesInReverseChronologicalOrder);
-  }
-
-  // todo remove
-  @SneakyThrows
-  private String getAuthTokenForUser(AccountLoginDto loginDto) {
-    // Define the endpoint URL
-    String loginUrl = Paths.AUTHENTICATION_URI;
-
-    var response = given()
-        .body(objectMapper.writeValueAsString(loginDto))
-        .when()
-        .post(loginUrl)
-        .then()
-        .statusCode(200)
-        .extract();
-
-    String responseBody = response.body().asString();
-
-    // get token from response
-    return responseBody.substring(7);
   }
 
   @SneakyThrows

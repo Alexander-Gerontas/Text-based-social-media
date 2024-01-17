@@ -64,13 +64,6 @@ public final class AccountDtoFactory {
     );
   }
 
-  public static AccountLoginDto getFreeAccountLoginDto() {
-    return new AccountLoginDto(
-        "simpleUser",
-        "userpass"
-    );
-  }
-
   public static AccountLoginDto getPremiumAccountLoginDto() {
     return new AccountLoginDto(
         "adminUser",

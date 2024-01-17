@@ -9,16 +9,14 @@ import com.alg.social_media.configuration.BaseIntegrationTest;
 import com.alg.social_media.constants.Paths;
 import com.alg.social_media.dto.account.AccountLoginDto;
 import com.alg.social_media.dto.account.FollowDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javalin.http.HttpStatus;
 import lombok.SneakyThrows;
 
-public final class AuthenticationUtil extends BaseIntegrationTest {
+public final class CrudUtils extends BaseIntegrationTest {
+  private CrudUtils() {}
 
-  // todo rename crud util
-  private AuthenticationUtil() {}
-
-  public static String getAuthTokenForUser(AccountLoginDto loginDto) throws JsonProcessingException {
+  @SneakyThrows
+  public static String getAuthTokenForUser(AccountLoginDto loginDto) {
     // Define the endpoint URL
     String loginUrl = Paths.AUTHENTICATION_URI;
 

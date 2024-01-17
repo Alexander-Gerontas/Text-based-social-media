@@ -12,7 +12,7 @@ import com.alg.social_media.dto.account.FollowDto;
 import com.alg.social_media.repository.AccountRepository;
 import com.alg.social_media.repository.FollowRepository;
 import com.alg.social_media.utils.AccountDtoFactory;
-import com.alg.social_media.utils.AuthenticationUtil;
+import com.alg.social_media.utils.CrudUtils;
 import io.javalin.http.HttpStatus;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
@@ -70,8 +70,8 @@ class FollowControllerIT extends BaseIntegrationTest {
     var account1 = AccountDtoFactory.getAccountLoginDto(accountRegistrationDto);
     var account2 = AccountDtoFactory.getAccountLoginDto(premiumAccountRegistrationDto);
 
-    var freeAccountToken = AuthenticationUtil.getAuthTokenForUser(account1);
-    var premiumAccountToken = AuthenticationUtil.getAuthTokenForUser(account2);
+    var freeAccountToken = CrudUtils.getAuthTokenForUser(account1);
+    var premiumAccountToken = CrudUtils.getAuthTokenForUser(account2);
 
     given()
         .body(objectMapper.writeValueAsString(new FollowDto(premiumAccount.getUsername())))
@@ -96,7 +96,7 @@ class FollowControllerIT extends BaseIntegrationTest {
 
     var account = AccountDtoFactory.getAccountLoginDto(accountRegistrationDto);
 
-    var token = AuthenticationUtil.getAuthTokenForUser(account);
+    var token = CrudUtils.getAuthTokenForUser(account);
 
     // send a request to follow yourself
     given()

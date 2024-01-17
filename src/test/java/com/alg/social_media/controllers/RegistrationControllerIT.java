@@ -79,7 +79,7 @@ class RegistrationControllerIT extends BaseIntegrationTest {
     var account = accountConverter.toAccount(accountRegistrationDto);
     accountRepository.save(account);
 
-    var account1 = AccountDtoFactory.getFreeAccountLoginDto();
+    var account1 = AccountDtoFactory.getAccountLoginDto(accountRegistrationDto);
 
     var response = given()
         .body(objectMapper.writeValueAsString(account1))
@@ -101,7 +101,7 @@ class RegistrationControllerIT extends BaseIntegrationTest {
     var account = accountConverter.toAccount(accountRegistrationDto);
     accountRepository.save(account);
 
-    var loginDto = AccountDtoFactory.getFreeAccountLoginDto();
+    var loginDto = AccountDtoFactory.getAccountLoginDto(accountRegistrationDto);
     loginDto.setPassword("pass123");
 
     var response = given()
