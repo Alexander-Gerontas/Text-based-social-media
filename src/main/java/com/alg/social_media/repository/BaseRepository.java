@@ -33,6 +33,15 @@ public abstract class BaseRepository<E, P> {
     return dbUtils.executeWithResultInTransaction(operation);
   }
 
+  public void update(E entity) {
+    DBUtils.DbTransactionOperation operation = entityManager -> {
+      entityManager.merge(entity);
+      entityManager.flush();
+    };
+
+    dbUtils.executeInTransaction(operation);
+  }
+
   public E findById(P id) {
     DBUtils.DbTransactionResultOperation<E> operation = entityManager ->
         entityManager.find(entityName, id);

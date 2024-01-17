@@ -11,6 +11,7 @@ public final class Paths {
 
   // posts
   public static final String POST_URI = BASE_URI + "/post";
+  public static final String FOLLOWER_POSTS_URI = POST_URI + "/follower-posts";
 
   // comments
   public static final String COMMENT_URI = "/comment";

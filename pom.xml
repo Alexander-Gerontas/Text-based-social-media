@@ -12,6 +12,7 @@
 		<lombok.version>1.18.30</lombok.version>
 		<dagger.version>2.50</dagger.version>
 		<jjwt.version>0.12.3</jjwt.version>
+		<jackson.version>2.15.3</jackson.version>
 	</properties>
 	<dependencies>
 
@@ -114,6 +115,20 @@
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>3.2.0</version>
+		</dependency>
+
+		<!-- object mapper-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<!-- support for "Java 8 Dates" -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 
 		<!-- logging -->

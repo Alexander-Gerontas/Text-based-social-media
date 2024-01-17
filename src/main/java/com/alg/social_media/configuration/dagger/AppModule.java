@@ -13,6 +13,7 @@ import com.alg.social_media.model.Follow;
 import com.alg.social_media.model.Post;
 import com.alg.social_media.model.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dagger.Module;
 import dagger.Provides;
 import io.javalin.Javalin;
@@ -83,7 +84,9 @@ public class AppModule {
 	@Provides
 	@Singleton
 	public ObjectMapper provideObjectMapper() {
-		return new ObjectMapper();
+		var objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		return objectMapper;
 	}
 
 	@Provides

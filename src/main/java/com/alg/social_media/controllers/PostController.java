@@ -1,13 +1,17 @@
 package com.alg.social_media.controllers;
 
+import static com.alg.social_media.constants.ControllerArgs.PAGE;
+import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
 import static com.alg.social_media.constants.Keywords.USERNAME;
 import static com.alg.social_media.constants.Paths.COMMENT_URI;
+import static com.alg.social_media.constants.Paths.FOLLOWER_POSTS_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handlePostException;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleSubscriptionException;
 
 import com.alg.social_media.dto.post.CommentDto;
 import com.alg.social_media.dto.post.PostDto;
+import com.alg.social_media.dto.post.PostResponseDto;
 import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.exceptions.PostException;
 import com.alg.social_media.exceptions.SubscriptionException;
@@ -16,6 +20,7 @@ import com.alg.social_media.service.PostService;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
+import java.util.List;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,6 +46,9 @@ public class PostController {
 
         // comment on a post
         app.post(POST_URI + "/{id}" + COMMENT_URI, commentHandler(), AccountType.FREE, AccountType.PREMIUM);
+
+        // get follower posts
+        app.get(FOLLOWER_POSTS_URI, getFollowerPostsHandler(), AccountType.FREE, AccountType.PREMIUM);
 
         app.exception(SubscriptionException.class, handleSubscriptionException);
         app.exception(PostException.class, handlePostException);
@@ -81,6 +89,34 @@ public class PostController {
             ctx.json(newComment.getAuthor().getUsername() +
                 " made a comment on post with id: " + postId);
 
+            ctx.status(HttpStatus.OK);
+        };
+    }
+
+    private Handler getFollowerPostsHandler() {
+        return ctx -> {
+            String username = ctx.attribute(USERNAME);
+
+            int page = 0;
+            int pageSize = 10;
+
+            String pageParam = ctx.queryParam(PAGE);
+            String pageSizeParam = ctx.queryParam(PAGE_SIZE);
+
+            if (pageParam != null) {
+                page = Integer.parseInt(pageParam);
+            }
+
+            if (pageSizeParam != null) {
+                pageSize = Integer.parseInt(pageSizeParam);
+            }
+
+            log.info("User: " + username + " wants to see what his followers are posting");
+
+            List<PostResponseDto> followerPosts = postService.getFollowerPosts(username, page, pageSize);
+
+            // Send the response
+            ctx.json(followerPosts);
             ctx.status(HttpStatus.OK);
         };
     }

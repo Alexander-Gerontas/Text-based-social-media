@@ -49,6 +49,9 @@
       <column name="author_id" type="SERIAL">
         <constraints nullable="false" foreignKeyName="account_fk" references="accounts(id)"/>
       </column>
+      <column name="create_date" type="DATE">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
   </changeSet>
 

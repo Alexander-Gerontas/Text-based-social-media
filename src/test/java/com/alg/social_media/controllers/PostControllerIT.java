@@ -1,26 +1,40 @@
 package com.alg.social_media.controllers;
 
+import static com.alg.social_media.constants.ControllerArgs.PAGE;
+import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
 import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
 import static com.alg.social_media.constants.Keywords.BEARER;
 import static com.alg.social_media.constants.Paths.COMMENT_URI;
+import static com.alg.social_media.constants.Paths.FOLLOWER_POSTS_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.alg.social_media.configuration.BaseIntegrationTest;
 import com.alg.social_media.constants.Paths;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.account.AccountLoginDto;
+import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.dto.post.CommentDto;
+import com.alg.social_media.dto.post.PostDto;
+import com.alg.social_media.dto.post.PostResponseDto;
+import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Post;
 import com.alg.social_media.repository.AccountRepository;
 import com.alg.social_media.repository.CommentRepository;
+import com.alg.social_media.repository.FollowRepository;
 import com.alg.social_media.repository.PostRepository;
 import com.alg.social_media.utils.AccountDtoFactory;
+import com.alg.social_media.utils.AuthenticationUtil;
+import com.alg.social_media.utils.DateUtil;
 import com.alg.social_media.utils.PostDtoFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javalin.http.HttpStatus;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -32,6 +46,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class PostControllerIT extends BaseIntegrationTest {
+  private final FollowRepository followRepository;
   private final AccountRepository accountRepository;
   private final AccountConverter accountConverter;
   private final PostRepository postRepository;
@@ -40,6 +55,7 @@ class PostControllerIT extends BaseIntegrationTest {
   public PostControllerIT() {
     postRepository = appComponent.buildPostRepository();
     commentRepository = appComponent.buildCommentRepository();
+    followRepository = appComponent.buildFollowRepository();
     accountRepository = appComponent.buildAccountRepository();
 
     accountConverter = appComponent.buildAccountConverter();
@@ -62,6 +78,7 @@ class PostControllerIT extends BaseIntegrationTest {
     // clear repos
     commentRepository.deleteAll();
     postRepository.deleteAll();
+    followRepository.deleteAll();
     accountRepository.deleteAll();
   }
 
@@ -385,7 +402,93 @@ class PostControllerIT extends BaseIntegrationTest {
     assertEquals(10, commentRepository.findAll().size());
   }
 
-  private String getAuthTokenForUser(AccountLoginDto loginDto) throws JsonProcessingException {
+  @Test
+  @SneakyThrows
+  void getFollowerPostInReverseChronologicalOrderTest() {
+    // create multiple users
+    var registrationDto1 = AccountDtoFactory.getFreeAccountRegistrationDto("user1");
+    var registrationDto2 = AccountDtoFactory.getFreeAccountRegistrationDto("user2");
+    var registrationDto3 = AccountDtoFactory.getFreeAccountRegistrationDto("user3");
+    var registrationDto4 = AccountDtoFactory.getFreeAccountRegistrationDto("user4");
+    var registrationDto5 = AccountDtoFactory.getFreeAccountRegistrationDto("user5");
+
+    List<AccountRegistrationDto> registrationDtos = List.of(registrationDto1, registrationDto2,
+        registrationDto3, registrationDto4, registrationDto5);
+
+    List<Account> accounts = registrationDtos.stream()
+        .map(accountConverter::toAccount)
+        .toList();
+
+    accounts.forEach(accountRepository::save);
+
+    List<String> authTokens = registrationDtos.stream()
+        .map(AccountDtoFactory::getAccountLoginDto)
+        .map(this::getAuthTokenForUser)
+        .toList();
+
+    // first account follows every other user
+    accounts.forEach(account -> {
+      if (!account.getUsername().equals(registrationDto1.getUsername())) {
+        AuthenticationUtil.followUser(authTokens.get(0), account.getUsername());
+      }
+    });
+
+    // create two posts per user
+    authTokens.forEach(authToken -> {
+      var postDto1 = PostDtoFactory.getFreeUserPostDto();
+      var postDto2 = PostDtoFactory.getFreeUserPostDto();
+
+      createNewPost(postDto1, authToken, HttpStatus.OK);
+      createNewPost(postDto2, authToken, HttpStatus.OK);
+    });
+
+    // set random dates in posts
+    postRepository.findAll().forEach(post -> {
+      var date = DateUtil.getRandomLocalDate();
+
+      post.setCreateDate(date);
+      postRepository.update(post);
+    });
+
+    var response = given()
+        .queryParam(PAGE, 0)
+        .queryParam(PAGE_SIZE, 10)
+        .header(AUTHORIZATION, BEARER + " " + authTokens.get(0))
+        .when()
+        .get(FOLLOWER_POSTS_URI)
+        .then()
+        .statusCode(HttpStatus.OK.getCode())
+        .extract();
+
+    List<PostResponseDto> followerPosts = Arrays.stream(objectMapper
+        .readValue(response.body().asString(), PostResponseDto[].class))
+        .toList();
+
+    List<String> expectedUsernames = registrationDtos.stream()
+        .map(AccountRegistrationDto::getUsername)
+        .collect(Collectors.toList());
+
+    expectedUsernames.remove(registrationDto1.getUsername());
+
+    var actualUsernames = followerPosts.stream()
+        .map(PostResponseDto::getAuthor)
+        .toList();
+
+    var followerPostsContainExpectedUsernames = expectedUsernames.containsAll(actualUsernames);
+
+    assertTrue(followerPostsContainExpectedUsernames);
+
+    List<LocalDate> postDates = followerPosts.stream()
+        .map(PostResponseDto::getCreateDate)
+        .toList();
+
+    var datesInReverseChronologicalOrder = DateUtil.areDatesInReverseChronologicalOrder(postDates);
+    assertTrue(datesInReverseChronologicalOrder);
+  }
+
+  // todo remove
+  @SneakyThrows
+  private String getAuthTokenForUser(AccountLoginDto loginDto) {
     // Define the endpoint URL
     String loginUrl = Paths.AUTHENTICATION_URI;
 
@@ -401,6 +504,18 @@ class PostControllerIT extends BaseIntegrationTest {
 
     // get token from response
     return responseBody.substring(7);
+  }
+
+  @SneakyThrows
+  private void createNewPost(PostDto postDto, String authToken, HttpStatus httpStatus) {
+    given()
+        .body(objectMapper.writeValueAsString(postDto))
+        .header(AUTHORIZATION, BEARER + " " + authToken)
+        .when()
+        .post(POST_URI)
+        .then()
+        .statusCode(httpStatus.getCode())
+        .extract();
   }
 
   private void commentOnPost(Long postId, CommentDto commentDto, String authToken, HttpStatus httpStatus) throws JsonProcessingException {

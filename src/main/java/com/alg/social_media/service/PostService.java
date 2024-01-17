@@ -2,24 +2,32 @@ package com.alg.social_media.service;
 
 import static com.alg.social_media.exceptions.GenericError.SUBSCRIPTION_ERROR;
 
+import com.alg.social_media.converters.PostConverter;
 import com.alg.social_media.dto.post.PostDto;
+import com.alg.social_media.dto.post.PostResponseDto;
 import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.exceptions.GenericError;
 import com.alg.social_media.exceptions.PostException;
 import com.alg.social_media.exceptions.SubscriptionException;
+import com.alg.social_media.model.Account;
+import com.alg.social_media.model.Follow;
 import com.alg.social_media.model.Post;
 import com.alg.social_media.repository.PostRepository;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 public class PostService {
-
     private final PostRepository postRepository;
+    private final PostConverter postConverter;
     private final AccountService accountService;
 
     @Inject
-    public PostService(final PostRepository accountRepository,
+    public PostService(final PostRepository postRepository, final PostConverter postConverter,
         final AccountService accountService) {
-        this.postRepository = accountRepository;
+        this.postRepository = postRepository;
+        this.postConverter = postConverter;
         this.accountService = accountService;
     }
 
@@ -37,6 +45,7 @@ public class PostService {
         Post post = Post.builder()
             .content(postDto.getContent())
             .author(account)
+            .createDate(LocalDate.now())
             .build();
 
         return postRepository.save(post);
@@ -44,5 +53,20 @@ public class PostService {
 
     public Post findById(Long id) {
         return postRepository.findById(id);
+    }
+
+    public List<PostResponseDto> getFollowerPosts(String username, int page, int pageSize) {
+        Account account = accountService.findByUsername(username);
+
+        var followerIds = account.getFollowers().stream()
+            .map(Follow::getFollowing)
+            .map(Account::getId)
+            .collect(Collectors.toSet());
+
+        List<Post> followerPost = postRepository.findAccountPostReverseChronologically(followerIds, page, pageSize);
+
+        return followerPost.stream()
+            .map(postConverter::toResponseDto)
+            .toList();
     }
 }
