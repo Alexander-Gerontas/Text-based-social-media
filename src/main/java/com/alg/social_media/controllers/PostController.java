@@ -1,10 +1,12 @@
 package com.alg.social_media.controllers;
 
+import static com.alg.social_media.constants.ControllerArgs.COMMENT_LIMIT;
 import static com.alg.social_media.constants.ControllerArgs.PAGE;
 import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
 import static com.alg.social_media.constants.Keywords.USERNAME;
 import static com.alg.social_media.constants.Paths.COMMENT_URI;
 import static com.alg.social_media.constants.Paths.FOLLOWER_POSTS_URI;
+import static com.alg.social_media.constants.Paths.MY_POSTS_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handlePostException;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleSubscriptionException;
@@ -50,6 +52,9 @@ public class PostController {
         // get follower posts
         app.get(FOLLOWER_POSTS_URI, getFollowerPostsHandler(), AccountType.FREE, AccountType.PREMIUM);
 
+        // user gets his own posts
+        app.get(MY_POSTS_URI, getAccountPostsHandler(), AccountType.FREE, AccountType.PREMIUM);
+
         app.exception(SubscriptionException.class, handleSubscriptionException);
         app.exception(PostException.class, handlePostException);
     }
@@ -89,6 +94,27 @@ public class PostController {
             ctx.json(newComment.getAuthor().getUsername() +
                 " made a comment on post with id: " + postId);
 
+            ctx.status(HttpStatus.OK);
+        };
+    }
+
+    private Handler getAccountPostsHandler() {
+        return ctx -> {
+            String username = ctx.attribute(USERNAME);
+            String pageParam = ctx.queryParam(PAGE);
+            String pageSizeParam = ctx.queryParam(PAGE_SIZE);
+            String commentLimitParam = ctx.queryParam(COMMENT_LIMIT);
+
+            int page = (pageParam != null) ? Integer.parseInt(pageParam) : 0;
+            int pageSize = (pageSizeParam != null) ? Integer.parseInt(pageSizeParam) : 10;
+            int commentLimit = (commentLimitParam != null) ? Integer.parseInt(commentLimitParam) : 50;
+
+            log.info("User: " + username + " wants to see what his posts");
+
+            List<PostResponseDto> accountPosts = postService.getAccountPosts(username, page, pageSize, commentLimit);
+
+            // Send the response
+            ctx.json(accountPosts);
             ctx.status(HttpStatus.OK);
         };
     }

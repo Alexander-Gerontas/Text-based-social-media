@@ -74,7 +74,7 @@
       <column name="post_id" type="SERIAL">
         <constraints nullable="false" foreignKeyName="post_fk" references="posts(id)"/>
       </column>
-      <column name="create_date_time" type="TIMESTAMP">
+      <column name="create_date" type="DATE">
         <constraints nullable="false"/>
       </column>
     </createTable>

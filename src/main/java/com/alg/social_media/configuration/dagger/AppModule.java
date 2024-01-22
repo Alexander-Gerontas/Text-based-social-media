@@ -8,6 +8,8 @@ import com.alg.social_media.configuration.database.DBConnection;
 import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import com.alg.social_media.configuration.database.LiquibaseConfiguration;
 import com.alg.social_media.configuration.security.CustomAccessManager;
+import com.alg.social_media.converters.CommentConverter;
+import com.alg.social_media.converters.PostConverter;
 import com.alg.social_media.model.Comment;
 import com.alg.social_media.model.Follow;
 import com.alg.social_media.model.Post;
@@ -94,16 +96,28 @@ public class AppModule {
 		return new StandardPBEStringEncryptor();
 	}
 
-	@Provides
-	@Singleton
 	/**
 	 * Bean for model mapper with matching strategy to strict mode.
 	 *
 	 * @return the ModelMapper.
 	 */
+	@Provides
+	@Singleton
 	public ModelMapper modelMapper() {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(STRICT);
 		return modelMapper;
+	}
+
+	@Provides
+	@Singleton
+	public PostConverter postConverter(ModelMapper modelMapper) {
+		return new PostConverter(modelMapper);
+	}
+
+	@Provides
+	@Singleton
+	public CommentConverter commentConverter(ModelMapper modelMapper) {
+		return new CommentConverter(modelMapper);
 	}
 }

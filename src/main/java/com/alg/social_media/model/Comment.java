@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +41,6 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @Column(name = "create_date_time", columnDefinition = "TIMESTAMP")
-    private LocalDateTime createDate;
+    @Column(name = "create_date", columnDefinition = "DATE")
+    private LocalDate createDate;
 }

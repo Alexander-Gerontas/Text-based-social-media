@@ -9,7 +9,7 @@ import com.alg.social_media.exceptions.PostDoesNotExistException;
 import com.alg.social_media.exceptions.SubscriptionException;
 import com.alg.social_media.model.Comment;
 import com.alg.social_media.repository.CommentRepository;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import javax.inject.Inject;
 
 public class CommentService {
@@ -49,7 +49,7 @@ public class CommentService {
             .content(commentDto.getContent())
             .author(account)
             .post(post)
-            .createDate(LocalDateTime.now())
+            .createDate(LocalDate.now())
             .build();
 
         return commentRepository.save(comment);

@@ -5,23 +5,13 @@ import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.enums.AccountType;
 
 public final class AccountDtoFactory {
-  private static AccountRegistrationDto getFreeAccountRegistrationDto(
-      String username,
-      String email,
-      String password) {
-
-    return getAccountRegistrationDto(
-        username,
-        email,
-        password,
-        AccountType.FREE
-    );
-  }
-
   private static AccountRegistrationDto getAccountRegistrationDto(
       String username,
-      String email,
-      String password, AccountType accountType) {
+      AccountType accountType) {
+
+    var email = username + "@mail.com";
+    var password = username + "pass";
+
     return new AccountRegistrationDto(
         username,
         email,
@@ -30,15 +20,17 @@ public final class AccountDtoFactory {
     );
   }
 
-
   public static AccountRegistrationDto getFreeAccountRegistrationDto(String username) {
-    var email = username + "@mail.com";
-    var password = username + "pass";
-
-    return getFreeAccountRegistrationDto(
+    return getAccountRegistrationDto(
         username,
-        email,
-        password
+        AccountType.FREE
+    );
+  }
+
+  public static AccountRegistrationDto getPremiumAccountRegistrationDto(String username) {
+    return getAccountRegistrationDto(
+        username,
+        AccountType.PREMIUM
     );
   }
 
@@ -47,12 +39,7 @@ public final class AccountDtoFactory {
   }
 
   public static AccountRegistrationDto getPremiumAccountRegistrationDto() {
-    return new AccountRegistrationDto(
-        "adminUser",
-        "efg@mail.com",
-        "adminpass",
-        AccountType.PREMIUM
-    );
+    return getFreeAccountRegistrationDto("premiumuser");
   }
 
   public static AccountRegistrationDto getJaneDoePremiumAccountRegistrationDto() {

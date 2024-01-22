@@ -8,6 +8,7 @@ import com.alg.social_media.controllers.FollowController;
 import com.alg.social_media.controllers.PostController;
 import com.alg.social_media.controllers.RegistrationController;
 import com.alg.social_media.converters.AccountConverter;
+import com.alg.social_media.converters.PostConverter;
 import com.alg.social_media.repository.AccountRepository;
 import com.alg.social_media.repository.CommentRepository;
 import com.alg.social_media.repository.FollowRepository;
@@ -27,7 +28,10 @@ public interface AppComponent {
   Javalin buildJavalin();
   CustomAccessManager buildCustomAccessManager();
   SecurityMiddleware buildSecurityMiddleware();
+
+  // converters
   AccountConverter buildAccountConverter();
+  PostConverter buildPostConverter();
 
   // repositories
   PostRepository buildPostRepository();
