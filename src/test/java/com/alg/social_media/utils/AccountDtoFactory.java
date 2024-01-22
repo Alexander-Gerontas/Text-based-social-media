@@ -39,7 +39,7 @@ public final class AccountDtoFactory {
   }
 
   public static AccountRegistrationDto getPremiumAccountRegistrationDto() {
-    return getFreeAccountRegistrationDto("premiumuser");
+    return getPremiumAccountRegistrationDto("premiumuser");
   }
 
   public static AccountRegistrationDto getJaneDoePremiumAccountRegistrationDto() {
@@ -48,13 +48,6 @@ public final class AccountDtoFactory {
         "jane@doe.com",
         "janepass",
         AccountType.PREMIUM
-    );
-  }
-
-  public static AccountLoginDto getPremiumAccountLoginDto() {
-    return new AccountLoginDto(
-        "adminUser",
-        "adminpass"
     );
   }
 

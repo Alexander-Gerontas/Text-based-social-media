@@ -43,7 +43,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -491,7 +490,6 @@ class PostControllerIT extends BaseIntegrationTest {
 
   @Test
   @SneakyThrows
-  @Disabled("todo enable")
   void getMyPostsWithLatestCommentsInChronologicalOrderTest() {
     // create multiple users
     List<AccountRegistrationDto> registrationDtos = List.of(

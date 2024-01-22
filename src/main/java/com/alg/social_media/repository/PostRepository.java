@@ -6,6 +6,7 @@ import com.alg.social_media.utils.DBUtils;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.Collections;
@@ -83,6 +84,8 @@ public class PostRepository extends BaseRepository<Post, Long> {
       CriteriaQuery<Post> query = cb.createQuery(Post.class);
 
       Root<Post> postRoot = query.from(Post.class);
+      postRoot.fetch("comments", JoinType.LEFT);
+
       Predicate accountCondition = postRoot.get("author").get("id").in(accountIds);
 
       query.select(postRoot)
