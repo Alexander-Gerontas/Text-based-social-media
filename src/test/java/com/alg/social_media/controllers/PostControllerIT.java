@@ -1,11 +1,13 @@
 package com.alg.social_media.controllers;
 
+import static com.alg.social_media.constants.ControllerArgs.COMMENT_LIMIT;
 import static com.alg.social_media.constants.ControllerArgs.PAGE;
 import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
 import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
 import static com.alg.social_media.constants.Keywords.BEARER;
 import static com.alg.social_media.constants.Paths.COMMENT_URI;
 import static com.alg.social_media.constants.Paths.FOLLOWER_POSTS_URI;
+import static com.alg.social_media.constants.Paths.MY_POSTS_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
 import static com.alg.social_media.utils.CrudUtils.getAuthTokenForUser;
 import static io.restassured.RestAssured.given;
@@ -17,6 +19,7 @@ import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.account.AccountLoginDto;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.dto.post.CommentDto;
+import com.alg.social_media.dto.post.CommentResponseDto;
 import com.alg.social_media.dto.post.PostDto;
 import com.alg.social_media.dto.post.PostResponseDto;
 import com.alg.social_media.model.Account;
@@ -29,10 +32,10 @@ import com.alg.social_media.utils.AccountDtoFactory;
 import com.alg.social_media.utils.CrudUtils;
 import com.alg.social_media.utils.DateUtil;
 import com.alg.social_media.utils.PostDtoFactory;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.javalin.http.HttpStatus;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
@@ -485,6 +488,129 @@ class PostControllerIT extends BaseIntegrationTest {
     assertTrue(datesInReverseChronologicalOrder);
   }
 
+  @Test
+  @SneakyThrows
+  void getMyPostsWithLatestCommentsInChronologicalOrderTest() {
+    // create multiple users
+    List<AccountRegistrationDto> registrationDtos = List.of(
+        AccountDtoFactory.getPremiumAccountRegistrationDto("user1"),
+        AccountDtoFactory.getPremiumAccountRegistrationDto("user2"),
+        AccountDtoFactory.getPremiumAccountRegistrationDto("user3")
+    );
+
+    List<Account> accounts = registrationDtos.stream()
+        .map(accountConverter::toAccount)
+        .toList();
+
+    accounts.forEach(accountRepository::save);
+
+    List<String> authTokens = registrationDtos.stream()
+        .map(AccountDtoFactory::getAccountLoginDto)
+        .map(CrudUtils::getAuthTokenForUser)
+        .collect(Collectors.toList());
+
+    var firstUserAuthToken = authTokens.get(0);
+    authTokens.remove(firstUserAuthToken);
+
+    var userPosts = 4;
+    var commentPerUser = 4;
+
+    var totalCommentsInDb = userPosts * commentPerUser * authTokens.size();
+
+    var requestedPosts = userPosts / 2;
+    var requestedCommentsPerPost = totalCommentsInDb / 2;
+
+    // first user creates N posts
+    for (int i = 0; i < userPosts; i++) {
+      var postDto = PostDtoFactory.getFreeUserPostDto();
+      createNewPost(postDto, firstUserAuthToken, HttpStatus.OK);
+    }
+
+    // assert posts are saved
+    List<Post> postList = postRepository.findAll();
+    assertEquals(userPosts, postList.size());
+
+    // every other user comments on first user post
+    postList.forEach(post -> {
+
+      var postId = post.getId();
+
+      authTokens.forEach(authToken -> {
+        for (int i = 0; i < commentPerUser; i++) {
+          CommentDto commentDto = PostDtoFactory.getCommentDto();
+          commentOnPost(postId, commentDto, authToken, HttpStatus.OK);
+        }
+      });
+    });
+
+    // assert comments are saved
+    var comments = commentRepository.findAll();
+    assertEquals(totalCommentsInDb, comments.size());
+
+    // set random dates in posts and comments
+    postList.forEach(post -> {
+      var date = DateUtil.getRandomLocalDate();
+      post.setCreateDate(date);
+
+      postRepository.update(post);
+    });
+
+    commentRepository.findAll().forEach(comment -> {
+      var date = DateUtil.getRandomLocalDate();
+      comment.setCreateDate(date);
+
+      commentRepository.update(comment);
+    });
+
+    // fetch user posts and latest comments
+    var response = given()
+        .queryParam(PAGE, 0)
+        .queryParam(PAGE_SIZE, requestedPosts)
+        .queryParam(COMMENT_LIMIT, requestedCommentsPerPost)
+        .header(AUTHORIZATION, BEARER + " " + firstUserAuthToken)
+        .when()
+        .get(MY_POSTS_URI)
+        .then()
+        .statusCode(HttpStatus.OK.getCode())
+        .extract();
+
+    List<PostResponseDto> postResponseDtos = Arrays.stream(objectMapper
+        .readValue(response.body().asString(), PostResponseDto[].class))
+        .toList();
+
+    // check that all posts belong to first user
+    var actualUsernames = postResponseDtos.stream()
+        .map(PostResponseDto::getAuthor)
+        .toList();
+
+    var postsContainExpectedUsernames = actualUsernames.contains(registrationDtos.get(0).getUsername());
+    assertTrue(postsContainExpectedUsernames);
+
+    int actualCommentNum = postResponseDtos.stream().map(PostResponseDto::getComments).mapToInt(
+        Collection::size).sum();
+    assertEquals(requestedPosts, postResponseDtos.size());
+    assertEquals(requestedCommentsPerPost, actualCommentNum);
+
+    // assert post and comment dates are in order
+    List<LocalDate> postDates = postResponseDtos.stream()
+        .map(PostResponseDto::getCreateDate)
+        .toList();
+
+    var datesInReverseChronologicalOrder = DateUtil.areDatesInReverseChronologicalOrder(postDates);
+    assertTrue(datesInReverseChronologicalOrder);
+
+    postResponseDtos.forEach(postResponseDto -> {
+          var commentDates = postResponseDto.getComments().stream()
+              .map(CommentResponseDto::getCreateDate).toList();
+
+          var commentDatesInReverseChronologicalOrder = DateUtil.areDatesInReverseChronologicalOrder(
+              commentDates);
+
+          assertTrue(commentDatesInReverseChronologicalOrder);
+        }
+    );
+  }
+
   @SneakyThrows
   private void createNewPost(PostDto postDto, String authToken, HttpStatus httpStatus) {
     given()
@@ -497,7 +623,8 @@ class PostControllerIT extends BaseIntegrationTest {
         .extract();
   }
 
-  private void commentOnPost(Long postId, CommentDto commentDto, String authToken, HttpStatus httpStatus) throws JsonProcessingException {
+  @SneakyThrows
+  private void commentOnPost(Long postId, CommentDto commentDto, String authToken, HttpStatus httpStatus) {
     given()
         .body(objectMapper.writeValueAsString(commentDto))
         .header(AUTHORIZATION, BEARER + " " + authToken)

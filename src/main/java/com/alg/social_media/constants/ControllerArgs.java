@@ -5,4 +5,5 @@ public final class ControllerArgs {
 
   public static final String PAGE = "page";
   public static final String PAGE_SIZE = "pageSize";
+  public static final String COMMENT_LIMIT = "commentLimit";
 }

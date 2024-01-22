@@ -69,4 +69,15 @@ public class PostService {
             .map(postConverter::toResponseDto)
             .toList();
     }
+
+    public List<PostResponseDto> getAccountPosts(String username, int page, int pageSize, int commentLimit) {
+        Account account = accountService.findByUsername(username);
+
+        List<Post> latestPosts = postRepository
+            .findAccountPostAndCommentsReverseChronologically(account.getId(), page, pageSize, commentLimit);
+
+        return latestPosts.stream()
+            .map(postConverter::toResponseDto)
+            .toList();
+    }
 }
