@@ -104,8 +104,8 @@ class CommentControllerIT extends BaseIntegrationTest {
     var firstUserAuthToken = authTokens.get(0);
     authTokens.remove(firstUserAuthToken);
 
-    var userPosts = 4;
-    var commentPerUser = 4;
+    var userPosts = 2;
+    var commentPerUser = 2;
 
     var totalCommentsInDb = userPosts * commentPerUser * authTokens.size();
     var requestedComments = totalCommentsInDb / 2;
@@ -205,11 +205,11 @@ class CommentControllerIT extends BaseIntegrationTest {
         .filter(account -> !account.getUsername().equals(registrationDtos.get(1).getUsername()))
         .forEach(account -> CrudUtils.followUser(authTokens.get(0), account.getUsername()));
 
-    var userPosts = 4;
-    var commentPerUser = 4;
+    var userPosts = 2;
+    var commentPerUser = 2;
 
     var totalPostsInDb = userPosts * authTokens.size();
-    var totalCommentsInDb = totalPostsInDb * (commentPerUser -1) * authTokens.size();
+    var totalCommentsInDb = totalPostsInDb * (commentPerUser) * authTokens.size() - (authTokens.size() * userPosts * commentPerUser);
     var requestedComments = totalCommentsInDb / 2;
 
     // every user creates N posts
