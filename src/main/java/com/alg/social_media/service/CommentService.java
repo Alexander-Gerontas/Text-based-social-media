@@ -11,9 +11,11 @@ import com.alg.social_media.exceptions.PostDoesNotExistException;
 import com.alg.social_media.exceptions.SubscriptionException;
 import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Comment;
+import com.alg.social_media.model.Follow;
 import com.alg.social_media.repository.CommentRepository;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 public class CommentService {
@@ -67,6 +69,25 @@ public class CommentService {
 
         List<Comment> latestComments = commentRepository
             .findAccountPostCommentsReverseChronologically(account.getId(), page, pageSize);
+
+        return latestComments.stream()
+            .map(commentConverter::toResponseDto)
+            .toList();
+    }
+
+    public List<CommentResponseDto> getFollowerPostComments(String username, int page, int pageSize) {
+        Account account = accountService.findByUsername(username);
+
+        // get follower ids
+        var followerIds = account.getFollowers().stream().map(Follow::getFollowing)
+            .map(Account::getId)
+            .collect(Collectors.toList());
+
+        // add user's id in the id list
+        followerIds.add(account.getId());
+
+        List<Comment> latestComments = commentRepository
+            .findFollowersPostCommentsReverseChronologically(followerIds, page, pageSize);
 
         return latestComments.stream()
             .map(commentConverter::toResponseDto)

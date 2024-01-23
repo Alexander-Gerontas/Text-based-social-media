@@ -4,6 +4,7 @@ import static com.alg.social_media.constants.ControllerArgs.PAGE;
 import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
 import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
 import static com.alg.social_media.constants.Keywords.BEARER;
+import static com.alg.social_media.constants.Paths.MY_FOLLOWERS_POST_COMMENTS_URI;
 import static com.alg.social_media.constants.Paths.MY_POST_COMMENTS_URI;
 import static com.alg.social_media.utils.CrudUtils.commentOnPost;
 import static com.alg.social_media.utils.CrudUtils.createNewPost;
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.alg.social_media.configuration.BaseIntegrationTest;
+import com.alg.social_media.configuration.security.JwtUtil;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.dto.post.CommentDto;
@@ -80,7 +82,7 @@ class CommentControllerIT extends BaseIntegrationTest {
 
   @Test
   @SneakyThrows
-  void getMyPostsWithLatestCommentsInChronologicalOrderTest() {
+  void getLatestCommentsInMyPostsInChronologicalOrderTest() {
     // create multiple users
     List<AccountRegistrationDto> registrationDtos = List.of(
         AccountDtoFactory.getPremiumAccountRegistrationDto("user1"),
@@ -165,6 +167,129 @@ class CommentControllerIT extends BaseIntegrationTest {
         .toList();
 
     assertEquals(requestedComments, commentResponseDtos.size());
+
+    // assert comment dates are in order
+    List<LocalDate> postDates = commentResponseDtos.stream()
+        .map(CommentResponseDto::getCreateDate)
+        .toList();
+
+    var datesInReverseChronologicalOrder = DateUtil.areDatesInReverseChronologicalOrder(postDates);
+    assertTrue(datesInReverseChronologicalOrder);
+  }
+
+  @Test
+  @SneakyThrows
+  void getLatestCommentsInMyFollowersPostsInChronologicalOrderTest() {
+    // create multiple users
+    List<AccountRegistrationDto> registrationDtos = List.of(
+        AccountDtoFactory.getPremiumAccountRegistrationDto("user1"),
+        AccountDtoFactory.getPremiumAccountRegistrationDto("user2"),
+        AccountDtoFactory.getPremiumAccountRegistrationDto("user3"),
+        AccountDtoFactory.getPremiumAccountRegistrationDto("user4")
+    );
+
+    List<Account> accounts = registrationDtos.stream()
+        .map(accountConverter::toAccount)
+        .toList();
+
+    accounts.forEach(accountRepository::save);
+
+    List<String> authTokens = registrationDtos.stream()
+        .map(AccountDtoFactory::getAccountLoginDto)
+        .map(CrudUtils::getAuthTokenForUser)
+        .toList();
+
+    // first account follows every other user except one
+    accounts.stream()
+        .filter(account -> !account.getUsername().equals(registrationDtos.get(0).getUsername()))
+        .filter(account -> !account.getUsername().equals(registrationDtos.get(1).getUsername()))
+        .forEach(account -> CrudUtils.followUser(authTokens.get(0), account.getUsername()));
+
+    var userPosts = 4;
+    var commentPerUser = 4;
+
+    var totalPostsInDb = userPosts * authTokens.size();
+    var totalCommentsInDb = totalPostsInDb * (commentPerUser -1) * authTokens.size();
+    var requestedComments = totalCommentsInDb / 2;
+
+    // every user creates N posts
+    authTokens.forEach(authToken -> {
+      for (int i = 0; i < userPosts; i++) {
+        var postDto = PostDtoFactory.getFreeUserPostDto();
+        createNewPost(postDto, authToken, HttpStatus.OK);
+      }
+    });
+
+    // assert posts are saved
+    List<Post> postList = postRepository.findAll();
+    assertEquals(userPosts * authTokens.size(), postList.size());
+
+    // every user comments on other users posts
+    postList.forEach(post -> {
+      var postId = post.getId();
+
+      authTokens.forEach(authToken -> {
+        var tokenUser = JwtUtil.extractUsername(authToken);
+
+        // a user should not comment on his own post
+        if (!tokenUser.equals(post.getAuthor().getUsername())) {
+          for (int i = 0; i < commentPerUser; i++) {
+            CommentDto commentDto = PostDtoFactory.getCommentDto();
+            commentOnPost(postId, commentDto, authToken, HttpStatus.OK);
+          }
+        }
+      });
+    });
+
+    // assert comments are saved
+    var comments = commentRepository.findAll();
+    assertEquals(totalCommentsInDb, comments.size());
+
+    // set random dates in posts and comments
+    postList.forEach(post -> {
+      var date = DateUtil.getRandomLocalDate();
+      post.setCreateDate(date);
+
+      postRepository.update(post);
+    });
+
+    commentRepository.findAll().forEach(comment -> {
+      var date = DateUtil.getRandomLocalDate();
+      comment.setCreateDate(date);
+
+      commentRepository.update(comment);
+    });
+
+    // fetch latest comments on user posts
+    var response = given()
+        .queryParam(PAGE, 0)
+        .queryParam(PAGE_SIZE, requestedComments)
+        .header(AUTHORIZATION, BEARER + " " + authTokens.get(0))
+        .when()
+        .get(MY_FOLLOWERS_POST_COMMENTS_URI)
+        .then()
+        .statusCode(HttpStatus.OK.getCode())
+        .extract();
+
+    List<CommentResponseDto> commentResponseDtos = Arrays.stream(objectMapper
+        .readValue(response.body().asString(), CommentResponseDto[].class))
+        .toList();
+
+    assertEquals(requestedComments, commentResponseDtos.size());
+
+    // assert the comments are fetched from first user's posts and his follower's posts
+    List<String> followerUsernames = accounts.stream()
+        .map(Account::getUsername)
+        .filter(username -> !username.equals(registrationDtos.get(1).getUsername()))
+        .toList();
+
+    List<String> postAuthors = commentResponseDtos.stream()
+        .map(CommentResponseDto::getPostAuthor)
+        .distinct()
+        .toList();
+
+    assertEquals(followerUsernames.size(), postAuthors.size());
+    assertTrue(followerUsernames.containsAll(postAuthors));
 
     // assert comment dates are in order
     List<LocalDate> postDates = commentResponseDtos.stream()

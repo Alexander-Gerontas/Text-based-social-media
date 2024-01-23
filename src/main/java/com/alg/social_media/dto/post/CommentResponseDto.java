@@ -24,6 +24,9 @@ public class CommentResponseDto {
     @NotEmpty
     private String author;
 
+    @NotEmpty
+    private String postAuthor;
+
     @NotNull
     private LocalDate createDate;
 }
