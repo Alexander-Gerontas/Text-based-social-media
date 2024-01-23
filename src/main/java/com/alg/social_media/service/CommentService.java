@@ -79,7 +79,7 @@ public class CommentService {
         Account account = accountService.findByUsername(username);
 
         // get follower ids
-        var followerIds = account.getFollowers().stream().map(Follow::getFollowing)
+        var followerIds = account.getFollowers().stream().map(Follow::getFollower)
             .map(Account::getId)
             .collect(Collectors.toList());
 

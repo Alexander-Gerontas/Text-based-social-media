@@ -199,11 +199,11 @@ class CommentControllerIT extends BaseIntegrationTest {
         .map(CrudUtils::getAuthTokenForUser)
         .toList();
 
-    // first account follows every other user except one
-    accounts.stream()
-        .filter(account -> !account.getUsername().equals(registrationDtos.get(0).getUsername()))
-        .filter(account -> !account.getUsername().equals(registrationDtos.get(1).getUsername()))
-        .forEach(account -> CrudUtils.followUser(authTokens.get(0), account.getUsername()));
+    // every other user follows first account except one
+    authTokens.stream()
+        .filter(token -> !authTokens.get(0).equals(token))
+        .filter(token -> !authTokens.get(1).equals(token))
+        .forEach(token -> CrudUtils.followUser(token, registrationDtos.get(0).getUsername()));
 
     var userPosts = 2;
     var commentPerUser = 2;

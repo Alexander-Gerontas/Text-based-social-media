@@ -142,10 +142,10 @@ class FollowControllerIT extends BaseIntegrationTest {
         .map(CrudUtils::getAuthTokenForUser)
         .toList();
 
-    // first account follows every other user
-    accounts.stream()
-        .filter(account -> !account.getUsername().equals(registrationDtos.get(0).getUsername()))
-        .forEach(account -> CrudUtils.followUser(authTokens.get(0), account.getUsername()));
+    // every other user follows first account
+    authTokens.stream()
+        .filter(token -> !authTokens.get(0).equals(token))
+        .forEach(token -> CrudUtils.followUser(token, registrationDtos.get(0).getUsername()));
 
     // assert follows exist in db
     assertEquals(registrationDtos.size() - 1, followRepository.findAll().size());
@@ -197,10 +197,10 @@ class FollowControllerIT extends BaseIntegrationTest {
         .map(CrudUtils::getAuthTokenForUser)
         .toList();
 
-    // every other user follows first account
-    authTokens.stream()
-        .filter(token -> !authTokens.get(0).equals(token))
-        .forEach(token -> CrudUtils.followUser(token, registrationDtos.get(0).getUsername()));
+    // first account follows every other user
+    accounts.stream()
+        .filter(account -> !account.getUsername().equals(registrationDtos.get(0).getUsername()))
+        .forEach(account -> CrudUtils.followUser(authTokens.get(0), account.getUsername()));
 
     // assert follows exist in db
     assertEquals(registrationDtos.size() - 1, followRepository.findAll().size());

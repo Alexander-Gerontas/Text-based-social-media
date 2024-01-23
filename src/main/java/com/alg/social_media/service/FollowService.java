@@ -61,7 +61,7 @@ public class FollowService {
     Account account = accountService.findByUsername(username);
 
     // get account followers
-    var followers = account.getFollowers().stream().map(Follow::getFollowing).toList();
+    var followers = account.getFollowers().stream().map(Follow::getFollower).toList();
 
     // convert to response dtos
     return accountConverter.toResponseDtos(followers);
@@ -71,7 +71,7 @@ public class FollowService {
     Account account = accountService.findByUsername(username);
 
     // get account following
-    var followers = account.getFollowing().stream().map(Follow::getFollower).toList();
+    var followers = account.getFollowing().stream().map(Follow::getFollowing).toList();
 
     // convert to response dtos
     return accountConverter.toResponseDtos(followers);
