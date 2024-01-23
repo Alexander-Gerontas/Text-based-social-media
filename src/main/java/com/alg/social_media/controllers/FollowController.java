@@ -2,6 +2,8 @@ package com.alg.social_media.controllers;
 
 import static com.alg.social_media.constants.Keywords.USERNAME;
 import static com.alg.social_media.constants.Paths.FOLLOW_URI;
+import static com.alg.social_media.constants.Paths.MY_FOLLOWERS_URI;
+import static com.alg.social_media.constants.Paths.MY_FOLLOWING_URI;
 
 import com.alg.social_media.dto.account.FollowDto;
 import com.alg.social_media.enums.AccountType;
@@ -28,6 +30,12 @@ public class FollowController {
 
   private void configureRoutes() {
     app.post(FOLLOW_URI, followerHandler(), AccountType.FREE, AccountType.PREMIUM);
+
+    // get a list of my followers
+    app.get(MY_FOLLOWERS_URI, getAccountFollowersHandler(), AccountType.FREE, AccountType.PREMIUM);
+
+    // get a list of the accounts I am following
+    app.get(MY_FOLLOWING_URI, getAccountFollowingHandler(), AccountType.FREE, AccountType.PREMIUM);
   }
 
   private Handler followerHandler() {
@@ -44,6 +52,38 @@ public class FollowController {
       // Send the response
       ctx.json("account with username: " + follower + " is now following: " + following);
 
+      ctx.status(HttpStatus.OK);
+    };
+  }
+
+  private Handler getAccountFollowersHandler() {
+    return ctx -> {
+      String username = ctx.attribute(USERNAME);
+
+      // Log the request
+      log.info("account with username: " + username + " wants to see his followers");
+
+      // fetch user's followers
+      var accountFollowers = followService.getAccountFollowers(username);
+
+      // Send the response
+      ctx.json(accountFollowers);
+      ctx.status(HttpStatus.OK);
+    };
+  }
+
+  private Handler getAccountFollowingHandler() {
+    return ctx -> {
+      String username = ctx.attribute(USERNAME);
+
+      // Log the request
+      log.info("account with username: " + username + " wants to see who he is following");
+
+      // fetch user's following users
+      var accountFollowers = followService.getAccountFollowing(username);
+
+      // Send the response
+      ctx.json(accountFollowers);
       ctx.status(HttpStatus.OK);
     };
   }

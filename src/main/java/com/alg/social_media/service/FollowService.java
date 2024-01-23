@@ -1,22 +1,28 @@
 package com.alg.social_media.service;
 
+import com.alg.social_media.converters.AccountConverter;
+import com.alg.social_media.dto.account.AccountResponseDto;
 import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.exceptions.GenericError;
+import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Follow;
 import com.alg.social_media.repository.FollowRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import javax.inject.Inject;
 
 @Transactional
 public class FollowService {
   private final FollowRepository followRepository;
   private final AccountService accountService;
+  private final AccountConverter accountConverter;
 
   @Inject
   public FollowService(final FollowRepository followRepository,
-      final AccountService accountService) {
+      final AccountService accountService, final AccountConverter accountConverter) {
     this.followRepository = followRepository;
     this.accountService = accountService;
+    this.accountConverter = accountConverter;
   }
 
   public void followUser(String followerUsername, String followingUsername)
@@ -49,5 +55,25 @@ public class FollowService {
         .build();
 
     followRepository.save(follow);
+  }
+
+  public List<AccountResponseDto> getAccountFollowers(String username) {
+    Account account = accountService.findByUsername(username);
+
+    // get account followers
+    var followers = account.getFollowers().stream().map(Follow::getFollowing).toList();
+
+    // convert to response dtos
+    return accountConverter.toResponseDtos(followers);
+  }
+
+  public List<AccountResponseDto> getAccountFollowing(String username) {
+    Account account = accountService.findByUsername(username);
+
+    // get account following
+    var followers = account.getFollowing().stream().map(Follow::getFollower).toList();
+
+    // convert to response dtos
+    return accountConverter.toResponseDtos(followers);
   }
 }

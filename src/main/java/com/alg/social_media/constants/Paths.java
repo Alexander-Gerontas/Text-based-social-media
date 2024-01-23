@@ -22,4 +22,6 @@ public final class Paths {
 
   // follows
   public static final String FOLLOW_URI = BASE_URI + "/follow";
+  public static final String MY_FOLLOWERS_URI = FOLLOW_URI + "/my-followers";
+  public static final String MY_FOLLOWING_URI = FOLLOW_URI + "/my-following";
 }
