@@ -15,7 +15,9 @@ public final class Paths {
   public static final String MY_POSTS_URI = POST_URI + "/my-posts";
 
   // comments
-  public static final String COMMENT_URI = "/comment";
+  public static final String COMMENT = "/comment";
+  public static final String COMMENT_URI = BASE_URI + COMMENT;
+  public static final String MY_POST_COMMENTS_URI = COMMENT_URI + "/my-posts";
 
   // follows
   public static final String FOLLOW_URI = BASE_URI + "/follow";

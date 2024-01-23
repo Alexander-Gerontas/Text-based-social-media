@@ -2,13 +2,17 @@ package com.alg.social_media.utils;
 
 import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
 import static com.alg.social_media.constants.Keywords.BEARER;
+import static com.alg.social_media.constants.Paths.COMMENT;
 import static com.alg.social_media.constants.Paths.FOLLOW_URI;
+import static com.alg.social_media.constants.Paths.POST_URI;
 import static io.restassured.RestAssured.given;
 
 import com.alg.social_media.configuration.BaseIntegrationTest;
 import com.alg.social_media.constants.Paths;
 import com.alg.social_media.dto.account.AccountLoginDto;
 import com.alg.social_media.dto.account.FollowDto;
+import com.alg.social_media.dto.post.CommentDto;
+import com.alg.social_media.dto.post.PostDto;
 import io.javalin.http.HttpStatus;
 import lombok.SneakyThrows;
 
@@ -32,6 +36,30 @@ public final class CrudUtils extends BaseIntegrationTest {
 
     // get token from response
     return responseBody.substring(7);
+  }
+
+  @SneakyThrows
+  public static void createNewPost(PostDto postDto, String authToken, HttpStatus httpStatus) {
+    given()
+        .body(objectMapper.writeValueAsString(postDto))
+        .header(AUTHORIZATION, BEARER + " " + authToken)
+        .when()
+        .post(POST_URI)
+        .then()
+        .statusCode(httpStatus.getCode())
+        .extract();
+  }
+
+  @SneakyThrows
+  public static void commentOnPost(Long postId, CommentDto commentDto, String authToken, HttpStatus httpStatus) {
+    given()
+        .body(objectMapper.writeValueAsString(commentDto))
+        .header(AUTHORIZATION, BEARER + " " + authToken)
+        .when()
+        .post(POST_URI + "/" + postId + COMMENT)
+        .then()
+        .statusCode(httpStatus.getCode())
+        .extract();
   }
 
   @SneakyThrows

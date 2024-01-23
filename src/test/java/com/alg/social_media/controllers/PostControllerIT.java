@@ -5,10 +5,11 @@ import static com.alg.social_media.constants.ControllerArgs.PAGE;
 import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
 import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
 import static com.alg.social_media.constants.Keywords.BEARER;
-import static com.alg.social_media.constants.Paths.COMMENT_URI;
 import static com.alg.social_media.constants.Paths.FOLLOWER_POSTS_URI;
 import static com.alg.social_media.constants.Paths.MY_POSTS_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
+import static com.alg.social_media.utils.CrudUtils.commentOnPost;
+import static com.alg.social_media.utils.CrudUtils.createNewPost;
 import static com.alg.social_media.utils.CrudUtils.getAuthTokenForUser;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +21,6 @@ import com.alg.social_media.dto.account.AccountLoginDto;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.dto.post.CommentDto;
 import com.alg.social_media.dto.post.CommentResponseDto;
-import com.alg.social_media.dto.post.PostDto;
 import com.alg.social_media.dto.post.PostResponseDto;
 import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Post;
@@ -518,7 +518,7 @@ class PostControllerIT extends BaseIntegrationTest {
     var totalCommentsInDb = userPosts * commentPerUser * authTokens.size();
 
     var requestedPosts = userPosts / 2;
-    var requestedCommentsPerPost = totalCommentsInDb / 2;
+    var requestedComments = totalCommentsInDb / 2;
 
     // first user creates N posts
     for (int i = 0; i < userPosts; i++) {
@@ -566,7 +566,7 @@ class PostControllerIT extends BaseIntegrationTest {
     var response = given()
         .queryParam(PAGE, 0)
         .queryParam(PAGE_SIZE, requestedPosts)
-        .queryParam(COMMENT_LIMIT, requestedCommentsPerPost)
+        .queryParam(COMMENT_LIMIT, requestedComments)
         .header(AUTHORIZATION, BEARER + " " + firstUserAuthToken)
         .when()
         .get(MY_POSTS_URI)
@@ -589,7 +589,7 @@ class PostControllerIT extends BaseIntegrationTest {
     int actualCommentNum = postResponseDtos.stream().map(PostResponseDto::getComments).mapToInt(
         Collection::size).sum();
     assertEquals(requestedPosts, postResponseDtos.size());
-    assertEquals(requestedCommentsPerPost, actualCommentNum);
+    assertEquals(requestedComments, actualCommentNum);
 
     // assert post and comment dates are in order
     List<LocalDate> postDates = postResponseDtos.stream()
@@ -609,29 +609,5 @@ class PostControllerIT extends BaseIntegrationTest {
           assertTrue(commentDatesInReverseChronologicalOrder);
         }
     );
-  }
-
-  @SneakyThrows
-  private void createNewPost(PostDto postDto, String authToken, HttpStatus httpStatus) {
-    given()
-        .body(objectMapper.writeValueAsString(postDto))
-        .header(AUTHORIZATION, BEARER + " " + authToken)
-        .when()
-        .post(POST_URI)
-        .then()
-        .statusCode(httpStatus.getCode())
-        .extract();
-  }
-
-  @SneakyThrows
-  private void commentOnPost(Long postId, CommentDto commentDto, String authToken, HttpStatus httpStatus) {
-    given()
-        .body(objectMapper.writeValueAsString(commentDto))
-        .header(AUTHORIZATION, BEARER + " " + authToken)
-        .when()
-        .post(POST_URI + "/" + postId + COMMENT_URI)
-        .then()
-        .statusCode(httpStatus.getCode())
-        .extract();
   }
 }

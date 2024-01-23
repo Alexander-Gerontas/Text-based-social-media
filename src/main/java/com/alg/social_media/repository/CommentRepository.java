@@ -66,4 +66,32 @@ public class CommentRepository extends BaseRepository<Comment, Long> {
     var resultInTransaction = dbUtils.executeWithResultInTransaction(operation);
     return Math.toIntExact(resultInTransaction);
   }
+
+  // query that fetches the latest comments on user's posts
+  public List<Comment> findAccountPostCommentsReverseChronologically(Long accountId, int page,
+      int commentLimit) {
+    DBUtils.DbTransactionResultOperation<List<Comment>> operation = entityManager -> {
+      CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+      CriteriaQuery<Comment> commentQuery = cb.createQuery(Comment.class);
+
+      Root<Comment> commentRoot = commentQuery.from(Comment.class);
+
+      // Set a condition to fetch comments by account id
+      Predicate accountCondition = cb.equal(commentRoot.get("post").get("author").get("id"), accountId);
+
+      commentQuery.select(commentRoot)
+          .where(accountCondition)
+          .orderBy(cb.desc(commentRoot.get("createDate")))
+          .distinct(true);
+
+      // Fetch the latest N comments according to page num
+      TypedQuery<Comment> commentTypedQuery = entityManager.createQuery(commentQuery)
+          .setFirstResult(page * commentLimit)
+          .setMaxResults(commentLimit);
+
+      return commentTypedQuery.getResultList();
+    };
+
+    return dbUtils.executeWithResultInTransaction(operation);
+  }
 }

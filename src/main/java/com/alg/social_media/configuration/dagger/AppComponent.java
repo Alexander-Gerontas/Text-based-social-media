@@ -4,6 +4,7 @@ import com.alg.social_media.configuration.database.DBConnection;
 import com.alg.social_media.configuration.database.LiquibaseConfiguration;
 import com.alg.social_media.configuration.security.CustomAccessManager;
 import com.alg.social_media.configuration.security.SecurityMiddleware;
+import com.alg.social_media.controllers.CommentController;
 import com.alg.social_media.controllers.FollowController;
 import com.alg.social_media.controllers.PostController;
 import com.alg.social_media.controllers.RegistrationController;
@@ -44,6 +45,7 @@ public interface AppComponent {
   // controllers
   RegistrationController buildRegistrationController();
   PostController buildPostController();
+  CommentController buildCommentController();
   FollowController buildFollowController();
 
   DBConnection buildDBConnection();

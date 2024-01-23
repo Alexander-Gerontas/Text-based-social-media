@@ -4,7 +4,7 @@ import static com.alg.social_media.constants.ControllerArgs.COMMENT_LIMIT;
 import static com.alg.social_media.constants.ControllerArgs.PAGE;
 import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
 import static com.alg.social_media.constants.Keywords.USERNAME;
-import static com.alg.social_media.constants.Paths.COMMENT_URI;
+import static com.alg.social_media.constants.Paths.COMMENT;
 import static com.alg.social_media.constants.Paths.FOLLOWER_POSTS_URI;
 import static com.alg.social_media.constants.Paths.MY_POSTS_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
@@ -47,7 +47,7 @@ public class PostController {
         app.post(POST_URI, createPostHandler(), AccountType.FREE, AccountType.PREMIUM);
 
         // comment on a post
-        app.post(POST_URI + "/{id}" + COMMENT_URI, commentHandler(), AccountType.FREE, AccountType.PREMIUM);
+        app.post(POST_URI + "/{id}" + COMMENT, commentHandler(), AccountType.FREE, AccountType.PREMIUM);
 
         // get follower posts
         app.get(FOLLOWER_POSTS_URI, getFollowerPostsHandler(), AccountType.FREE, AccountType.PREMIUM);
@@ -109,7 +109,7 @@ public class PostController {
             int pageSize = (pageSizeParam != null) ? Integer.parseInt(pageSizeParam) : 10;
             int commentLimit = (commentLimitParam != null) ? Integer.parseInt(commentLimitParam) : 50;
 
-            log.info("User: " + username + " wants to see what his posts");
+            log.info("User: " + username + " wants to see his own posts");
 
             List<PostResponseDto> accountPosts = postService.getAccountPosts(username, page, pageSize, commentLimit);
 

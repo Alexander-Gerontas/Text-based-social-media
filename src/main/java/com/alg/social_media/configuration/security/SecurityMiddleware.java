@@ -6,6 +6,7 @@ import static com.alg.social_media.constants.Keywords.ROLE;
 import static com.alg.social_media.constants.Keywords.TOKEN;
 import static com.alg.social_media.constants.Keywords.USERNAME;
 import static com.alg.social_media.constants.Paths.AUTHENTICATION_URI;
+import static com.alg.social_media.constants.Paths.COMMENT_URI;
 import static com.alg.social_media.constants.Paths.FOLLOW_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
 import static com.alg.social_media.exceptions.GenericError.INVALID_TOKEN_PROVIDED;
@@ -56,6 +57,9 @@ public class SecurityMiddleware {
   private void configureRoutes() {
     app.before(POST_URI + "*", authHandler);
     app.before(POST_URI + "/*", authHandler);
+
+    app.before(COMMENT_URI + "*", authHandler);
+    app.before(COMMENT_URI + "/*", authHandler);
 
     app.before(FOLLOW_URI + "*", authHandler);
     app.before(FOLLOW_URI + "/*", authHandler);

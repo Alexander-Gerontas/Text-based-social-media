@@ -60,7 +60,7 @@ public class PostRepository extends BaseRepository<Post, Long> {
       // Fetch the latest 100 comments for each post
       TypedQuery<Comment> commentTypedQuery = entityManager.createQuery(commentQuery)
           .setFirstResult(0)
-          .setMaxResults(latestPosts.size() * commentLimit);
+          .setMaxResults(commentLimit);
 
       List<Comment> latestComments = commentTypedQuery.getResultList();
 

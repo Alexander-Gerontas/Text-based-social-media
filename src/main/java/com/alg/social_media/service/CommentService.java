@@ -3,26 +3,33 @@ package com.alg.social_media.service;
 import static com.alg.social_media.exceptions.GenericError.COMMENT_CHARACTER_LIMIT;
 import static com.alg.social_media.exceptions.GenericError.POST_DOES_NOT_EXIST;
 
+import com.alg.social_media.converters.CommentConverter;
 import com.alg.social_media.dto.post.CommentDto;
+import com.alg.social_media.dto.post.CommentResponseDto;
 import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.exceptions.PostDoesNotExistException;
 import com.alg.social_media.exceptions.SubscriptionException;
+import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Comment;
 import com.alg.social_media.repository.CommentRepository;
 import java.time.LocalDate;
+import java.util.List;
 import javax.inject.Inject;
 
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final CommentConverter commentConverter;
     private final PostService postService;
     private final AccountService accountService;
 
     @Inject
     public CommentService(final CommentRepository commentRepository,
+        final CommentConverter commentConverter,
         final PostService postService,
         final AccountService accountService) {
         this.commentRepository = commentRepository;
+        this.commentConverter = commentConverter;
         this.postService = postService;
         this.accountService = accountService;
     }
@@ -53,5 +60,16 @@ public class CommentService {
             .build();
 
         return commentRepository.save(comment);
+    }
+
+    public List<CommentResponseDto> getAccountPostComments(String username, int page, int pageSize) {
+        Account account = accountService.findByUsername(username);
+
+        List<Comment> latestComments = commentRepository
+            .findAccountPostCommentsReverseChronologically(account.getId(), page, pageSize);
+
+        return latestComments.stream()
+            .map(commentConverter::toResponseDto)
+            .toList();
     }
 }

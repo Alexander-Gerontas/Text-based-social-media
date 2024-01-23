@@ -48,6 +48,7 @@ public class BaseIntegrationTest {
 
     // initialize controllers
     appComponent.buildPostController();
+    appComponent.buildCommentController();
     appComponent.buildRegistrationController();
     appComponent.buildFollowController();
 
