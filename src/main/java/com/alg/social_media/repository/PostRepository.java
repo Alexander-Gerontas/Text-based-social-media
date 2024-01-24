@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
@@ -98,6 +99,54 @@ public class PostRepository extends BaseRepository<Post, Long> {
           .setMaxResults(size);
 
       return typedQuery.getResultList();
+    };
+
+    return dbUtils.executeWithResultInTransaction(operation);
+  }
+
+  public Post findPostByUuid(UUID postUuid, int commentLimit) {
+    DBUtils.DbTransactionResultOperation<Post> operation = entityManager -> {
+      CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+      CriteriaQuery<Post> postQuery = cb.createQuery(Post.class);
+
+      Root<Post> postRoot = postQuery.from(Post.class);
+
+      // Set a condition to fetch posts by uuid
+      Predicate uuidMatches = cb.equal(postRoot.get("uuid"), postUuid);
+
+      postQuery.select(postRoot)
+          .where(uuidMatches)
+          .distinct(true);
+
+      // Fetch post that matches the uuid
+      TypedQuery<Post> postTypedQuery = entityManager.createQuery(postQuery);
+
+      Post post = postTypedQuery.getSingleResult();
+      var postId = post.getId();
+
+      // Subquery to get the latest 100 comments for post
+      CriteriaQuery<Comment> commentQuery = cb.createQuery(Comment.class);
+      Root<Comment> commentRoot = commentQuery.from(Comment.class);
+
+      // Set a condition to fetch comments by post id
+      Predicate postCondition = commentRoot.get("post").get("id").in(postId);
+
+      commentQuery.select(commentRoot)
+          .where(postCondition)
+          .orderBy(cb.desc(commentRoot.get("createDate")))
+          .distinct(true);
+
+      // Fetch the latest 100 comments
+      TypedQuery<Comment> commentTypedQuery = entityManager.createQuery(commentQuery)
+          .setFirstResult(0)
+          .setMaxResults(commentLimit);
+
+      List<Comment> latestComments = commentTypedQuery.getResultList();
+
+      // Set comments in post entity
+      post.setComments(latestComments);
+
+      return post;
     };
 
     return dbUtils.executeWithResultInTransaction(operation);

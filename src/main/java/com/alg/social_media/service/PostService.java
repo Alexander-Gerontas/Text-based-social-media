@@ -15,6 +15,7 @@ import com.alg.social_media.model.Post;
 import com.alg.social_media.repository.PostRepository;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
@@ -79,5 +80,10 @@ public class PostService {
         return latestPosts.stream()
             .map(postConverter::toResponseDto)
             .toList();
+    }
+
+    public PostResponseDto getPostByUuid(UUID postId, int commentLimit) {
+        Post post = postRepository.findPostByUuid(postId, commentLimit);
+        return postConverter.toResponseDto(post);
     }
 }

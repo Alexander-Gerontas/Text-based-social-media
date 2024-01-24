@@ -14,11 +14,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Getter
@@ -33,6 +35,10 @@ public class Post {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
+
+    @UuidGenerator
+    @Column(name = "uuid", updatable = false, nullable = false)
+    private UUID uuid;
 
     @Column(length = 3000, nullable = false)
     private String content;

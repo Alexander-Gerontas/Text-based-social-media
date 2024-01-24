@@ -3,11 +3,13 @@ package com.alg.social_media.controllers;
 import static com.alg.social_media.constants.ControllerArgs.COMMENT_LIMIT;
 import static com.alg.social_media.constants.ControllerArgs.PAGE;
 import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
+import static com.alg.social_media.constants.ControllerArgs.UUID;
 import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
 import static com.alg.social_media.constants.Keywords.BEARER;
 import static com.alg.social_media.constants.Paths.FOLLOWER_POSTS_URI;
 import static com.alg.social_media.constants.Paths.MY_POSTS_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
+import static com.alg.social_media.constants.Paths.SHARABLE_POST_URI;
 import static com.alg.social_media.utils.CrudUtils.commentOnPost;
 import static com.alg.social_media.utils.CrudUtils.createNewPost;
 import static com.alg.social_media.utils.CrudUtils.getAuthTokenForUser;
@@ -609,5 +611,64 @@ class PostControllerIT extends BaseIntegrationTest {
           assertTrue(commentDatesInReverseChronologicalOrder);
         }
     );
+  }
+
+  @Test
+  @SneakyThrows
+  void createSharablePostTest() {
+    // create two users
+    var registrationDto = AccountDtoFactory.getFreeAccountRegistrationDto();
+    var loginDto = AccountDtoFactory.getAccountLoginDto(registrationDto);
+
+    var janeDoeRegistrationDto = AccountDtoFactory.getFreeAccountRegistrationDto("janeDoe");
+    var janeDoeLoginDto = AccountDtoFactory.getAccountLoginDto(janeDoeRegistrationDto);
+
+    var account = accountConverter.toAccount(registrationDto);
+    accountRepository.save(account);
+
+    var janeDoeAccount = accountConverter.toAccount(janeDoeRegistrationDto);
+    accountRepository.save(janeDoeAccount);
+
+    var authToken = getAuthTokenForUser(loginDto);
+    var janeDoeAuthToken = getAuthTokenForUser(janeDoeLoginDto);
+
+    // create a free user post
+    var postDto = PostDtoFactory.getFreeUserPostDto();
+    CrudUtils.createNewPost(postDto, authToken, HttpStatus.OK);
+
+    var postList = postRepository.findAll();
+    var postEntity = postList.get(0);
+
+    assertEquals(1, postList.size());
+
+    // jane doe writes two comments on post
+    var commentDto = PostDtoFactory.getCommentDto();
+    var commentDto2 = PostDtoFactory.getCommentDto();
+
+    CrudUtils.commentOnPost(postEntity.getId(), commentDto, janeDoeAuthToken, HttpStatus.OK);
+    CrudUtils.commentOnPost(postEntity.getId(), commentDto2, janeDoeAuthToken, HttpStatus.OK);
+
+    var commentList = commentRepository.findAll();
+    assertEquals(2, commentList.size());
+
+    // get post uuid
+    var uuid = postEntity.getUuid();
+
+    // get the post without authentication token
+    var response = given()
+        .queryParam(UUID, uuid)
+        .queryParam(COMMENT_LIMIT, 100)
+        .when()
+        .get(SHARABLE_POST_URI)
+        .then()
+        .statusCode(HttpStatus.OK.getCode())
+        .extract();
+
+    var postResponseDto = objectMapper.readValue(response.body().asString(), PostResponseDto.class);
+
+    // assert response dto contains expected values
+    assertEquals(registrationDto.getUsername(), postResponseDto.getAuthor());
+    assertEquals(postDto.getContent(), postResponseDto.getContent());
+    assertEquals(commentRepository.findAll().size(), postResponseDto.getComments().size());
   }
 }

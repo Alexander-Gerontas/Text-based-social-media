@@ -8,9 +8,11 @@ import static com.alg.social_media.constants.Paths.COMMENT;
 import static com.alg.social_media.constants.Paths.FOLLOWER_POSTS_URI;
 import static com.alg.social_media.constants.Paths.MY_POSTS_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
+import static com.alg.social_media.constants.Paths.SHARABLE_POST_URI;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handlePostException;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleSubscriptionException;
 
+import com.alg.social_media.constants.ControllerArgs;
 import com.alg.social_media.dto.post.CommentDto;
 import com.alg.social_media.dto.post.PostDto;
 import com.alg.social_media.dto.post.PostResponseDto;
@@ -23,6 +25,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
 import java.util.List;
+import java.util.UUID;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,6 +57,9 @@ public class PostController {
 
         // user gets his own posts
         app.get(MY_POSTS_URI, getAccountPostsHandler(), AccountType.FREE, AccountType.PREMIUM);
+
+        // get sharable post
+        app.get(SHARABLE_POST_URI, getSharablePostHandler(), AccountType.ANYONE);
 
         app.exception(SubscriptionException.class, handleSubscriptionException);
         app.exception(PostException.class, handlePostException);
@@ -112,6 +118,28 @@ public class PostController {
             log.info("User: " + username + " wants to see his own posts");
 
             List<PostResponseDto> accountPosts = postService.getAccountPosts(username, page, pageSize, commentLimit);
+
+            // Send the response
+            ctx.json(accountPosts);
+            ctx.status(HttpStatus.OK);
+        };
+    }
+
+    private Handler getSharablePostHandler() {
+        return ctx -> {
+            String uuidParam = ctx.queryParam(ControllerArgs.UUID);
+            String commentLimitParam = ctx.queryParam(COMMENT_LIMIT);
+
+            if (uuidParam == null) {
+                throw new RuntimeException("uuid not provided");
+            }
+
+            UUID postId = UUID.fromString(uuidParam);
+            int commentLimit = (commentLimitParam != null) ? Integer.parseInt(commentLimitParam) : 50;
+
+            log.info("User with sharable link is viewing the post");
+
+            PostResponseDto accountPosts = postService.getPostByUuid(postId, commentLimit);
 
             // Send the response
             ctx.json(accountPosts);

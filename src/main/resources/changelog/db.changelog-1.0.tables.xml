@@ -43,6 +43,9 @@
       <column name="id" type="SERIAL" autoIncrement="true">
         <constraints primaryKey="true" primaryKeyName="post_pk"/>
       </column>
+      <column name="uuid" type="uuid">
+        <constraints nullable="false"/>
+      </column>
       <column name="content" type="varchar(3000)">
         <constraints nullable="false"/>
       </column>
