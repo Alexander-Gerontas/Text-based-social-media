@@ -2,6 +2,9 @@ package com.alg.social_media.controllers;
 
 import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
 import static com.alg.social_media.constants.Keywords.BEARER;
+import static com.alg.social_media.constants.Keywords.EMAIL;
+import static com.alg.social_media.constants.Keywords.USERNAME;
+import static com.alg.social_media.constants.Paths.ACCOUNT_SEARCH_URI;
 import static com.alg.social_media.constants.Paths.FOLLOW_URI;
 import static com.alg.social_media.constants.Paths.MY_FOLLOWERS_URI;
 import static com.alg.social_media.constants.Paths.MY_FOLLOWING_URI;
@@ -14,6 +17,7 @@ import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.dto.account.AccountResponseDto;
 import com.alg.social_media.dto.account.FollowDto;
+import com.alg.social_media.exceptions.GenericError;
 import com.alg.social_media.model.Account;
 import com.alg.social_media.repository.AccountRepository;
 import com.alg.social_media.repository.FollowRepository;
@@ -25,6 +29,7 @@ import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -227,5 +232,79 @@ class FollowControllerIT extends BaseIntegrationTest {
 
     assertEquals(expectedUsernames.size(), accountResponseDtos.size());
     assertTrue(expectedUsernames.containsAll(actualUsernames));
+  }
+
+  @Test
+  @SneakyThrows
+  void searchForAccountToFollowTest() {
+    // create multiple users
+    List<AccountRegistrationDto> registrationDtos = List.of(
+        AccountDtoFactory.getPremiumAccountRegistrationDto("user1"),
+        AccountDtoFactory.getPremiumAccountRegistrationDto("user2"),
+        AccountDtoFactory.getPremiumAccountRegistrationDto("user3")
+    );
+
+    List<Account> accounts = registrationDtos.stream()
+        .map(accountConverter::toAccount)
+        .toList();
+
+    accounts.forEach(accountRepository::save);
+
+    List<String> authTokens = registrationDtos.stream()
+        .map(AccountDtoFactory::getAccountLoginDto)
+        .map(CrudUtils::getAuthTokenForUser)
+        .toList();
+
+    // first user is searching for user2 by username
+    var response = given()
+        .queryParam(USERNAME, registrationDtos.get(1).getUsername())
+        .header(AUTHORIZATION, BEARER + " " + authTokens.get(0))
+        .when()
+        .get(ACCOUNT_SEARCH_URI)
+        .then()
+        .statusCode(HttpStatus.OK.getCode())
+        .extract();
+
+    var responseDto = objectMapper.readValue(response.body().asString(), AccountResponseDto.class);
+
+    // first account follows user found
+    CrudUtils.followUser(authTokens.get(0), responseDto.getUsername());
+
+    // assert follow exist in db
+    assertEquals(1, followRepository.findAll().size());
+
+    // first user is searching for user3 by email
+    response = given()
+        .queryParam(EMAIL, registrationDtos.get(2).getEmail())
+        .header(AUTHORIZATION, BEARER + " " + authTokens.get(0))
+        .when()
+        .get(ACCOUNT_SEARCH_URI)
+        .then()
+        .statusCode(HttpStatus.OK.getCode())
+        .extract();
+
+    responseDto = objectMapper.readValue(response.body().asString(), AccountResponseDto.class);
+
+    // first account follows user found
+    CrudUtils.followUser(authTokens.get(0), responseDto.getUsername());
+
+    // assert follows exist in db
+    assertEquals(2, followRepository.findAll().size());
+
+    // first user is searching for a user that does not exist
+    response = given()
+        .queryParam(USERNAME, "no-username")
+        .header(AUTHORIZATION, BEARER + " " + authTokens.get(0))
+        .when()
+        .get(ACCOUNT_SEARCH_URI)
+        .then()
+        .statusCode(HttpStatus.BAD_REQUEST.getCode())
+        .extract();
+
+    // assert error message is correct
+    Assertions.assertTrue(response.body().asPrettyString().contains(GenericError.ACCOUNT_DOES_NOT_EXIST.getDescription()));
+
+    // assert follows in db remain the same
+    assertEquals(2, followRepository.findAll().size());
   }
 }
