@@ -5,9 +5,13 @@ public final class Paths {
   private Paths() {}
   public static final String BASE_URI = "/api/v1";
 
+  // account
+  public static final String ACCOUNT_URI = BASE_URI + "/account";
+  public static final String ACCOUNT_SEARCH_URI = ACCOUNT_URI + "/search";
+
   // registration + authentication
-  public static final String REGISTRATION_URI = BASE_URI + "/account/registration";
-  public static final String AUTHENTICATION_URI = BASE_URI + "/account/login";
+  public static final String REGISTRATION_URI = BASE_URI + "/registration";
+  public static final String AUTHENTICATION_URI = BASE_URI + "/login";
 
   // posts
   public static final String POST_URI = BASE_URI + "/post";

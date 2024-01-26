@@ -1,6 +1,7 @@
 package com.alg.social_media.service;
 
 import com.alg.social_media.converters.AccountConverter;
+import com.alg.social_media.dto.account.AccountResponseDto;
 import com.alg.social_media.exceptions.AccountExistsException;
 import com.alg.social_media.exceptions.GenericError;
 import com.alg.social_media.model.Account;
@@ -41,5 +42,15 @@ public class AccountService {
 
     public Account findByUsername(String username) {
       return accountRepository.findByUsername(username);
+    }
+
+    public AccountResponseDto getAccountDtoByUsername(String username) {
+      var account = accountRepository.findByUsername(username);
+      return accountConverter.toResponseDto(account);
+    }
+
+    public AccountResponseDto getAccountDtoByEmail(String email) {
+        var account = accountRepository.findByEmail(email);
+        return accountConverter.toResponseDto(account);
     }
 }

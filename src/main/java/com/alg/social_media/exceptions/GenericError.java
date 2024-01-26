@@ -10,7 +10,7 @@ public enum GenericError {
 
     // Authentication errors
     ACCOUNT_WITH_SAME_USERNAME_EXISTS(2000, "Account with username exists: "),
-    ACCOUNT_DOES_NOT_EXIST(2001, "Account with username does not exist: "),
+    ACCOUNT_DOES_NOT_EXIST(2001, "Account with username or email does not exist: "),
     USER_PROVIDED_WRONG_PASSWORD(2002, "User provided wrong password: "),
     NO_TOKEN_PROVIDED(2003, "No token provided: "),
     INVALID_TOKEN_PROVIDED(2004, "Invalid token provided: "),

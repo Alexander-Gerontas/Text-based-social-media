@@ -29,6 +29,10 @@ public class AccountConverter {
     }
 
     public AccountResponseDto toResponseDto(Account account) {
+        if (account == null) {
+            return null;
+        }
+
         var responseDto = modelMapper.map(account, AccountResponseDto.class);
         return responseDto;
     }

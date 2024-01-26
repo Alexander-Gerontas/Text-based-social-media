@@ -5,10 +5,12 @@ import static com.alg.social_media.constants.Keywords.BEARER;
 import static com.alg.social_media.constants.Keywords.ROLE;
 import static com.alg.social_media.constants.Keywords.TOKEN;
 import static com.alg.social_media.constants.Keywords.USERNAME;
+import static com.alg.social_media.constants.Paths.ACCOUNT_URI;
 import static com.alg.social_media.constants.Paths.AUTHENTICATION_URI;
 import static com.alg.social_media.constants.Paths.COMMENT_URI;
 import static com.alg.social_media.constants.Paths.FOLLOW_URI;
 import static com.alg.social_media.constants.Paths.POST_URI;
+import static com.alg.social_media.constants.Paths.REGISTRATION_URI;
 import static com.alg.social_media.exceptions.GenericError.INVALID_TOKEN_PROVIDED;
 import static com.alg.social_media.exceptions.GenericError.NO_TOKEN_PROVIDED;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountDoesNotExist;
@@ -55,6 +57,16 @@ public class SecurityMiddleware {
   }
 
   private void configureRoutes() {
+    // fixme move before handler to controllers
+    app.before(ACCOUNT_URI + "*", authHandler);
+    app.before(ACCOUNT_URI + "/*", authHandler);
+
+    app.before(REGISTRATION_URI + "*", ctx -> {});
+    app.before(REGISTRATION_URI + "/*", ctx -> {});
+
+    app.before(AUTHENTICATION_URI + "*", ctx -> {});
+    app.before(AUTHENTICATION_URI + "/*", ctx -> {});
+
     app.before(POST_URI + "*", authHandler);
     app.before(POST_URI + "/*", authHandler);
 
