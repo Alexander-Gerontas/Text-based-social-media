@@ -24,12 +24,12 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
-class RegistrationControllerIT extends BaseIntegrationTest {
+class AccountControllerIT extends BaseIntegrationTest {
   private final AccountConverter accountConverter;
   private final AccountService accountService;
   private final AccountRepository accountRepository;
 
-  public RegistrationControllerIT() {
+  public AccountControllerIT() {
     accountRepository = appComponent.buildAccountRepository();
     accountService = appComponent.buildAccountService();
     accountConverter = appComponent.buildAccountConverter();

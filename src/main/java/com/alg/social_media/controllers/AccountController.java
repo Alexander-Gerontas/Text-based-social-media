@@ -18,14 +18,13 @@ import io.javalin.http.HttpStatus;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
-// fixme rename controller
 @Slf4j
-public class RegistrationController {
+public class AccountController {
     private final Javalin app;
     private final AccountService accountService;
 
     @Inject
-    public RegistrationController(Javalin app, AccountService accountService) {
+    public AccountController(Javalin app, AccountService accountService) {
         this.app = app;
         this.accountService = accountService;
 
