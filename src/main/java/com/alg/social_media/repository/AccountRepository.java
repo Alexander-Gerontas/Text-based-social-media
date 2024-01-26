@@ -2,6 +2,7 @@ package com.alg.social_media.repository;
 
 import static com.alg.social_media.constants.QueryParameters.EMAIL;
 import static com.alg.social_media.constants.QueryParameters.FOLLOWERS;
+import static com.alg.social_media.constants.QueryParameters.FOLLOWING;
 import static com.alg.social_media.constants.QueryParameters.USERNAME;
 
 import com.alg.social_media.model.Account;
@@ -25,16 +26,28 @@ public class AccountRepository extends BaseRepository<Account, Long> {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Account> query = cb.createQuery(Account.class);
 
+            // create a query that fetches the user and his followers
             Root<Account> accountRoot = query.from(Account.class);
             accountRoot.fetch(FOLLOWERS, JoinType.LEFT);
-//            accountRoot.fetch(FOLLOWING, JoinType.LEFT); fixme enable
 
             query.select(accountRoot)
                 .where(cb.equal(accountRoot.get(paramName), param))
                 .distinct(true);
 
             TypedQuery<Account> typedQuery = entityManager.createQuery(query);
+            Account account = typedQuery.getSingleResult();
 
+            // create a separate query to fetch the users followed by user
+            query = cb.createQuery(Account.class);
+
+            accountRoot = query.from(Account.class);
+            accountRoot.fetch(FOLLOWING, JoinType.LEFT);
+
+            query.select(accountRoot)
+                .where(cb.equal(accountRoot, account))
+                .distinct(true);
+
+            typedQuery = entityManager.createQuery(query);
             return typedQuery.getSingleResult();
         };
 
