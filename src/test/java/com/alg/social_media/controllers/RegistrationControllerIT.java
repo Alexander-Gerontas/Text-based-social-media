@@ -94,7 +94,7 @@ class RegistrationControllerIT extends BaseIntegrationTest {
 
   @Test
   @SneakyThrows
-  void accountLoginWitWrongPasswordReturnsNoToken() {
+  void accountLoginWithWrongPasswordReturnsNoToken() {
     // create a new account
     var accountRegistrationDto = AccountDtoFactory.getFreeAccountRegistrationDto();
 
