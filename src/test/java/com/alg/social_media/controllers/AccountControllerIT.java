@@ -49,8 +49,11 @@ class AccountControllerIT extends BaseIntegrationTest {
 
   @AfterEach
   public void cleanUp() {
+    // reset rest assured
+    resetRestAssured();
+
     // clear repos
-      accountRepository.deleteAll();
+    accountRepository.deleteAll();
   }
 
   @Test

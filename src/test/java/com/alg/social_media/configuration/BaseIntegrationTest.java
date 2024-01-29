@@ -64,4 +64,14 @@ public class BaseIntegrationTest {
     // start javalin server
     app.start(port);
   }
+
+  protected static void resetRestAssured() {
+    RestAssured.reset();
+
+    RestAssured.useRelaxedHTTPSValidation();
+
+    // Set up the base URI and port of your application
+    RestAssured.baseURI = "http://localhost/";
+    RestAssured.port = port; // Set your port
+  }
 }

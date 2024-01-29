@@ -62,6 +62,9 @@ class FollowControllerIT extends BaseIntegrationTest {
 
   @AfterEach
   public void cleanUp() {
+    // reset rest assured
+    resetRestAssured();
+
     // clear repos
     followRepository.deleteAll();
     accountRepository.deleteAll();
@@ -298,7 +301,9 @@ class FollowControllerIT extends BaseIntegrationTest {
         .when()
         .get(ACCOUNT_SEARCH_URI)
         .then()
+//        .cl
         .statusCode(HttpStatus.BAD_REQUEST.getCode())
+//        .close()
         .extract();
 
     // assert error message is correct
