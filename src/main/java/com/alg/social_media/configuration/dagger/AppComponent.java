@@ -16,12 +16,12 @@ import com.alg.social_media.repository.FollowRepository;
 import com.alg.social_media.repository.PostRepository;
 import com.alg.social_media.service.AccountService;
 import com.alg.social_media.utils.DBUtils;
-import com.alg.social_media.utils.PasswordEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Component;
 import io.javalin.Javalin;
 import javax.inject.Singleton;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Singleton
 @Component(modules = AppModule.class)
@@ -53,5 +53,5 @@ public interface AppComponent {
   FlywayConfiguration buildLiquibaseConfiguration();
   ObjectMapper buildObjectMapper();
   ModelMapper buildModelMapper();
-  PasswordEncoder buildPasswordEncoder();
+  BCryptPasswordEncoder buildBCryptPasswordEncoder();
 }

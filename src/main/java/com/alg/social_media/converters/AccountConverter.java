@@ -3,28 +3,27 @@ package com.alg.social_media.converters;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.dto.account.AccountResponseDto;
 import com.alg.social_media.model.Account;
-import com.alg.social_media.utils.PasswordEncoder;
 import java.util.List;
 import javax.inject.Inject;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Converts Account DTOs to domain objects.
  */
 public class AccountConverter {
     private final ModelMapper modelMapper;
-
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Inject
-    public AccountConverter(final ModelMapper modelMapper, final PasswordEncoder passwordEncoder) {
+    public AccountConverter(final ModelMapper modelMapper, final BCryptPasswordEncoder passwordEncoder) {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
     public Account toAccount(AccountRegistrationDto registrationDto) {
         var account = modelMapper.map(registrationDto, Account.class);
-        account.setPassword(passwordEncoder.encryptPassword(registrationDto.getPassword()));
+        account.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
         return account;
     }
 

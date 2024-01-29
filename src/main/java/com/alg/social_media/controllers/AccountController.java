@@ -24,22 +24,22 @@ import com.alg.social_media.exceptions.AccountExistsException;
 import com.alg.social_media.exceptions.WrongPasswordException;
 import com.alg.social_media.model.Account;
 import com.alg.social_media.service.AccountService;
-import com.alg.social_media.utils.PasswordEncoder;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Slf4j
 public class AccountController {
     private final Javalin app;
     private final AccountService accountService;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Inject
-    public AccountController(final Javalin app, final AccountService accountService, final
-    PasswordEncoder passwordEncoder) {
+    public AccountController(final Javalin app, final AccountService accountService,
+        final BCryptPasswordEncoder passwordEncoder) {
         this.app = app;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
@@ -89,9 +89,7 @@ public class AccountController {
                     loginDto.getUsername());
             }
 
-            var decryptedPassword = passwordEncoder.decryptPassword(account.getPassword());
-
-            if (!loginDto.getPassword().equals(decryptedPassword)) {
+            if (!passwordEncoder.matches(loginDto.getPassword(), account.getPassword())) {
                 throw new WrongPasswordException(USER_PROVIDED_WRONG_PASSWORD,
                     loginDto.getUsername());
             }

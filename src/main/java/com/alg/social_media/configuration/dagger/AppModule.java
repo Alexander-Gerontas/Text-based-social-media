@@ -5,15 +5,15 @@ import static com.alg.social_media.handler.GlobalControllerExceptionHandler.runt
 import static org.modelmapper.convention.MatchingStrategies.STRICT;
 
 import com.alg.social_media.configuration.database.DBConnection;
-import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import com.alg.social_media.configuration.database.FlywayConfiguration;
+import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import com.alg.social_media.configuration.security.CustomAccessManager;
 import com.alg.social_media.converters.CommentConverter;
 import com.alg.social_media.converters.PostConverter;
+import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Comment;
 import com.alg.social_media.model.Follow;
 import com.alg.social_media.model.Post;
-import com.alg.social_media.model.Account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dagger.Module;
@@ -21,8 +21,8 @@ import dagger.Provides;
 import io.javalin.Javalin;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Module
 public class AppModule {
@@ -92,8 +92,9 @@ public class AppModule {
 	}
 
 	@Provides
-	public StandardPBEStringEncryptor provideStandardPBEStringEncryptor() {
-		return new StandardPBEStringEncryptor();
+	@Singleton
+	public BCryptPasswordEncoder providePasswordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	/**
