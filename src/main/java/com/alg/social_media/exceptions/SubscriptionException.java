@@ -1,5 +1,7 @@
 package com.alg.social_media.exceptions;
 
+import com.alg.social_media.enums.GenericError;
+
 /** Exception to be thrown if free user attempts to access premium features. */
 public class SubscriptionException extends Exception {
 

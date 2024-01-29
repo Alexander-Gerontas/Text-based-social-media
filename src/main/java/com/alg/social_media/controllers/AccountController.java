@@ -20,8 +20,6 @@ import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.exceptions.AccountExistsException;
 import com.alg.social_media.exceptions.GenericError;
-import com.alg.social_media.exceptions.WrongPasswordException;
-import com.alg.social_media.model.Account;
 import com.alg.social_media.service.AccountService;
 import com.alg.social_media.utils.PasswordEncoder;
 import io.javalin.Javalin;

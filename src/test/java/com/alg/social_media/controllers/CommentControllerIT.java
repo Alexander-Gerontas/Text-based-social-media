@@ -73,6 +73,9 @@ class CommentControllerIT extends BaseIntegrationTest {
 
   @AfterEach
   public void cleanUp() {
+    // reset rest assured
+    resetRestAssured();
+
     // clear repos
     commentRepository.deleteAll();
     postRepository.deleteAll();

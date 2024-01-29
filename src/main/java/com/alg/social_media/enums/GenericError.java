@@ -1,5 +1,4 @@
-package com.alg.social_media.exceptions;
-// fixme move to enums packg
+package com.alg.social_media.enums;
 
 import lombok.Getter;
 

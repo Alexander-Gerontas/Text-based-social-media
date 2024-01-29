@@ -1,7 +1,7 @@
 package com.alg.social_media.service;
 
-import static com.alg.social_media.exceptions.GenericError.COMMENT_CHARACTER_LIMIT;
-import static com.alg.social_media.exceptions.GenericError.POST_DOES_NOT_EXIST;
+import static com.alg.social_media.enums.GenericError.COMMENT_CHARACTER_LIMIT;
+import static com.alg.social_media.enums.GenericError.POST_DOES_NOT_EXIST;
 
 import com.alg.social_media.converters.CommentConverter;
 import com.alg.social_media.dto.post.CommentDto;

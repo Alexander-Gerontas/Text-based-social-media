@@ -1,12 +1,12 @@
 package com.alg.social_media.service;
 
-import static com.alg.social_media.exceptions.GenericError.SUBSCRIPTION_ERROR;
+import static com.alg.social_media.enums.GenericError.SUBSCRIPTION_ERROR;
 
 import com.alg.social_media.converters.PostConverter;
 import com.alg.social_media.dto.post.PostDto;
 import com.alg.social_media.dto.post.PostResponseDto;
 import com.alg.social_media.enums.AccountType;
-import com.alg.social_media.exceptions.GenericError;
+import com.alg.social_media.enums.GenericError;
 import com.alg.social_media.exceptions.PostException;
 import com.alg.social_media.exceptions.SubscriptionException;
 import com.alg.social_media.model.Account;

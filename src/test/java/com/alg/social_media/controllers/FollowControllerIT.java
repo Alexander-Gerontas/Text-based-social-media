@@ -17,7 +17,7 @@ import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.dto.account.AccountResponseDto;
 import com.alg.social_media.dto.account.FollowDto;
-import com.alg.social_media.exceptions.GenericError;
+import com.alg.social_media.enums.GenericError;
 import com.alg.social_media.model.Account;
 import com.alg.social_media.repository.AccountRepository;
 import com.alg.social_media.repository.FollowRepository;
@@ -62,6 +62,9 @@ class FollowControllerIT extends BaseIntegrationTest {
 
   @AfterEach
   public void cleanUp() {
+    // reset rest assured
+    resetRestAssured();
+
     // clear repos
     followRepository.deleteAll();
     accountRepository.deleteAll();
@@ -298,7 +301,9 @@ class FollowControllerIT extends BaseIntegrationTest {
         .when()
         .get(ACCOUNT_SEARCH_URI)
         .then()
+//        .cl
         .statusCode(HttpStatus.BAD_REQUEST.getCode())
+//        .close()
         .extract();
 
     // assert error message is correct

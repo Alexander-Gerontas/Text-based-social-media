@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.alg.social_media.configuration.BaseIntegrationTest;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
-import com.alg.social_media.exceptions.GenericError;
+import com.alg.social_media.enums.GenericError;
 import com.alg.social_media.repository.AccountRepository;
 import com.alg.social_media.service.AccountService;
 import com.alg.social_media.utils.AccountDtoFactory;
@@ -49,8 +49,11 @@ class AccountControllerIT extends BaseIntegrationTest {
 
   @AfterEach
   public void cleanUp() {
+    // reset rest assured
+    resetRestAssured();
+
     // clear repos
-      accountRepository.deleteAll();
+    accountRepository.deleteAll();
   }
 
   @Test
