@@ -10,7 +10,7 @@ import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.dto.account.AccountResponseDto;
 import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.exceptions.AccountExistsException;
-import com.alg.social_media.exceptions.GenericError;
+import com.alg.social_media.enums.GenericError;
 import com.alg.social_media.service.AccountService;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;

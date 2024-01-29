@@ -1,5 +1,7 @@
 package com.alg.social_media.exceptions;
 
+import com.alg.social_media.enums.GenericError;
+
 /** Exception to be thrown if user provided wrong password. */
 public class WrongPasswordException extends Exception {
 

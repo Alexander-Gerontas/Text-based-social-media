@@ -3,7 +3,7 @@ package com.alg.social_media.service;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.account.AccountResponseDto;
 import com.alg.social_media.exceptions.AccountDoesNotExistException;
-import com.alg.social_media.exceptions.GenericError;
+import com.alg.social_media.enums.GenericError;
 import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Follow;
 import com.alg.social_media.repository.FollowRepository;
