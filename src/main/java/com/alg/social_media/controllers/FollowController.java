@@ -1,5 +1,6 @@
 package com.alg.social_media.controllers;
 
+import static com.alg.social_media.configuration.security.SecurityMiddleware.authenticationHandler;
 import static com.alg.social_media.constants.Keywords.USERNAME;
 import static com.alg.social_media.constants.Paths.FOLLOW_URI;
 import static com.alg.social_media.constants.Paths.MY_FOLLOWERS_URI;
@@ -29,6 +30,10 @@ public class FollowController {
   }
 
   private void configureRoutes() {
+    // set authentication
+    app.before(FOLLOW_URI + "*", authenticationHandler());
+    app.before(FOLLOW_URI + "/*", authenticationHandler());
+
     app.post(FOLLOW_URI, followerHandler(), AccountType.FREE, AccountType.PREMIUM);
 
     // get a list of my followers

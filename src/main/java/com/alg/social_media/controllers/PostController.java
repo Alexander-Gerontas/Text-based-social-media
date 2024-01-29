@@ -1,5 +1,6 @@
 package com.alg.social_media.controllers;
 
+import static com.alg.social_media.configuration.security.SecurityMiddleware.authenticationHandler;
 import static com.alg.social_media.constants.ControllerArgs.COMMENT_LIMIT;
 import static com.alg.social_media.constants.ControllerArgs.PAGE;
 import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
@@ -45,6 +46,9 @@ public class PostController {
     }
 
     private void configureRoutes() {
+        // set authentication
+        app.before(POST_URI + "*", authenticationHandler());
+        app.before(POST_URI + "/*", authenticationHandler());
 
         // create new post
         app.post(POST_URI, createPostHandler(), AccountType.FREE, AccountType.PREMIUM);

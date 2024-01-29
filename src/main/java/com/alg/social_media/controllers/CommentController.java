@@ -1,8 +1,10 @@
 package com.alg.social_media.controllers;
 
+import static com.alg.social_media.configuration.security.SecurityMiddleware.authenticationHandler;
 import static com.alg.social_media.constants.ControllerArgs.PAGE;
 import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
 import static com.alg.social_media.constants.Keywords.USERNAME;
+import static com.alg.social_media.constants.Paths.COMMENT_URI;
 import static com.alg.social_media.constants.Paths.MY_FOLLOWERS_POST_COMMENTS_URI;
 import static com.alg.social_media.constants.Paths.MY_POST_COMMENTS_URI;
 
@@ -30,6 +32,10 @@ public class CommentController {
     }
 
     private void configureRoutes() {
+        // set authentication
+        app.before(COMMENT_URI + "*", authenticationHandler());
+        app.before(COMMENT_URI + "/*", authenticationHandler());
+
         // get latest comments from a user's posts
         app.get(MY_POST_COMMENTS_URI, getAccountCommentsHandler(), AccountType.FREE, AccountType.PREMIUM);
 
