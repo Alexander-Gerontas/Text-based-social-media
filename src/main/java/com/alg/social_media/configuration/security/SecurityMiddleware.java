@@ -4,8 +4,8 @@ import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
 import static com.alg.social_media.constants.Keywords.BEARER;
 import static com.alg.social_media.constants.Keywords.ROLE;
 import static com.alg.social_media.constants.Keywords.USERNAME;
-import static com.alg.social_media.exceptions.GenericError.INVALID_TOKEN_PROVIDED;
-import static com.alg.social_media.exceptions.GenericError.NO_TOKEN_PROVIDED;
+import static com.alg.social_media.enums.GenericError.INVALID_TOKEN_PROVIDED;
+import static com.alg.social_media.enums.GenericError.NO_TOKEN_PROVIDED;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleInvalidTokenProvided;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleNoTokenProvided;
 

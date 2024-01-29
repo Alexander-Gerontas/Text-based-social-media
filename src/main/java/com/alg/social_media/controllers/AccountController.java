@@ -8,6 +8,8 @@ import static com.alg.social_media.constants.Paths.ACCOUNT_SEARCH_URI;
 import static com.alg.social_media.constants.Paths.ACCOUNT_URI;
 import static com.alg.social_media.constants.Paths.AUTHENTICATION_URI;
 import static com.alg.social_media.constants.Paths.REGISTRATION_URI;
+import static com.alg.social_media.enums.GenericError.ACCOUNT_DOES_NOT_EXIST;
+import static com.alg.social_media.enums.GenericError.USER_PROVIDED_WRONG_PASSWORD;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountDoesNotExist;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountExists;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleWrongPassword;
@@ -19,7 +21,8 @@ import com.alg.social_media.dto.account.AccountResponseDto;
 import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.exceptions.AccountExistsException;
-import com.alg.social_media.exceptions.GenericError;
+import com.alg.social_media.exceptions.WrongPasswordException;
+import com.alg.social_media.model.Account;
 import com.alg.social_media.service.AccountService;
 import com.alg.social_media.utils.PasswordEncoder;
 import io.javalin.Javalin;
@@ -82,14 +85,14 @@ public class AccountController {
 
             // if an account does not exist throw exception
             if (account == null) {
-                throw new AccountDoesNotExistException(GenericError.ACCOUNT_DOES_NOT_EXIST,
+                throw new AccountDoesNotExistException(ACCOUNT_DOES_NOT_EXIST,
                     loginDto.getUsername());
             }
 
             var decryptedPassword = passwordEncoder.decryptPassword(account.getPassword());
 
             if (!loginDto.getPassword().equals(decryptedPassword)) {
-                throw new WrongPasswordException(GenericError.USER_PROVIDED_WRONG_PASSWORD,
+                throw new WrongPasswordException(USER_PROVIDED_WRONG_PASSWORD,
                     loginDto.getUsername());
             }
 
@@ -141,7 +144,7 @@ public class AccountController {
             }
 
             if (responseDto == null) {
-                throw new AccountExistsException(GenericError.ACCOUNT_DOES_NOT_EXIST, searchParam);
+                throw new AccountExistsException(ACCOUNT_DOES_NOT_EXIST, searchParam);
             }
 
             // Send the response
