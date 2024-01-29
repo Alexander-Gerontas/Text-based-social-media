@@ -13,6 +13,7 @@
 		<dagger.version>2.50</dagger.version>
 		<jjwt.version>0.12.3</jjwt.version>
 		<jackson.version>2.15.3</jackson.version>
+		<flyway.version>10.6.0</flyway.version>
 	</properties>
 	<dependencies>
 
@@ -84,9 +85,16 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.liquibase</groupId>
-			<artifactId>liquibase-core</artifactId>
-			<version>4.25.0</version>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-maven-plugin</artifactId>
+			<version>${flyway.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<version>${flyway.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- hibernate -->

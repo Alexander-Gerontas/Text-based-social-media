@@ -1,7 +1,7 @@
 package com.alg.social_media.configuration.dagger;
 
 import com.alg.social_media.configuration.database.DBConnection;
-import com.alg.social_media.configuration.database.LiquibaseConfiguration;
+import com.alg.social_media.configuration.database.FlywayConfiguration;
 import com.alg.social_media.configuration.security.CustomAccessManager;
 import com.alg.social_media.configuration.security.SecurityMiddleware;
 import com.alg.social_media.controllers.AccountController;
@@ -50,7 +50,7 @@ public interface AppComponent {
 
   DBConnection buildDBConnection();
   DBUtils buildDBUtils();
-  LiquibaseConfiguration buildLiquibaseConfiguration();
+  FlywayConfiguration buildLiquibaseConfiguration();
   ObjectMapper buildObjectMapper();
   ModelMapper buildModelMapper();
   PasswordEncoder buildPasswordEncoder();

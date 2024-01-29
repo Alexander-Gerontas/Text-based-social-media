@@ -6,7 +6,7 @@ import static org.modelmapper.convention.MatchingStrategies.STRICT;
 
 import com.alg.social_media.configuration.database.DBConnection;
 import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
-import com.alg.social_media.configuration.database.LiquibaseConfiguration;
+import com.alg.social_media.configuration.database.FlywayConfiguration;
 import com.alg.social_media.configuration.security.CustomAccessManager;
 import com.alg.social_media.converters.CommentConverter;
 import com.alg.social_media.converters.PostConverter;
@@ -73,8 +73,8 @@ public class AppModule {
 
 	@Provides
 	@Singleton
-	public LiquibaseConfiguration provideLiquibaseConfiguration(DataSource dataSource) {
-		return new LiquibaseConfiguration(dataSource);
+	public FlywayConfiguration provideLiquibaseConfiguration(final DataSource dataSource) {
+		return new FlywayConfiguration(dataSource);
 	}
 
 	@Provides

@@ -3,7 +3,7 @@ package com.alg.social_media.configuration;
 import com.alg.social_media.configuration.dagger.AppComponent;
 import com.alg.social_media.configuration.dagger.DaggerAppComponent;
 import com.alg.social_media.configuration.database.DBConnection;
-import com.alg.social_media.configuration.database.LiquibaseConfiguration;
+import com.alg.social_media.configuration.database.FlywayConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.restassured.RestAssured;
@@ -15,7 +15,7 @@ public class BaseIntegrationTest {
   public static final Javalin app;
   public static final ObjectMapper objectMapper;
   public static final DBConnection dbConnection;
-  public static final LiquibaseConfiguration liquibaseConfiguration;
+  public static final FlywayConfiguration flywayConfiguration;
   public static final ConfiguredPostgresContainer postgres;
   public static final AppComponent appComponent;
   public static final Properties properties;
@@ -55,7 +55,7 @@ public class BaseIntegrationTest {
     objectMapper = appComponent.buildObjectMapper();
 
     dbConnection = appComponent.buildDBConnection();
-    liquibaseConfiguration = appComponent.buildLiquibaseConfiguration();
+    flywayConfiguration = appComponent.buildLiquibaseConfiguration();
 
     // Set up the base URI and port of your application
     RestAssured.baseURI = "http://localhost/";
