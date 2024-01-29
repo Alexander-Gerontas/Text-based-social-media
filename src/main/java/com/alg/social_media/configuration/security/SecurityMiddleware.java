@@ -39,8 +39,6 @@ public class SecurityMiddleware {
   private final Javalin app;
   private final AccountService accountService;
   private final PasswordEncoder passwordEncoder;
-  private final Handler authHandler;
-  private final Handler loginHandler;
 
   @Inject
   public SecurityMiddleware(Javalin app, AccountService accountService,
@@ -50,16 +48,13 @@ public class SecurityMiddleware {
     this.accountService = accountService;
     this.passwordEncoder = passwordEncoder;
 
-    this.authHandler = createAuthenticationHandler();
-    this.loginHandler = generateAuthenticationToken();
-
     configureRoutes();
   }
 
   private void configureRoutes() {
     // fixme move before handler to controllers
-    app.before(ACCOUNT_URI + "*", authHandler);
-    app.before(ACCOUNT_URI + "/*", authHandler);
+    app.before(ACCOUNT_URI + "*", authenticationHandler());
+    app.before(ACCOUNT_URI + "/*", authenticationHandler());
 
     app.before(REGISTRATION_URI + "*", ctx -> {});
     app.before(REGISTRATION_URI + "/*", ctx -> {});
@@ -67,16 +62,16 @@ public class SecurityMiddleware {
     app.before(AUTHENTICATION_URI + "*", ctx -> {});
     app.before(AUTHENTICATION_URI + "/*", ctx -> {});
 
-    app.before(POST_URI + "*", authHandler);
-    app.before(POST_URI + "/*", authHandler);
+    app.before(POST_URI + "*", authenticationHandler());
+    app.before(POST_URI + "/*", authenticationHandler());
 
-    app.before(COMMENT_URI + "*", authHandler);
-    app.before(COMMENT_URI + "/*", authHandler);
+    app.before(COMMENT_URI + "*", authenticationHandler());
+    app.before(COMMENT_URI + "/*", authenticationHandler());
 
-    app.before(FOLLOW_URI + "*", authHandler);
-    app.before(FOLLOW_URI + "/*", authHandler);
+    app.before(FOLLOW_URI + "*", authenticationHandler());
+    app.before(FOLLOW_URI + "/*", authenticationHandler());
 
-    app.post(AUTHENTICATION_URI, loginHandler, AccountType.ANYONE);
+    app.post(AUTHENTICATION_URI, generateAuthenticationToken(), AccountType.ANYONE);
 
     app.exception(NoTokenProvidedException.class, handleNoTokenProvided);
     app.exception(InvalidTokenException.class, handleInvalidTokenProvided);
@@ -85,7 +80,7 @@ public class SecurityMiddleware {
     app.exception(WrongPasswordException.class, handleWrongPassword);
   }
 
-  private Handler createAuthenticationHandler() {
+  private Handler authenticationHandler() {
     return context -> {
       String token = context.header(AUTHORIZATION);
 
@@ -97,7 +92,7 @@ public class SecurityMiddleware {
         String username = JwtUtil.extractUsername(token.substring(7));
         AccountType accountType = JwtUtil.extractAccountType(token.substring(7));
 
-        // Continue to the next handler
+        // register username and role in handler context
         context.attribute(USERNAME, username);
         context.attribute(ROLE, accountType);
       } catch (Exception e) {
