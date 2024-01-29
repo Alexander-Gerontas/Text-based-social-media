@@ -13,12 +13,14 @@ import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Follow;
 import com.alg.social_media.model.Post;
 import com.alg.social_media.repository.PostRepository;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
+@Transactional
 public class PostService {
     private final PostRepository postRepository;
     private final PostConverter postConverter;

@@ -13,11 +13,13 @@ import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Comment;
 import com.alg.social_media.model.Follow;
 import com.alg.social_media.repository.CommentRepository;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
+@Transactional
 public class CommentService {
 
     private final CommentRepository commentRepository;

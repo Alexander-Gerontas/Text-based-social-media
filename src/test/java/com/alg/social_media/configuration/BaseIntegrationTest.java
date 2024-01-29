@@ -2,7 +2,7 @@ package com.alg.social_media.configuration;
 
 import com.alg.social_media.configuration.dagger.AppComponent;
 import com.alg.social_media.configuration.dagger.DaggerAppComponent;
-import com.alg.social_media.configuration.database.DBConnection;
+import com.alg.social_media.configuration.database.DBConfiguration;
 import com.alg.social_media.configuration.database.FlywayConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
@@ -14,7 +14,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 public class BaseIntegrationTest {
   public static final Javalin app;
   public static final ObjectMapper objectMapper;
-  public static final DBConnection dbConnection;
+  public static final DBConfiguration dbConfiguration;
   public static final FlywayConfiguration flywayConfiguration;
   public static final ConfiguredPostgresContainer postgres;
   public static final AppComponent appComponent;
@@ -38,7 +38,7 @@ public class BaseIntegrationTest {
     properties.setProperty("jdbc.username", jdbcUsername);
     properties.setProperty("jdbc.password", jdbcPassword);
 
-    DBConnection.properties = properties;
+    DBConfiguration.properties = properties;
 
     // initialize dagger components
     appComponent = DaggerAppComponent.create();
@@ -54,7 +54,7 @@ public class BaseIntegrationTest {
 
     objectMapper = appComponent.buildObjectMapper();
 
-    dbConnection = appComponent.buildDBConnection();
+    dbConfiguration = appComponent.buildDBConnection();
     flywayConfiguration = appComponent.buildLiquibaseConfiguration();
 
     // Set up the base URI and port of your application

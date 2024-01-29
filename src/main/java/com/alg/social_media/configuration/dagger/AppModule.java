@@ -4,7 +4,7 @@ import static com.alg.social_media.handler.GlobalControllerExceptionHandler.exce
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.runtimeExceptionHandler;
 import static org.modelmapper.convention.MatchingStrategies.STRICT;
 
-import com.alg.social_media.configuration.database.DBConnection;
+import com.alg.social_media.configuration.database.DBConfiguration;
 import com.alg.social_media.configuration.database.FlywayConfiguration;
 import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import com.alg.social_media.configuration.security.CustomAccessManager;
@@ -26,7 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Module
 public class AppModule {
-	private DBConnection dbConnection;
+	private DBConfiguration dbConfiguration;
 
 	public AppModule() {}
 
@@ -52,8 +52,8 @@ public class AppModule {
 
 	@Provides
 	@Singleton
-	public JpaEntityManagerFactory provideJpaEntityManagerFactory(DBConnection dbConnection) {
-		return new JpaEntityManagerFactory(dbConnection, new Class[]{
+	public JpaEntityManagerFactory provideJpaEntityManagerFactory(DBConfiguration dbConfiguration) {
+		return new JpaEntityManagerFactory(dbConfiguration, new Class[]{
 				Account.class,
 				Follow.class,
 				Post.class,
@@ -63,12 +63,12 @@ public class AppModule {
 
 	@Provides
 	@Singleton
-	public DBConnection provideDBConnection() {
-		if (dbConnection == null) {
-			this.dbConnection = new DBConnection();
+	public DBConfiguration provideDBConnection() {
+		if (dbConfiguration == null) {
+			this.dbConfiguration = new DBConfiguration();
 		}
 
-		return dbConnection;
+		return dbConfiguration;
 	}
 
 	@Provides
@@ -79,8 +79,8 @@ public class AppModule {
 
 	@Provides
 	@Singleton
-	public DataSource provideDataSource(DBConnection dbConnection) {
-		return dbConnection.getHikariDataSource();
+	public DataSource provideDataSource(DBConfiguration dbConfiguration) {
+		return dbConfiguration.getHikariDataSource();
 	}
 
 	@Provides

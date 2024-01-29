@@ -10,14 +10,14 @@ import net.ttddyy.dsproxy.listener.QueryExecutionListener;
 import net.ttddyy.dsproxy.listener.logging.SLF4JLogLevel;
 import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 
-public class DBConnection {
+public class DBConfiguration {
 
 	public static Properties properties;
 	private final String jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword;
 	private final HikariConfig config;
 	private final String jdbcFilename = "jdbc.properties";
 
-	public DBConnection() {
+	public DBConfiguration() {
 		if (properties == null) {
 			readProperties();
 		}

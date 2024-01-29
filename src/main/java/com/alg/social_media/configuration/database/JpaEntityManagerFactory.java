@@ -14,12 +14,12 @@ public class JpaEntityManagerFactory {
 
 	private final Class[] entityClasses;
 
-	private final DBConnection dbConnection;
+	private final DBConfiguration dbConfiguration;
 
 	private final Properties properties;
 
-	public JpaEntityManagerFactory(DBConnection dbConnection, Class[] entityClasses ) {
-		this.dbConnection = dbConnection;
+	public JpaEntityManagerFactory(DBConfiguration dbConfiguration, Class[] entityClasses ) {
+		this.dbConfiguration = dbConfiguration;
 		this.entityClasses = entityClasses;
 
 		this.properties = new Properties();
@@ -27,7 +27,7 @@ public class JpaEntityManagerFactory {
 		properties.put("hibernate.connection.provider_disables_autocommit", true);
 		properties.put("hibernate.id.new_generator_mappings", false);
 		properties.put("hibernate.jdbc.batch_size", 5);
-		properties.put("hibernate.connection.datasource", dbConnection.getHikariDataSource());
+		properties.put("hibernate.connection.datasource", dbConfiguration.getHikariDataSource());
 	}
 
 	public EntityManager getEntityManager() {

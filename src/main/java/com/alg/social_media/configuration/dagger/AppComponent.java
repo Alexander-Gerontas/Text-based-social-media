@@ -1,6 +1,6 @@
 package com.alg.social_media.configuration.dagger;
 
-import com.alg.social_media.configuration.database.DBConnection;
+import com.alg.social_media.configuration.database.DBConfiguration;
 import com.alg.social_media.configuration.database.FlywayConfiguration;
 import com.alg.social_media.configuration.security.CustomAccessManager;
 import com.alg.social_media.configuration.security.SecurityMiddleware;
@@ -48,7 +48,7 @@ public interface AppComponent {
   CommentController buildCommentController();
   FollowController buildFollowController();
 
-  DBConnection buildDBConnection();
+  DBConfiguration buildDBConnection();
   DBUtils buildDBUtils();
   FlywayConfiguration buildLiquibaseConfiguration();
   ObjectMapper buildObjectMapper();
