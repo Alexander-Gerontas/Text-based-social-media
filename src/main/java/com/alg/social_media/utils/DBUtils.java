@@ -7,60 +7,96 @@ import java.sql.SQLException;
 import javax.inject.Inject;
 
 public class DBUtils {
-	private final JpaEntityManagerFactory jpaEntityManagerFactory;
 
-	@Inject
-	public DBUtils(JpaEntityManagerFactory jpaEntityManagerFactory) {
-		this.jpaEntityManagerFactory = jpaEntityManagerFactory;
-	}
+  private final JpaEntityManagerFactory jpaEntityManagerFactory;
+  private final ThreadLocal<EntityManager> threadLocalConnection;
 
-	public void executeInTransaction(DbTransactionOperation operation) {
-		var entityManager = jpaEntityManagerFactory.getEntityManager();
+  @Inject
+  public DBUtils(final JpaEntityManagerFactory jpaEntityManagerFactory) {
+    this.jpaEntityManagerFactory = jpaEntityManagerFactory;
+    threadLocalConnection = new ThreadLocal<>();
+  }
 
-		var transaction = entityManager.getTransaction();
-		transaction.begin();
+  public void executeInTransaction(DbTransactionOperation operation) {
+    var entityManager = getLocalEntityManager();
 
-		try {
-			operation.execute(entityManager);
-			transaction.commit();
-		} catch (SQLException e) {
-			transaction.rollback();
-			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
-		}
-	}
+    var transaction = entityManager.getTransaction();
+    transaction.begin();
 
-	public <T> T executeWithResultInTransaction(DbTransactionResultOperation<T> operation) {
-		EntityManager entityManager = jpaEntityManagerFactory.getEntityManager();
+    try {
+      operation.execute(entityManager);
+      transaction.commit();
+    } catch (SQLException e) {
+      transaction.rollback();
+      throw new RuntimeException(e);
+    } finally {
+      closeConnection();
+    }
+  }
 
-		var transaction = entityManager.getTransaction();
-		transaction.begin();
+  public <T> T executeWithResultInTransaction(DbTransactionResultOperation<T> operation) {
+    EntityManager entityManager = getLocalEntityManager();
 
-		try {
-			T result = operation.execute(entityManager);
-			transaction.commit();
+    var transaction = entityManager.getTransaction();
+    transaction.begin();
 
-			return result;
-		} catch (SQLException e) {
-			transaction.rollback();
-			throw new RuntimeException(e);
-		} catch (NoResultException e) {
-			return null;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
-		}
-	}
+    try {
+      T result = operation.execute(entityManager);
+      transaction.commit();
 
-	@FunctionalInterface
-	public interface DbTransactionOperation {
-		void execute(EntityManager entityManager) throws SQLException;
-	}
+      return result;
+    } catch (SQLException e) {
+      transaction.rollback();
+      throw new RuntimeException(e);
+    } catch (NoResultException e) {
+      return null;
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    } finally {
+      closeConnection();
+    }
+  }
 
-	@FunctionalInterface
-	public interface DbTransactionResultOperation<T> {
-		T execute(EntityManager entityManager) throws SQLException;
-	}
+  private EntityManager getLocalEntityManager() {
+
+    EntityManager entityManager = getCurrentEntityManager();
+    if (entityManager == null) {
+      entityManager = jpaEntityManagerFactory.getEntityManager();
+      setThreadLocalConnection(entityManager);
+    }
+    return entityManager;
+  }
+
+  private void setThreadLocalConnection(EntityManager entityManager) {
+    threadLocalConnection.set(entityManager);
+  }
+
+  private EntityManager getCurrentEntityManager() {
+    return threadLocalConnection.get();
+  }
+
+  boolean isConnectionOpen() {
+    return threadLocalConnection.get() != null;
+  }
+
+  private void closeConnection() {
+    EntityManager entityManager = getCurrentEntityManager();
+
+    if (entityManager != null) {
+      entityManager.close();
+      threadLocalConnection.remove();
+    }
+  }
+
+  @FunctionalInterface
+  public interface DbTransactionOperation {
+
+    void execute(EntityManager entityManager) throws SQLException;
+  }
+
+  @FunctionalInterface
+  public interface DbTransactionResultOperation<T> {
+
+    T execute(EntityManager entityManager) throws SQLException;
+  }
 }
