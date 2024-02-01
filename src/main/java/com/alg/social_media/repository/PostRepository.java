@@ -75,7 +75,7 @@ public class PostRepository extends BaseRepository<Post, Long> {
       return latestPosts;
     };
 
-    return dbUtils.executeWithResultInTransaction(operation);
+    return dbUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public List<Post> findAccountPostReverseChronologically(Set<Long> accountIds, int page, int size) {
@@ -101,7 +101,7 @@ public class PostRepository extends BaseRepository<Post, Long> {
       return typedQuery.getResultList();
     };
 
-    return dbUtils.executeWithResultInTransaction(operation);
+    return dbUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public Post findPostByUuid(UUID postUuid, int commentLimit) {
@@ -149,6 +149,6 @@ public class PostRepository extends BaseRepository<Post, Long> {
       return post;
     };
 
-    return dbUtils.executeWithResultInTransaction(operation);
+    return dbUtils.executeWithTransactionResultPropagation(operation);
   }
 }

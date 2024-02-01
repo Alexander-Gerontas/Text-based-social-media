@@ -30,7 +30,7 @@ public abstract class BaseRepository<E, P> {
       return entity;
     };
 
-    return dbUtils.executeWithResultInTransaction(operation);
+    return dbUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public void update(E entity) {
@@ -39,14 +39,14 @@ public abstract class BaseRepository<E, P> {
       entityManager.flush();
     };
 
-    dbUtils.executeInTransaction(operation);
+    dbUtils.executeWithTransactionPropagation(operation);
   }
 
   public E findById(P id) {
     DBUtils.DbTransactionResultOperation<E> operation = entityManager ->
         entityManager.find(entityName, id);
 
-    return dbUtils.executeWithResultInTransaction(operation);
+    return dbUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public List<E> findAll() {
@@ -64,7 +64,7 @@ public abstract class BaseRepository<E, P> {
       return typedQuery.getResultList();
     };
 
-    return dbUtils.executeWithResultInTransaction(operation);
+    return dbUtils.executeWithTransactionResultPropagation(operation);
   }
 
   private void delete(P entityId) {
@@ -73,7 +73,7 @@ public abstract class BaseRepository<E, P> {
       entityManager.remove(entity);
     };
 
-    dbUtils.executeInTransaction(operation);
+    dbUtils.executeWithTransactionPropagation(operation);
   }
 
   public void deleteAll() {
@@ -85,6 +85,6 @@ public abstract class BaseRepository<E, P> {
       entityManager.createQuery(criteriaDelete).executeUpdate();
     };
 
-    dbUtils.executeInTransaction(operation);
+    dbUtils.executeWithTransactionPropagation(operation);
   }
 }

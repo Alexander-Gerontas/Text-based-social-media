@@ -3,6 +3,7 @@ package com.alg.social_media.utils;
 import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import javax.inject.Inject;
 
@@ -57,6 +58,66 @@ public class DBUtils {
     }
   }
 
+  public void executeWithTransactionPropagation(DbTransactionOperation operation) {
+
+    // check if transaction is inner or outer
+    boolean outerTransaction = !isConnectionOpen();
+
+    var entityManager = getLocalEntityManager();
+    var transaction = entityManager.getTransaction();
+
+    if (!transaction.isActive()) {
+      transaction.begin();
+    }
+
+    try {
+      operation.execute(entityManager);
+
+      // commit records and close connection if transaction is outer
+      if (outerTransaction) {
+        transaction.commit();
+        closeConnection();
+      }
+    } catch (Exception e) {
+      transaction.rollback();
+      closeConnection();
+      throw new RuntimeException(e);
+    }
+  }
+
+  public <T> T executeWithTransactionResultPropagation(DbTransactionResultOperation<T> operation) {
+    // check if transaction is inner or outer
+    boolean outerTransaction = !isConnectionOpen();
+
+    var entityManager = getLocalEntityManager();
+    var transaction = entityManager.getTransaction();
+
+    if (!transaction.isActive()) {
+      transaction.begin();
+    }
+
+    try {
+      T result = operation.execute(entityManager);
+
+      // commit records if transaction is outer
+      if (outerTransaction) {
+        transaction.commit();
+      }
+
+      return result;
+    } catch (NoResultException e) {
+      return null;
+    } catch (Exception e) {
+      transaction.rollback();
+      closeConnection();
+      throw new RuntimeException(e);
+    } finally {
+      if (outerTransaction) {
+        closeConnection();
+      }
+    }
+  }
+
   private EntityManager getLocalEntityManager() {
 
     EntityManager entityManager = getCurrentEntityManager();
@@ -97,6 +158,7 @@ public class DBUtils {
   @FunctionalInterface
   public interface DbTransactionResultOperation<T> {
 
-    T execute(EntityManager entityManager) throws SQLException;
+    T execute(EntityManager entityManager)
+        throws SQLException, InvocationTargetException, IllegalAccessException;
   }
 }

@@ -40,7 +40,7 @@ public class CommentRepository extends BaseRepository<Comment, Long> {
       return typedQuery.getResultList();
     };
 
-    return dbUtils.executeWithResultInTransaction(operation);
+    return dbUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public int countPostsByAuthorId(Long authorId, Long postId) {
@@ -63,7 +63,7 @@ public class CommentRepository extends BaseRepository<Comment, Long> {
       return typedQuery.getSingleResult();
     };
 
-    var resultInTransaction = dbUtils.executeWithResultInTransaction(operation);
+    var resultInTransaction = dbUtils.executeWithTransactionResultPropagation(operation);
     return Math.toIntExact(resultInTransaction);
   }
 
@@ -92,7 +92,7 @@ public class CommentRepository extends BaseRepository<Comment, Long> {
       return commentTypedQuery.getResultList();
     };
 
-    return dbUtils.executeWithResultInTransaction(operation);
+    return dbUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public List<Comment> findFollowersPostCommentsReverseChronologically(List<Long> accountIds, int page,
@@ -119,6 +119,6 @@ public class CommentRepository extends BaseRepository<Comment, Long> {
       return commentTypedQuery.getResultList();
     };
 
-    return dbUtils.executeWithResultInTransaction(operation);
+    return dbUtils.executeWithTransactionResultPropagation(operation);
   }
 }

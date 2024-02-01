@@ -51,7 +51,7 @@ public class AccountRepository extends BaseRepository<Account, Long> {
             return typedQuery.getSingleResult();
         };
 
-        return dbUtils.executeWithResultInTransaction(operation);
+        return dbUtils.executeWithTransactionResultPropagation(operation);
     }
 
     public Account findByUsername(String username) {
