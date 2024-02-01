@@ -14,8 +14,8 @@ import javax.inject.Inject;
 
 public class CommentRepository extends BaseRepository<Comment, Long> {
   @Inject
-  public CommentRepository(DBUtils dbUtils) {
-    super(dbUtils, Comment.class);
+  public CommentRepository() {
+    super(Comment.class);
   }
 
   public List<Comment> findByAuthorId(Long authorId, Long postId) {
@@ -40,7 +40,7 @@ public class CommentRepository extends BaseRepository<Comment, Long> {
       return typedQuery.getResultList();
     };
 
-    return dbUtils.executeWithTransactionResultPropagation(operation);
+    return DBUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public int countPostsByAuthorId(Long authorId, Long postId) {
@@ -63,7 +63,7 @@ public class CommentRepository extends BaseRepository<Comment, Long> {
       return typedQuery.getSingleResult();
     };
 
-    var resultInTransaction = dbUtils.executeWithTransactionResultPropagation(operation);
+    var resultInTransaction = DBUtils.executeWithTransactionResultPropagation(operation);
     return Math.toIntExact(resultInTransaction);
   }
 
@@ -92,7 +92,7 @@ public class CommentRepository extends BaseRepository<Comment, Long> {
       return commentTypedQuery.getResultList();
     };
 
-    return dbUtils.executeWithTransactionResultPropagation(operation);
+    return DBUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public List<Comment> findFollowersPostCommentsReverseChronologically(List<Long> accountIds, int page,
@@ -119,6 +119,6 @@ public class CommentRepository extends BaseRepository<Comment, Long> {
       return commentTypedQuery.getResultList();
     };
 
-    return dbUtils.executeWithTransactionResultPropagation(operation);
+    return DBUtils.executeWithTransactionResultPropagation(operation);
   }
 }

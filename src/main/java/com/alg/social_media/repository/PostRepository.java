@@ -19,8 +19,8 @@ import javax.inject.Inject;
 
 public class PostRepository extends BaseRepository<Post, Long> {
   @Inject
-  public PostRepository(DBUtils dbUtils) {
-    super(dbUtils, Post.class);
+  public PostRepository() {
+    super(Post.class);
   }
 
   public List<Post> findAccountPostAndCommentsReverseChronologically(Long accountId, int page,
@@ -75,7 +75,7 @@ public class PostRepository extends BaseRepository<Post, Long> {
       return latestPosts;
     };
 
-    return dbUtils.executeWithTransactionResultPropagation(operation);
+    return DBUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public List<Post> findAccountPostReverseChronologically(Set<Long> accountIds, int page, int size) {
@@ -101,7 +101,7 @@ public class PostRepository extends BaseRepository<Post, Long> {
       return typedQuery.getResultList();
     };
 
-    return dbUtils.executeWithTransactionResultPropagation(operation);
+    return DBUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public Post findPostByUuid(UUID postUuid, int commentLimit) {
@@ -149,6 +149,6 @@ public class PostRepository extends BaseRepository<Post, Long> {
       return post;
     };
 
-    return dbUtils.executeWithTransactionResultPropagation(operation);
+    return DBUtils.executeWithTransactionResultPropagation(operation);
   }
 }

@@ -46,6 +46,8 @@ public class BaseIntegrationTest {
     appComponent.buildSecurityMiddleware();
     app = appComponent.buildJavalin();
 
+    appComponent.buildDBUtils();
+
     // initialize controllers
     appComponent.buildPostController();
     appComponent.buildCommentController();

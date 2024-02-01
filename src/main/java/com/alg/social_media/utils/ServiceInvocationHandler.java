@@ -1,6 +1,5 @@
-package com.alg.social_media.service;
+package com.alg.social_media.utils;
 
-import com.alg.social_media.utils.DBUtils;
 import jakarta.transaction.Transactional;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -8,18 +7,16 @@ import java.lang.reflect.Proxy;
 
 public class ServiceInvocationHandler implements InvocationHandler {
     private final Object service;
-    private final DBUtils dbUtils;
 
-    public ServiceInvocationHandler(final Object service, final DBUtils dbUtils) {
+    public ServiceInvocationHandler(final Object service) {
         this.service = service;
-        this.dbUtils = dbUtils;
     }
 
-    public static <T> T wrap(T target, DBUtils dbUtils) {
+    public static <T> T wrap(T target) {
         return (T) Proxy.newProxyInstance(
             target.getClass().getClassLoader(),
             target.getClass().getInterfaces(),
-            new ServiceInvocationHandler(target, dbUtils)
+            new ServiceInvocationHandler(target)
         );
     }
 
@@ -35,7 +32,7 @@ public class ServiceInvocationHandler implements InvocationHandler {
                     return result;
                 };
 
-            return dbUtils.executeWithTransactionResultPropagation(operation);
+            return DBUtils.executeWithTransactionResultPropagation(operation);
         }
 
         // execute the class method and return the result if annotation not present

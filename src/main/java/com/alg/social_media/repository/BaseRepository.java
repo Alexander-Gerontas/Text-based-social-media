@@ -15,11 +15,9 @@ import java.util.List;
  * @param <P> the primary key of the entity
  */
 public abstract class BaseRepository<E, P> {
-  protected final DBUtils dbUtils;
   private final Class<E> entityName;
 
-  protected BaseRepository(DBUtils dbUtils, Class<E> entityName) {
-    this.dbUtils = dbUtils;
+  protected BaseRepository(Class<E> entityName) {
     this.entityName = entityName;
   }
 
@@ -30,7 +28,7 @@ public abstract class BaseRepository<E, P> {
       return entity;
     };
 
-    return dbUtils.executeWithTransactionResultPropagation(operation);
+    return DBUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public void update(E entity) {
@@ -39,14 +37,14 @@ public abstract class BaseRepository<E, P> {
       entityManager.flush();
     };
 
-    dbUtils.executeWithTransactionPropagation(operation);
+    DBUtils.executeWithTransactionPropagation(operation);
   }
 
   public E findById(P id) {
     DBUtils.DbTransactionResultOperation<E> operation = entityManager ->
         entityManager.find(entityName, id);
 
-    return dbUtils.executeWithTransactionResultPropagation(operation);
+    return DBUtils.executeWithTransactionResultPropagation(operation);
   }
 
   public List<E> findAll() {
@@ -64,7 +62,7 @@ public abstract class BaseRepository<E, P> {
       return typedQuery.getResultList();
     };
 
-    return dbUtils.executeWithTransactionResultPropagation(operation);
+    return DBUtils.executeWithTransactionResultPropagation(operation);
   }
 
   private void delete(P entityId) {
@@ -73,7 +71,7 @@ public abstract class BaseRepository<E, P> {
       entityManager.remove(entity);
     };
 
-    dbUtils.executeWithTransactionPropagation(operation);
+    DBUtils.executeWithTransactionPropagation(operation);
   }
 
   public void deleteAll() {
@@ -85,6 +83,6 @@ public abstract class BaseRepository<E, P> {
       entityManager.createQuery(criteriaDelete).executeUpdate();
     };
 
-    dbUtils.executeWithTransactionPropagation(operation);
+    DBUtils.executeWithTransactionPropagation(operation);
   }
 }

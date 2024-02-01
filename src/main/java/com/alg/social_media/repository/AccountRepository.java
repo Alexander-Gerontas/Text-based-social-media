@@ -16,8 +16,8 @@ import javax.inject.Inject;
 
 public class AccountRepository extends BaseRepository<Account, Long> {
     @Inject
-    public AccountRepository(DBUtils dbUtils) {
-        super(dbUtils, Account.class);
+    public AccountRepository() {
+        super(Account.class);
     }
 
     private Account findByCondition(String paramName, String param) {
@@ -51,7 +51,7 @@ public class AccountRepository extends BaseRepository<Account, Long> {
             return typedQuery.getSingleResult();
         };
 
-        return dbUtils.executeWithTransactionResultPropagation(operation);
+        return DBUtils.executeWithTransactionResultPropagation(operation);
     }
 
     public Account findByUsername(String username) {

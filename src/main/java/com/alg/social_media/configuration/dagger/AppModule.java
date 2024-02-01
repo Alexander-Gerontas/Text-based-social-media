@@ -27,7 +27,7 @@ import com.alg.social_media.service.FollowService;
 import com.alg.social_media.service.FollowServiceImpl;
 import com.alg.social_media.service.PostService;
 import com.alg.social_media.service.PostServiceImpl;
-import com.alg.social_media.service.ServiceInvocationHandler;
+import com.alg.social_media.utils.ServiceInvocationHandler;
 import com.alg.social_media.utils.DBUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -109,49 +109,38 @@ public class AppModule {
 	@Provides
 	@Singleton
 	public AccountService provideAccountService(final AccountRepository accountRepository, final
-			AccountConverter accountConverter, final DBUtils dbUtils) {
+			AccountConverter accountConverter) {
     AccountService accountService = new AccountServiceImpl(accountRepository, accountConverter);
 
-    AccountService accountServiceProxy = ServiceInvocationHandler.wrap(accountService, dbUtils);
-
-		return accountServiceProxy;
+    return ServiceInvocationHandler.wrap(accountService);
 	}
 
 	@Provides
 	@Singleton
 	public CommentService provideCommentService(final CommentRepository commentRepository,
 			final CommentConverter commentConverter, final PostService postService,
-			final AccountService accountService, final DBUtils dbUtils) {
+			final AccountService accountService) {
 		CommentService commentService = new CommentServiceImpl(commentRepository, commentConverter,
 				postService,
 				accountService);
 
-		CommentService commentServiceProxy = ServiceInvocationHandler.wrap(commentService, dbUtils);
-
-		return commentServiceProxy;
+		return ServiceInvocationHandler.wrap(commentService);
 	}
 
 	@Provides
 	@Singleton
 	public FollowService provideFollowService(final FollowRepository followRepository,
-			final AccountService accountService, final AccountConverter accountConverter, final DBUtils dbUtils) {
-
+			final AccountService accountService, final AccountConverter accountConverter) {
     FollowService followService = new FollowServiceImpl(followRepository, accountService, accountConverter);
-    FollowService followServiceProxy = ServiceInvocationHandler.wrap(followService, dbUtils);
-
-		return followServiceProxy;
+    return ServiceInvocationHandler.wrap(followService);
 	}
 
 	@Provides
 	@Singleton
 	public PostService providePostService(final PostRepository postRepository,
-			final PostConverter postConverter, final AccountService accountService,
-			final DBUtils dbUtils) {
-
+			final PostConverter postConverter, final AccountService accountService) {
 		PostService postService = new PostServiceImpl(postRepository, postConverter, accountService);
-		PostService postServiceProxy = ServiceInvocationHandler.wrap(postService, dbUtils);
-
-		return postServiceProxy;
+		return ServiceInvocationHandler.wrap(postService);
 	}
 
 	@Provides
@@ -165,7 +154,6 @@ public class AppModule {
 	public DBUtils provideDBUtils(final JpaEntityManagerFactory jpaEntityManagerFactory) {
 		return new DBUtils(jpaEntityManagerFactory);
 	}
-
 	/**
 	 * Bean for model mapper with matching strategy to strict mode.
 	 *

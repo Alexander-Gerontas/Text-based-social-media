@@ -7,14 +7,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import javax.inject.Inject;
 
-public class DBUtils {
+public final class DBUtils {
 
-  private final JpaEntityManagerFactory jpaEntityManagerFactory;
-  private final ThreadLocal<EntityManager> threadLocalConnection;
+  private static JpaEntityManagerFactory jpaEntityManagerFactory;
+  private static ThreadLocal<EntityManager> threadLocalConnection;
 
   @Inject
   public DBUtils(final JpaEntityManagerFactory jpaEntityManagerFactory) {
-    this.jpaEntityManagerFactory = jpaEntityManagerFactory;
+    DBUtils.jpaEntityManagerFactory = jpaEntityManagerFactory;
     threadLocalConnection = new ThreadLocal<>();
   }
 
@@ -58,7 +58,7 @@ public class DBUtils {
     }
   }
 
-  public void executeWithTransactionPropagation(DbTransactionOperation operation) {
+  public static void executeWithTransactionPropagation(DbTransactionOperation operation) {
 
     // check if transaction is inner or outer
     boolean outerTransaction = !isConnectionOpen();
@@ -85,7 +85,7 @@ public class DBUtils {
     }
   }
 
-  public <T> T executeWithTransactionResultPropagation(DbTransactionResultOperation<T> operation) {
+  public static <T> T executeWithTransactionResultPropagation(DbTransactionResultOperation<T> operation) {
     // check if transaction is inner or outer
     boolean outerTransaction = !isConnectionOpen();
 
@@ -118,7 +118,7 @@ public class DBUtils {
     }
   }
 
-  private EntityManager getLocalEntityManager() {
+  private static EntityManager getLocalEntityManager() {
 
     EntityManager entityManager = getCurrentEntityManager();
     if (entityManager == null) {
@@ -128,19 +128,19 @@ public class DBUtils {
     return entityManager;
   }
 
-  private void setThreadLocalConnection(EntityManager entityManager) {
+  private static void setThreadLocalConnection(EntityManager entityManager) {
     threadLocalConnection.set(entityManager);
   }
 
-  private EntityManager getCurrentEntityManager() {
+  private static EntityManager getCurrentEntityManager() {
     return threadLocalConnection.get();
   }
 
-  boolean isConnectionOpen() {
+  private static boolean isConnectionOpen() {
     return threadLocalConnection.get() != null;
   }
 
-  private void closeConnection() {
+  private static void closeConnection() {
     EntityManager entityManager = getCurrentEntityManager();
 
     if (entityManager != null) {
