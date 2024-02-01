@@ -2,8 +2,8 @@ package com.alg.social_media.service;
 
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.account.AccountResponseDto;
-import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.enums.GenericError;
+import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Follow;
 import com.alg.social_media.repository.FollowRepository;
@@ -11,7 +11,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import javax.inject.Inject;
 
-//@Transactional
+@Transactional
 public class FollowServiceImpl implements FollowService{
   private final FollowRepository followRepository;
   private final AccountService accountService;

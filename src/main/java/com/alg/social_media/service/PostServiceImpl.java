@@ -20,7 +20,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
-//@Transactional
+@Transactional
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostConverter postConverter;

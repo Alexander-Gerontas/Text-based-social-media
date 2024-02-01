@@ -1,16 +1,16 @@
 package com.alg.social_media.service;
 
 import com.alg.social_media.converters.AccountConverter;
-import com.alg.social_media.dto.account.AccountResponseDto;
-import com.alg.social_media.exceptions.AccountExistsException;
-import com.alg.social_media.enums.GenericError;
-import com.alg.social_media.model.Account;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
+import com.alg.social_media.dto.account.AccountResponseDto;
+import com.alg.social_media.enums.GenericError;
+import com.alg.social_media.exceptions.AccountExistsException;
+import com.alg.social_media.model.Account;
 import com.alg.social_media.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import javax.inject.Inject;
 
-//@Transactional
+@Transactional
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AccountConverter accountConverter;
