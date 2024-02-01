@@ -1,6 +1,6 @@
 package com.alg.social_media.controllers;
 
-import static com.alg.social_media.configuration.security.SecurityMiddleware.authenticationHandler;
+import static com.alg.social_media.security.SecurityMiddleware.authenticationHandler;
 import static com.alg.social_media.constants.Keywords.EMAIL;
 import static com.alg.social_media.constants.Keywords.TOKEN;
 import static com.alg.social_media.constants.Keywords.USERNAME;
@@ -14,7 +14,7 @@ import static com.alg.social_media.handler.GlobalControllerExceptionHandler.hand
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleAccountExists;
 import static com.alg.social_media.handler.GlobalControllerExceptionHandler.handleWrongPassword;
 
-import com.alg.social_media.configuration.security.JwtUtil;
+import com.alg.social_media.utils.JwtUtil;
 import com.alg.social_media.dto.account.AccountLoginDto;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.dto.account.AccountResponseDto;

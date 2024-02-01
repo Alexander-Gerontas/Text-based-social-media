@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.alg.social_media.configuration.BaseIntegrationTest;
-import com.alg.social_media.configuration.security.JwtUtil;
+import com.alg.social_media.utils.JwtUtil;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.dto.account.AccountRegistrationDto;
 import com.alg.social_media.dto.post.CommentDto;

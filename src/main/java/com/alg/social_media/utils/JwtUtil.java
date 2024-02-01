@@ -1,4 +1,4 @@
-package com.alg.social_media.configuration.security;
+package com.alg.social_media.utils;
 
 import static com.alg.social_media.constants.Keywords.ROLE;
 import static com.alg.social_media.constants.Security.JWT_EXPIRATION_TIME;

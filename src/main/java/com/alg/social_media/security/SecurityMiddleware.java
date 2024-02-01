@@ -1,4 +1,4 @@
-package com.alg.social_media.configuration.security;
+package com.alg.social_media.security;
 
 import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
 import static com.alg.social_media.constants.Keywords.BEARER;
@@ -12,6 +12,7 @@ import static com.alg.social_media.handler.GlobalControllerExceptionHandler.hand
 import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.exceptions.InvalidTokenException;
 import com.alg.social_media.exceptions.NoTokenProvidedException;
+import com.alg.social_media.utils.JwtUtil;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import javax.inject.Inject;

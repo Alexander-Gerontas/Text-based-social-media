@@ -2,8 +2,8 @@ package com.alg.social_media.configuration.dagger;
 
 import com.alg.social_media.configuration.database.DBConfiguration;
 import com.alg.social_media.configuration.database.FlywayConfiguration;
-import com.alg.social_media.configuration.security.CustomAccessManager;
-import com.alg.social_media.configuration.security.SecurityMiddleware;
+import com.alg.social_media.security.CustomAccessManager;
+import com.alg.social_media.security.SecurityMiddleware;
 import com.alg.social_media.controllers.AccountController;
 import com.alg.social_media.controllers.CommentController;
 import com.alg.social_media.controllers.FollowController;

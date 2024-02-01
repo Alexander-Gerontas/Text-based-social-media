@@ -1,6 +1,6 @@
 package com.alg.social_media.controllers;
 
-import static com.alg.social_media.configuration.security.SecurityMiddleware.authenticationHandler;
+import static com.alg.social_media.security.SecurityMiddleware.authenticationHandler;
 import static com.alg.social_media.constants.ControllerArgs.PAGE;
 import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
 import static com.alg.social_media.constants.Keywords.USERNAME;
