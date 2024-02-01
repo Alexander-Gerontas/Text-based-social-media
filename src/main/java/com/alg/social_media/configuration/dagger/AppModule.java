@@ -8,12 +8,27 @@ import com.alg.social_media.configuration.database.DBConfiguration;
 import com.alg.social_media.configuration.database.FlywayConfiguration;
 import com.alg.social_media.configuration.database.JpaEntityManagerFactory;
 import com.alg.social_media.configuration.security.CustomAccessManager;
+import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.converters.CommentConverter;
 import com.alg.social_media.converters.PostConverter;
 import com.alg.social_media.model.Account;
 import com.alg.social_media.model.Comment;
 import com.alg.social_media.model.Follow;
 import com.alg.social_media.model.Post;
+import com.alg.social_media.repository.AccountRepository;
+import com.alg.social_media.repository.CommentRepository;
+import com.alg.social_media.repository.FollowRepository;
+import com.alg.social_media.repository.PostRepository;
+import com.alg.social_media.service.AccountService;
+import com.alg.social_media.service.AccountServiceImpl;
+import com.alg.social_media.service.CommentService;
+import com.alg.social_media.service.CommentServiceImpl;
+import com.alg.social_media.service.FollowService;
+import com.alg.social_media.service.FollowServiceImpl;
+import com.alg.social_media.service.PostService;
+import com.alg.social_media.service.PostServiceImpl;
+import com.alg.social_media.service.ServiceInvocationHandler;
+import com.alg.social_media.utils.DBUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dagger.Module;
@@ -93,8 +108,62 @@ public class AppModule {
 
 	@Provides
 	@Singleton
+	public AccountService provideAccountService(final AccountRepository accountRepository, final
+			AccountConverter accountConverter, final DBUtils dbUtils) {
+    AccountService accountService = new AccountServiceImpl(accountRepository, accountConverter);
+
+    AccountService accountServiceProxy = ServiceInvocationHandler.wrap(accountService, dbUtils);
+
+		return accountServiceProxy;
+	}
+
+	@Provides
+	@Singleton
+	public CommentService provideCommentService(final CommentRepository commentRepository,
+			final CommentConverter commentConverter, final PostService postService,
+			final AccountService accountService, final DBUtils dbUtils) {
+		CommentService commentService = new CommentServiceImpl(commentRepository, commentConverter,
+				postService,
+				accountService);
+
+		CommentService commentServiceProxy = ServiceInvocationHandler.wrap(commentService, dbUtils);
+
+		return commentServiceProxy;
+	}
+
+	@Provides
+	@Singleton
+	public FollowService provideFollowService(final FollowRepository followRepository,
+			final AccountService accountService, final AccountConverter accountConverter, final DBUtils dbUtils) {
+
+    FollowService followService = new FollowServiceImpl(followRepository, accountService, accountConverter);
+    FollowService followServiceProxy = ServiceInvocationHandler.wrap(followService, dbUtils);
+
+		return followServiceProxy;
+	}
+
+	@Provides
+	@Singleton
+	public PostService providePostService(final PostRepository postRepository,
+			final PostConverter postConverter, final AccountService accountService,
+			final DBUtils dbUtils) {
+
+		PostService postService = new PostServiceImpl(postRepository, postConverter, accountService);
+		PostService postServiceProxy = ServiceInvocationHandler.wrap(postService, dbUtils);
+
+		return postServiceProxy;
+	}
+
+	@Provides
+	@Singleton
 	public BCryptPasswordEncoder providePasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Provides
+	@Singleton
+	public DBUtils provideDBUtils(final JpaEntityManagerFactory jpaEntityManagerFactory) {
+		return new DBUtils(jpaEntityManagerFactory);
 	}
 
 	/**
