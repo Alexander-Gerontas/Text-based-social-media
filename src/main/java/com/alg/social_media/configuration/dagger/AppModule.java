@@ -15,9 +15,13 @@ import com.alg.social_media.model.Comment;
 import com.alg.social_media.model.Follow;
 import com.alg.social_media.model.Post;
 import com.alg.social_media.repository.AccountRepository;
+import com.alg.social_media.repository.AccountRepositoryImpl;
 import com.alg.social_media.repository.CommentRepository;
+import com.alg.social_media.repository.CommentRepositoryImpl;
 import com.alg.social_media.repository.FollowRepository;
+import com.alg.social_media.repository.FollowRepositoryImpl;
 import com.alg.social_media.repository.PostRepository;
+import com.alg.social_media.repository.PostRepositoryImpl;
 import com.alg.social_media.security.CustomAccessManager;
 import com.alg.social_media.service.AccountService;
 import com.alg.social_media.service.AccountServiceImpl;
@@ -104,6 +108,30 @@ public class AppModule {
 		var objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		return objectMapper;
+	}
+
+	@Provides
+	@Singleton
+	public AccountRepository provideAccountRepository() {
+    return new AccountRepositoryImpl();
+	}
+
+	@Provides
+	@Singleton
+	public CommentRepository provideCommentRepository() {
+		return new CommentRepositoryImpl();
+	}
+
+	@Provides
+	@Singleton
+	public FollowRepository provideFollowRepository() {
+		return new FollowRepositoryImpl();
+	}
+
+	@Provides
+	@Singleton
+	public PostRepository providePostRepository() {
+		return new PostRepositoryImpl();
 	}
 
 	@Provides
