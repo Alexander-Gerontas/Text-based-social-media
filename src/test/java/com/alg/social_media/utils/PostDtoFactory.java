@@ -1,7 +1,7 @@
 package com.alg.social_media.utils;
 
-import com.alg.social_media.dto.post.CommentDto;
-import com.alg.social_media.dto.post.PostDto;
+import com.alg.social_media.domain.dto.CommentDto;
+import com.alg.social_media.domain.dto.PostDto;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public final class PostDtoFactory {

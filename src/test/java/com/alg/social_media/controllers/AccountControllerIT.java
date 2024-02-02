@@ -6,12 +6,13 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.alg.social_media.application.port.in.AccountService;
+import com.alg.social_media.application.port.out.AccountRepository;
+import com.alg.social_media.domain.model.Account;
 import com.alg.social_media.configuration.BaseIntegrationTest;
 import com.alg.social_media.converters.AccountConverter;
-import com.alg.social_media.dto.account.AccountRegistrationDto;
+import com.alg.social_media.domain.dto.AccountRegistrationDto;
 import com.alg.social_media.enums.GenericError;
-import com.alg.social_media.repository.AccountRepository;
-import com.alg.social_media.service.AccountService;
 import com.alg.social_media.utils.AccountDtoFactory;
 import io.javalin.http.HttpStatus;
 import lombok.SneakyThrows;

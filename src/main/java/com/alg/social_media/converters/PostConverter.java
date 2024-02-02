@@ -1,8 +1,8 @@
 package com.alg.social_media.converters;
 
-import com.alg.social_media.dto.post.CommentResponseDto;
-import com.alg.social_media.dto.post.PostResponseDto;
-import com.alg.social_media.model.Post;
+import com.alg.social_media.domain.dto.CommentResponseDto;
+import com.alg.social_media.domain.dto.PostResponseDto;
+import com.alg.social_media.domain.model.Post;
 import java.util.List;
 import javax.inject.Inject;
 import org.modelmapper.ModelMapper;
