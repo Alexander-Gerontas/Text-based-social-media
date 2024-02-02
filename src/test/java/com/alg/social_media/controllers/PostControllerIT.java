@@ -25,6 +25,7 @@ import com.alg.social_media.configuration.BaseIntegrationTest;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.domain.dto.AccountLoginDto;
 import com.alg.social_media.domain.dto.AccountRegistrationDto;
+import com.alg.social_media.domain.dto.CommentDto;
 import com.alg.social_media.domain.dto.CommentResponseDto;
 import com.alg.social_media.domain.dto.PostResponseDto;
 import com.alg.social_media.domain.model.Account;

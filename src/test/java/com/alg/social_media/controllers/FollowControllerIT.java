@@ -12,15 +12,15 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.alg.social_media.application.port.out.AccountRepository;
+import com.alg.social_media.application.port.out.FollowRepository;
 import com.alg.social_media.configuration.BaseIntegrationTest;
 import com.alg.social_media.converters.AccountConverter;
 import com.alg.social_media.domain.dto.AccountRegistrationDto;
 import com.alg.social_media.domain.dto.AccountResponseDto;
 import com.alg.social_media.domain.dto.FollowDto;
-import com.alg.social_media.enums.GenericError;
 import com.alg.social_media.domain.model.Account;
-import com.alg.social_media.repository.AccountRepository;
-import com.alg.social_media.follow.FollowRepository;
+import com.alg.social_media.enums.GenericError;
 import com.alg.social_media.utils.AccountDtoFactory;
 import com.alg.social_media.utils.CrudUtils;
 import io.javalin.http.HttpStatus;

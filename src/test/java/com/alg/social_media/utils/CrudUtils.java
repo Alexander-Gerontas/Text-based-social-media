@@ -10,9 +10,9 @@ import static io.restassured.RestAssured.given;
 import com.alg.social_media.configuration.BaseIntegrationTest;
 import com.alg.social_media.constants.Paths;
 import com.alg.social_media.domain.dto.AccountLoginDto;
+import com.alg.social_media.domain.dto.CommentDto;
 import com.alg.social_media.domain.dto.FollowDto;
-import com.alg.social_media.comment.domain.CommentDto;
-import com.alg.social_media.dto.post.PostDto;
+import com.alg.social_media.domain.dto.PostDto;
 import io.javalin.http.HttpStatus;
 import lombok.SneakyThrows;
 
