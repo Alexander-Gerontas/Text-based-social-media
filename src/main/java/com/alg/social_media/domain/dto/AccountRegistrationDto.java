@@ -1,6 +1,6 @@
 package com.alg.social_media.domain.dto;
 
-import com.alg.social_media.enums.AccountType;
+import com.alg.social_media.domain.enums.AccountType;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

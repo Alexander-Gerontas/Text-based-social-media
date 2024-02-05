@@ -1,14 +1,14 @@
 package com.alg.social_media.utils;
 
-import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
-import static com.alg.social_media.constants.Keywords.BEARER;
-import static com.alg.social_media.constants.Paths.COMMENT;
-import static com.alg.social_media.constants.Paths.FOLLOW_URI;
-import static com.alg.social_media.constants.Paths.POST_URI;
+import static com.alg.social_media.domain.constants.Keywords.AUTHORIZATION;
+import static com.alg.social_media.domain.constants.Keywords.BEARER;
+import static com.alg.social_media.domain.constants.Paths.COMMENT;
+import static com.alg.social_media.domain.constants.Paths.FOLLOW_URI;
+import static com.alg.social_media.domain.constants.Paths.POST_URI;
 import static io.restassured.RestAssured.given;
 
 import com.alg.social_media.configuration.BaseIntegrationTest;
-import com.alg.social_media.constants.Paths;
+import com.alg.social_media.domain.constants.Paths;
 import com.alg.social_media.domain.dto.AccountLoginDto;
 import com.alg.social_media.domain.dto.CommentDto;
 import com.alg.social_media.domain.dto.FollowDto;

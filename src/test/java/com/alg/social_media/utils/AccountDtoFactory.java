@@ -2,7 +2,7 @@ package com.alg.social_media.utils;
 
 import com.alg.social_media.domain.dto.AccountLoginDto;
 import com.alg.social_media.domain.dto.AccountRegistrationDto;
-import com.alg.social_media.enums.AccountType;
+import com.alg.social_media.domain.enums.AccountType;
 
 public final class AccountDtoFactory {
   private static AccountRegistrationDto getAccountRegistrationDto(

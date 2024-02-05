@@ -1,7 +1,7 @@
 package com.alg.social_media.application.port.in;
 
+import com.alg.social_media.configuration.exceptions.AccountDoesNotExistException;
 import com.alg.social_media.domain.dto.AccountResponseDto;
-import com.alg.social_media.exceptions.AccountDoesNotExistException;
 import java.util.List;
 
 public interface FollowService {

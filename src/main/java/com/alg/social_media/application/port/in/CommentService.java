@@ -1,10 +1,10 @@
 package com.alg.social_media.application.port.in;
 
-import com.alg.social_media.domain.model.Comment;
+import com.alg.social_media.configuration.exceptions.PostDoesNotExistException;
+import com.alg.social_media.configuration.exceptions.SubscriptionException;
 import com.alg.social_media.domain.dto.CommentDto;
 import com.alg.social_media.domain.dto.CommentResponseDto;
-import com.alg.social_media.exceptions.PostDoesNotExistException;
-import com.alg.social_media.exceptions.SubscriptionException;
+import com.alg.social_media.domain.model.Comment;
 import java.util.List;
 
 public interface CommentService {

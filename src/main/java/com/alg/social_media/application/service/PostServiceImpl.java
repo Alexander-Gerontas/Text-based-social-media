@@ -1,20 +1,20 @@
 package com.alg.social_media.application.service;
 
-import static com.alg.social_media.enums.GenericError.SUBSCRIPTION_ERROR;
+import static com.alg.social_media.domain.enums.GenericError.SUBSCRIPTION_ERROR;
 
 import com.alg.social_media.application.port.in.AccountService;
-import com.alg.social_media.domain.model.Account;
-import com.alg.social_media.converters.PostConverter;
-import com.alg.social_media.domain.dto.PostResponseDto;
-import com.alg.social_media.enums.AccountType;
-import com.alg.social_media.enums.GenericError;
-import com.alg.social_media.exceptions.PostException;
-import com.alg.social_media.exceptions.SubscriptionException;
-import com.alg.social_media.domain.model.Follow;
 import com.alg.social_media.application.port.in.PostService;
 import com.alg.social_media.application.port.out.PostRepository;
-import com.alg.social_media.domain.model.Post;
+import com.alg.social_media.configuration.converters.PostConverter;
+import com.alg.social_media.configuration.exceptions.PostException;
+import com.alg.social_media.configuration.exceptions.SubscriptionException;
 import com.alg.social_media.domain.dto.PostDto;
+import com.alg.social_media.domain.dto.PostResponseDto;
+import com.alg.social_media.domain.enums.AccountType;
+import com.alg.social_media.domain.enums.GenericError;
+import com.alg.social_media.domain.model.Account;
+import com.alg.social_media.domain.model.Follow;
+import com.alg.social_media.domain.model.Post;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;

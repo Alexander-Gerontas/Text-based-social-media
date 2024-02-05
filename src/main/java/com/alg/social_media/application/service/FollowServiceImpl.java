@@ -1,14 +1,14 @@
 package com.alg.social_media.application.service;
 
 import com.alg.social_media.application.port.in.AccountService;
-import com.alg.social_media.domain.model.Account;
 import com.alg.social_media.application.port.in.FollowService;
-import com.alg.social_media.converters.AccountConverter;
-import com.alg.social_media.domain.dto.AccountResponseDto;
-import com.alg.social_media.enums.GenericError;
-import com.alg.social_media.exceptions.AccountDoesNotExistException;
-import com.alg.social_media.domain.model.Follow;
 import com.alg.social_media.application.port.out.FollowRepository;
+import com.alg.social_media.configuration.converters.AccountConverter;
+import com.alg.social_media.configuration.exceptions.AccountDoesNotExistException;
+import com.alg.social_media.domain.dto.AccountResponseDto;
+import com.alg.social_media.domain.enums.GenericError;
+import com.alg.social_media.domain.model.Account;
+import com.alg.social_media.domain.model.Follow;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import javax.inject.Inject;

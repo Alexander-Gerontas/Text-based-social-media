@@ -1,12 +1,12 @@
-package com.alg.social_media.handler;
+package com.alg.social_media.configuration.handler;
 
-import com.alg.social_media.exceptions.AccountDoesNotExistException;
-import com.alg.social_media.exceptions.AccountExistsException;
-import com.alg.social_media.exceptions.InvalidTokenException;
-import com.alg.social_media.exceptions.NoTokenProvidedException;
-import com.alg.social_media.exceptions.PostException;
-import com.alg.social_media.exceptions.SubscriptionException;
-import com.alg.social_media.exceptions.WrongPasswordException;
+import com.alg.social_media.configuration.exceptions.AccountDoesNotExistException;
+import com.alg.social_media.configuration.exceptions.AccountExistsException;
+import com.alg.social_media.configuration.exceptions.InvalidTokenException;
+import com.alg.social_media.configuration.exceptions.NoTokenProvidedException;
+import com.alg.social_media.configuration.exceptions.PostException;
+import com.alg.social_media.configuration.exceptions.SubscriptionException;
+import com.alg.social_media.configuration.exceptions.WrongPasswordException;
 import io.javalin.http.ExceptionHandler;
 import io.javalin.http.HttpStatus;
 

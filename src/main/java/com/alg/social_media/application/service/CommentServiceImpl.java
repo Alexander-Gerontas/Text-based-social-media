@@ -1,21 +1,21 @@
 package com.alg.social_media.application.service;
 
-import static com.alg.social_media.enums.GenericError.COMMENT_CHARACTER_LIMIT;
-import static com.alg.social_media.enums.GenericError.POST_DOES_NOT_EXIST;
+import static com.alg.social_media.domain.enums.GenericError.COMMENT_CHARACTER_LIMIT;
+import static com.alg.social_media.domain.enums.GenericError.POST_DOES_NOT_EXIST;
 
 import com.alg.social_media.application.port.in.AccountService;
+import com.alg.social_media.application.port.in.CommentService;
+import com.alg.social_media.application.port.in.PostService;
 import com.alg.social_media.application.port.out.CommentRepository;
+import com.alg.social_media.configuration.converters.CommentConverter;
+import com.alg.social_media.configuration.exceptions.PostDoesNotExistException;
+import com.alg.social_media.configuration.exceptions.SubscriptionException;
+import com.alg.social_media.domain.dto.CommentDto;
+import com.alg.social_media.domain.dto.CommentResponseDto;
+import com.alg.social_media.domain.enums.AccountType;
 import com.alg.social_media.domain.model.Account;
 import com.alg.social_media.domain.model.Comment;
-import com.alg.social_media.domain.dto.CommentDto;
-import com.alg.social_media.application.port.in.CommentService;
-import com.alg.social_media.converters.CommentConverter;
-import com.alg.social_media.domain.dto.CommentResponseDto;
-import com.alg.social_media.enums.AccountType;
-import com.alg.social_media.exceptions.PostDoesNotExistException;
-import com.alg.social_media.exceptions.SubscriptionException;
 import com.alg.social_media.domain.model.Follow;
-import com.alg.social_media.application.port.in.PostService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;

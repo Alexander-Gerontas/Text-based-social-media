@@ -1,6 +1,6 @@
-package com.alg.social_media.exceptions;
+package com.alg.social_media.configuration.exceptions;
 
-import com.alg.social_media.enums.GenericError;
+import com.alg.social_media.domain.enums.GenericError;
 
 /** Exception to be thrown when an invalid token is provided. */
 public class InvalidTokenException extends Exception {

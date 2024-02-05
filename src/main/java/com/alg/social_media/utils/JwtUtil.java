@@ -1,10 +1,10 @@
 package com.alg.social_media.utils;
 
-import static com.alg.social_media.constants.Keywords.ROLE;
-import static com.alg.social_media.constants.Security.JWT_EXPIRATION_TIME;
-import static com.alg.social_media.constants.Security.JWT_SECRET_KEY;
+import static com.alg.social_media.domain.constants.Keywords.ROLE;
+import static com.alg.social_media.domain.constants.Security.JWT_EXPIRATION_TIME;
+import static com.alg.social_media.domain.constants.Security.JWT_SECRET_KEY;
 
-import com.alg.social_media.enums.AccountType;
+import com.alg.social_media.domain.enums.AccountType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,11 +1,11 @@
 package com.alg.social_media.controllers;
 
-import static com.alg.social_media.constants.ControllerArgs.PAGE;
-import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
-import static com.alg.social_media.constants.Keywords.AUTHORIZATION;
-import static com.alg.social_media.constants.Keywords.BEARER;
-import static com.alg.social_media.constants.Paths.MY_FOLLOWERS_POST_COMMENTS_URI;
-import static com.alg.social_media.constants.Paths.MY_POST_COMMENTS_URI;
+import static com.alg.social_media.domain.constants.ControllerArgs.PAGE;
+import static com.alg.social_media.domain.constants.ControllerArgs.PAGE_SIZE;
+import static com.alg.social_media.domain.constants.Keywords.AUTHORIZATION;
+import static com.alg.social_media.domain.constants.Keywords.BEARER;
+import static com.alg.social_media.domain.constants.Paths.MY_FOLLOWERS_POST_COMMENTS_URI;
+import static com.alg.social_media.domain.constants.Paths.MY_POST_COMMENTS_URI;
 import static com.alg.social_media.utils.CrudUtils.commentOnPost;
 import static com.alg.social_media.utils.CrudUtils.createNewPost;
 import static io.restassured.RestAssured.given;
@@ -17,7 +17,7 @@ import com.alg.social_media.application.port.out.CommentRepository;
 import com.alg.social_media.application.port.out.FollowRepository;
 import com.alg.social_media.application.port.out.PostRepository;
 import com.alg.social_media.configuration.BaseIntegrationTest;
-import com.alg.social_media.converters.AccountConverter;
+import com.alg.social_media.configuration.converters.AccountConverter;
 import com.alg.social_media.domain.dto.AccountRegistrationDto;
 import com.alg.social_media.domain.dto.CommentDto;
 import com.alg.social_media.domain.dto.CommentResponseDto;

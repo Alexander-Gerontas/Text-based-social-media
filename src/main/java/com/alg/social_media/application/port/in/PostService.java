@@ -1,10 +1,10 @@
 package com.alg.social_media.application.port.in;
 
-import com.alg.social_media.domain.dto.PostResponseDto;
-import com.alg.social_media.exceptions.PostException;
-import com.alg.social_media.exceptions.SubscriptionException;
-import com.alg.social_media.domain.model.Post;
+import com.alg.social_media.configuration.exceptions.PostException;
+import com.alg.social_media.configuration.exceptions.SubscriptionException;
 import com.alg.social_media.domain.dto.PostDto;
+import com.alg.social_media.domain.dto.PostResponseDto;
+import com.alg.social_media.domain.model.Post;
 import java.util.List;
 import java.util.UUID;
 

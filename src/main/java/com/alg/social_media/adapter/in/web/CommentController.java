@@ -1,16 +1,16 @@
 package com.alg.social_media.adapter.in.web;
 
-import static com.alg.social_media.security.SecurityMiddleware.authenticationHandler;
-import static com.alg.social_media.constants.ControllerArgs.PAGE;
-import static com.alg.social_media.constants.ControllerArgs.PAGE_SIZE;
-import static com.alg.social_media.constants.Keywords.USERNAME;
-import static com.alg.social_media.constants.Paths.COMMENT_URI;
-import static com.alg.social_media.constants.Paths.MY_FOLLOWERS_POST_COMMENTS_URI;
-import static com.alg.social_media.constants.Paths.MY_POST_COMMENTS_URI;
+import static com.alg.social_media.configuration.security.SecurityMiddleware.authenticationHandler;
+import static com.alg.social_media.domain.constants.ControllerArgs.PAGE;
+import static com.alg.social_media.domain.constants.ControllerArgs.PAGE_SIZE;
+import static com.alg.social_media.domain.constants.Keywords.USERNAME;
+import static com.alg.social_media.domain.constants.Paths.COMMENT_URI;
+import static com.alg.social_media.domain.constants.Paths.MY_FOLLOWERS_POST_COMMENTS_URI;
+import static com.alg.social_media.domain.constants.Paths.MY_POST_COMMENTS_URI;
 
-import com.alg.social_media.domain.dto.CommentResponseDto;
-import com.alg.social_media.enums.AccountType;
 import com.alg.social_media.application.port.in.CommentService;
+import com.alg.social_media.domain.dto.CommentResponseDto;
+import com.alg.social_media.domain.enums.AccountType;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;

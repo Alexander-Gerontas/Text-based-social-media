@@ -2,7 +2,7 @@ package com.alg.social_media.domain.model;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import com.alg.social_media.enums.AccountType;
+import com.alg.social_media.domain.enums.AccountType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

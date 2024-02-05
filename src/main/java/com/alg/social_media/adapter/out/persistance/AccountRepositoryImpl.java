@@ -1,9 +1,9 @@
 package com.alg.social_media.adapter.out.persistance;
 
-import static com.alg.social_media.constants.QueryParameters.EMAIL;
-import static com.alg.social_media.constants.QueryParameters.FOLLOWERS;
-import static com.alg.social_media.constants.QueryParameters.FOLLOWING;
-import static com.alg.social_media.constants.QueryParameters.USERNAME;
+import static com.alg.social_media.domain.constants.QueryParameters.EMAIL;
+import static com.alg.social_media.domain.constants.QueryParameters.FOLLOWERS;
+import static com.alg.social_media.domain.constants.QueryParameters.FOLLOWING;
+import static com.alg.social_media.domain.constants.QueryParameters.USERNAME;
 
 import com.alg.social_media.application.port.out.AccountRepository;
 import com.alg.social_media.domain.model.Account;

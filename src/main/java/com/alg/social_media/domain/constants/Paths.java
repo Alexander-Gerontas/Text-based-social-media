@@ -1,4 +1,4 @@
-package com.alg.social_media.constants;
+package com.alg.social_media.domain.constants;
 
 public final class Paths {
 

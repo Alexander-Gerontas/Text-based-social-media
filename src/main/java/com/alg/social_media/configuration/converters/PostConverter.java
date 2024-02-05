@@ -1,4 +1,4 @@
-package com.alg.social_media.converters;
+package com.alg.social_media.configuration.converters;
 
 import com.alg.social_media.domain.dto.CommentResponseDto;
 import com.alg.social_media.domain.dto.PostResponseDto;

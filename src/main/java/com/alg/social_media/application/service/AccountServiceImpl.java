@@ -2,12 +2,12 @@ package com.alg.social_media.application.service;
 
 import com.alg.social_media.application.port.in.AccountService;
 import com.alg.social_media.application.port.out.AccountRepository;
-import com.alg.social_media.domain.model.Account;
-import com.alg.social_media.converters.AccountConverter;
+import com.alg.social_media.configuration.converters.AccountConverter;
+import com.alg.social_media.configuration.exceptions.AccountExistsException;
 import com.alg.social_media.domain.dto.AccountRegistrationDto;
 import com.alg.social_media.domain.dto.AccountResponseDto;
-import com.alg.social_media.enums.GenericError;
-import com.alg.social_media.exceptions.AccountExistsException;
+import com.alg.social_media.domain.enums.GenericError;
+import com.alg.social_media.domain.model.Account;
 import jakarta.transaction.Transactional;
 import javax.inject.Inject;
 
