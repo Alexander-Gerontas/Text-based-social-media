@@ -1,17 +1,17 @@
 package com.alg.social_media.configuration.security;
 
+import static com.alg.social_media.account.adapter.domain.constants.Keywords.AUTHORIZATION;
+import static com.alg.social_media.account.adapter.domain.constants.Keywords.BEARER;
+import static com.alg.social_media.account.adapter.domain.constants.Keywords.ROLE;
+import static com.alg.social_media.account.adapter.domain.constants.Keywords.USERNAME;
+import static com.alg.social_media.account.adapter.domain.enums.GenericError.INVALID_TOKEN_PROVIDED;
+import static com.alg.social_media.account.adapter.domain.enums.GenericError.NO_TOKEN_PROVIDED;
 import static com.alg.social_media.configuration.handler.GlobalControllerExceptionHandler.handleInvalidTokenProvided;
 import static com.alg.social_media.configuration.handler.GlobalControllerExceptionHandler.handleNoTokenProvided;
-import static com.alg.social_media.domain.constants.Keywords.AUTHORIZATION;
-import static com.alg.social_media.domain.constants.Keywords.BEARER;
-import static com.alg.social_media.domain.constants.Keywords.ROLE;
-import static com.alg.social_media.domain.constants.Keywords.USERNAME;
-import static com.alg.social_media.domain.enums.GenericError.INVALID_TOKEN_PROVIDED;
-import static com.alg.social_media.domain.enums.GenericError.NO_TOKEN_PROVIDED;
 
+import com.alg.social_media.account.adapter.domain.enums.AccountType;
 import com.alg.social_media.configuration.exceptions.InvalidTokenException;
 import com.alg.social_media.configuration.exceptions.NoTokenProvidedException;
-import com.alg.social_media.domain.enums.AccountType;
 import com.alg.social_media.utils.JwtUtil;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;

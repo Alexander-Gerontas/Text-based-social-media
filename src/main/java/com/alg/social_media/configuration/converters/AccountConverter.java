@@ -1,8 +1,8 @@
 package com.alg.social_media.configuration.converters;
 
-import com.alg.social_media.domain.dto.AccountRegistrationDto;
-import com.alg.social_media.domain.dto.AccountResponseDto;
-import com.alg.social_media.domain.model.Account;
+import com.alg.social_media.account.adapter.domain.dto.AccountRegistrationDto;
+import com.alg.social_media.account.adapter.domain.dto.AccountResponseDto;
+import com.alg.social_media.account.adapter.domain.model.Account;
 import java.util.List;
 import javax.inject.Inject;
 import org.modelmapper.ModelMapper;

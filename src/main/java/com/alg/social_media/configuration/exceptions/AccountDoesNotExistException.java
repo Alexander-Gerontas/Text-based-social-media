@@ -1,6 +1,6 @@
 package com.alg.social_media.configuration.exceptions;
 
-import com.alg.social_media.domain.enums.GenericError;
+import com.alg.social_media.account.adapter.domain.enums.GenericError;
 
 /** Exception to be thrown if account does not exist. */
 public class AccountDoesNotExistException extends Exception {

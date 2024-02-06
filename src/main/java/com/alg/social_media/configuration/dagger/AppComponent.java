@@ -1,14 +1,14 @@
 package com.alg.social_media.configuration.dagger;
 
-import com.alg.social_media.adapter.in.web.AccountController;
-import com.alg.social_media.adapter.in.web.CommentController;
-import com.alg.social_media.adapter.in.web.FollowController;
-import com.alg.social_media.adapter.in.web.PostController;
-import com.alg.social_media.application.port.in.AccountService;
-import com.alg.social_media.application.port.out.AccountRepository;
-import com.alg.social_media.application.port.out.CommentRepository;
-import com.alg.social_media.application.port.out.FollowRepository;
-import com.alg.social_media.application.port.out.PostRepository;
+import com.alg.social_media.account.adapter.application.port.in.AccountService;
+import com.alg.social_media.account.adapter.application.port.out.AccountRepository;
+import com.alg.social_media.account.adapter.application.port.out.CommentRepository;
+import com.alg.social_media.account.adapter.application.port.out.FollowRepository;
+import com.alg.social_media.account.adapter.application.port.out.PostRepository;
+import com.alg.social_media.account.adapter.in.web.AccountController;
+import com.alg.social_media.account.adapter.in.web.CommentController;
+import com.alg.social_media.account.adapter.in.web.FollowController;
+import com.alg.social_media.account.adapter.in.web.PostController;
 import com.alg.social_media.configuration.converters.AccountConverter;
 import com.alg.social_media.configuration.converters.PostConverter;
 import com.alg.social_media.configuration.database.DBConfiguration;
