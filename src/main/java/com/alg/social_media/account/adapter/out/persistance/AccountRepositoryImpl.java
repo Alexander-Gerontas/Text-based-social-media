@@ -1,12 +1,13 @@
 package com.alg.social_media.account.adapter.out.persistance;
 
-import static com.alg.social_media.account.adapter.domain.constants.QueryParameters.EMAIL;
-import static com.alg.social_media.account.adapter.domain.constants.QueryParameters.FOLLOWERS;
-import static com.alg.social_media.account.adapter.domain.constants.QueryParameters.FOLLOWING;
-import static com.alg.social_media.account.adapter.domain.constants.QueryParameters.USERNAME;
+import static com.alg.social_media.configuration.constants.QueryParameters.EMAIL;
+import static com.alg.social_media.configuration.constants.QueryParameters.FOLLOWERS;
+import static com.alg.social_media.configuration.constants.QueryParameters.FOLLOWING;
+import static com.alg.social_media.configuration.constants.QueryParameters.USERNAME;
 
 import com.alg.social_media.account.adapter.application.port.out.AccountRepository;
 import com.alg.social_media.account.adapter.domain.model.Account;
+import com.alg.social_media.utils.BaseRepositoryImpl;
 import com.alg.social_media.utils.DBUtils;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;

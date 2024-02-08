@@ -1,9 +1,9 @@
 package com.alg.social_media.account.adapter.in.web;
 
-import static com.alg.social_media.account.adapter.domain.constants.Keywords.USERNAME;
-import static com.alg.social_media.account.adapter.domain.constants.Paths.FOLLOW_URI;
-import static com.alg.social_media.account.adapter.domain.constants.Paths.MY_FOLLOWERS_URI;
-import static com.alg.social_media.account.adapter.domain.constants.Paths.MY_FOLLOWING_URI;
+import static com.alg.social_media.configuration.constants.Keywords.USERNAME;
+import static com.alg.social_media.configuration.constants.Paths.FOLLOW_URI;
+import static com.alg.social_media.configuration.constants.Paths.MY_FOLLOWERS_URI;
+import static com.alg.social_media.configuration.constants.Paths.MY_FOLLOWING_URI;
 import static com.alg.social_media.configuration.security.SecurityMiddleware.authenticationHandler;
 
 import com.alg.social_media.account.adapter.application.port.in.FollowService;

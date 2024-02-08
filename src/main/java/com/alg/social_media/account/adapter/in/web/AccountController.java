@@ -1,14 +1,14 @@
 package com.alg.social_media.account.adapter.in.web;
 
-import static com.alg.social_media.account.adapter.domain.constants.Keywords.EMAIL;
-import static com.alg.social_media.account.adapter.domain.constants.Keywords.TOKEN;
-import static com.alg.social_media.account.adapter.domain.constants.Keywords.USERNAME;
-import static com.alg.social_media.account.adapter.domain.constants.Paths.ACCOUNT_SEARCH_URI;
-import static com.alg.social_media.account.adapter.domain.constants.Paths.ACCOUNT_URI;
-import static com.alg.social_media.account.adapter.domain.constants.Paths.AUTHENTICATION_URI;
-import static com.alg.social_media.account.adapter.domain.constants.Paths.REGISTRATION_URI;
 import static com.alg.social_media.account.adapter.domain.enums.GenericError.ACCOUNT_DOES_NOT_EXIST;
 import static com.alg.social_media.account.adapter.domain.enums.GenericError.USER_PROVIDED_WRONG_PASSWORD;
+import static com.alg.social_media.configuration.constants.Keywords.EMAIL;
+import static com.alg.social_media.configuration.constants.Keywords.TOKEN;
+import static com.alg.social_media.configuration.constants.Keywords.USERNAME;
+import static com.alg.social_media.configuration.constants.Paths.ACCOUNT_SEARCH_URI;
+import static com.alg.social_media.configuration.constants.Paths.ACCOUNT_URI;
+import static com.alg.social_media.configuration.constants.Paths.AUTHENTICATION_URI;
+import static com.alg.social_media.configuration.constants.Paths.REGISTRATION_URI;
 import static com.alg.social_media.configuration.handler.GlobalControllerExceptionHandler.handleAccountDoesNotExist;
 import static com.alg.social_media.configuration.handler.GlobalControllerExceptionHandler.handleAccountExists;
 import static com.alg.social_media.configuration.handler.GlobalControllerExceptionHandler.handleWrongPassword;

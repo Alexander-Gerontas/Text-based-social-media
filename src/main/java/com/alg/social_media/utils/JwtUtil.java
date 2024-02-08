@@ -1,8 +1,8 @@
 package com.alg.social_media.utils;
 
-import static com.alg.social_media.account.adapter.domain.constants.Keywords.ROLE;
-import static com.alg.social_media.account.adapter.domain.constants.Security.JWT_EXPIRATION_TIME;
-import static com.alg.social_media.account.adapter.domain.constants.Security.JWT_SECRET_KEY;
+import static com.alg.social_media.configuration.constants.Keywords.ROLE;
+import static com.alg.social_media.configuration.constants.Security.JWT_EXPIRATION_TIME;
+import static com.alg.social_media.configuration.constants.Security.JWT_SECRET_KEY;
 
 import com.alg.social_media.account.adapter.domain.enums.AccountType;
 import io.jsonwebtoken.Claims;

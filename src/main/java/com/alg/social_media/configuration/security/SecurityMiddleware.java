@@ -1,11 +1,11 @@
 package com.alg.social_media.configuration.security;
 
-import static com.alg.social_media.account.adapter.domain.constants.Keywords.AUTHORIZATION;
-import static com.alg.social_media.account.adapter.domain.constants.Keywords.BEARER;
-import static com.alg.social_media.account.adapter.domain.constants.Keywords.ROLE;
-import static com.alg.social_media.account.adapter.domain.constants.Keywords.USERNAME;
 import static com.alg.social_media.account.adapter.domain.enums.GenericError.INVALID_TOKEN_PROVIDED;
 import static com.alg.social_media.account.adapter.domain.enums.GenericError.NO_TOKEN_PROVIDED;
+import static com.alg.social_media.configuration.constants.Keywords.AUTHORIZATION;
+import static com.alg.social_media.configuration.constants.Keywords.BEARER;
+import static com.alg.social_media.configuration.constants.Keywords.ROLE;
+import static com.alg.social_media.configuration.constants.Keywords.USERNAME;
 import static com.alg.social_media.configuration.handler.GlobalControllerExceptionHandler.handleInvalidTokenProvided;
 import static com.alg.social_media.configuration.handler.GlobalControllerExceptionHandler.handleNoTokenProvided;
 
